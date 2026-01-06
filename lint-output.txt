@@ -1,0 +1,43 @@
+﻿
+> vivare-web@0.1.0 lint
+> eslint
+
+
+C:\Projetos\Site_Vivare\vivare-web\src\app\acomodacoes\[id]\page.tsx
+   1:10  warning  'Suspense' is defined but never used      @typescript-eslint/no-unused-vars
+   7:10  warning  'Skeleton' is defined but never used      @typescript-eslint/no-unused-vars
+   8:36  warning  'CalendarIcon' is defined but never used  @typescript-eslint/no-unused-vars
+  14:14  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  30:14  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\vivare-web\src\components\home\Hero.tsx
+  12:10  warning  'cn' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\vivare-web\src\components\listing\Amenities.tsx
+  13:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Projetos\Site_Vivare\vivare-web\src\components\listing\BookingSidebar.tsx
+   5:18  warning  'differenceInDays' is defined but never used  @typescript-eslint/no-unused-vars
+  12:10  warning  'cn' is defined but never used                @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\vivare-web\src\components\listing\DateRangePicker.tsx
+   5:10  warning  'addDays' is defined but never used       @typescript-eslint/no-unused-vars
+   5:19  warning  'isSameDay' is defined but never used     @typescript-eslint/no-unused-vars
+   5:30  warning  'parseISO' is defined but never used      @typescript-eslint/no-unused-vars
+   5:40  warning  'isAfter' is defined but never used       @typescript-eslint/no-unused-vars
+   7:49  warning  'CalendarIcon' is defined but never used  @typescript-eslint/no-unused-vars
+  28:5   warning  'listingId' is defined but never used     @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\vivare-web\src\components\listing\LocationFilter.tsx
+    4:18  warning  'Search' is defined but never used                               @typescript-eslint/no-unused-vars
+  101:62  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  101:71  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Projetos\Site_Vivare\vivare-web\src\components\listing\PhotoGallery.tsx
+  16:11  warning  'remainingCount' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\vivare-web\src\lib\api-client.ts
+  8:5  warning  'Listing' is defined but never used  @typescript-eslint/no-unused-vars
+
+Ô£û 20 problems (3 errors, 17 warnings)
+

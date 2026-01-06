@@ -1,0 +1,24 @@
+
+> vivare-web@0.1.0 lint
+> eslint
+
+
+C:\Projetos\Site_Vivare\vivare-web\src\app\checkout\[id]\page.tsx
+  9:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\vivare-web\src\components\home\Hero.tsx
+  12:10  warning  'cn' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\vivare-web\src\components\listing\Amenities.tsx
+  13:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Projetos\Site_Vivare\vivare-web\src\components\listing\DateRangePicker.tsx
+   5:10  warning  'addDays' is defined but never used       @typescript-eslint/no-unused-vars
+   5:19  warning  'isSameDay' is defined but never used     @typescript-eslint/no-unused-vars
+   5:30  warning  'parseISO' is defined but never used      @typescript-eslint/no-unused-vars
+   5:40  warning  'isAfter' is defined but never used       @typescript-eslint/no-unused-vars
+   7:49  warning  'CalendarIcon' is defined but never used  @typescript-eslint/no-unused-vars
+  28:5   warning  'listingId' is defined but never used     @typescript-eslint/no-unused-vars
+
+✖ 9 problems (1 error, 8 warnings)
+
