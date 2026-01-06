@@ -45,6 +45,8 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     priority={priority}
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+ZNPQAIXwM498u7eQAAAABJRU5ErkJggg=="
                 />
 
                 {/* Featured Badge */}
@@ -52,16 +54,16 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
                     <div
                         className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-sm font-semibold
                        bg-gradient-to-r from-accent-500 to-accent-600 text-white
-                       shadow-md"
+                       shadow-md z-10"
                     >
                         Destaque
                     </div>
                 )}
 
-                {/* Gradient Overlay on Hover */}
+                {/* Gradient Overlay - Always slightly visible for text safety */}
                 <div
-                    className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent 
-                     opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent 
+                     opacity-60 group-hover:opacity-100 transition-opacity duration-300"
                 />
             </div>
 

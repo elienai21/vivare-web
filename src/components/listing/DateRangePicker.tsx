@@ -176,6 +176,10 @@ export function DateRangePicker({
           top: 1.5rem;
         }
 
+        .react-datepicker__portal {
+          z-index: 9999 !important;
+        }
+
         .react-datepicker__navigation--previous {
           left: 1rem;
         }
@@ -186,6 +190,7 @@ export function DateRangePicker({
       `}</style>
 
       <ReactDatePicker
+        portalId="root-portal"
         selected={startDate}
         onChange={onChange}
         startDate={startDate}

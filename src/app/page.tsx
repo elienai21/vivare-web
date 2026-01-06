@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Hero } from "@/components/home/Hero";
 import { Collections } from "@/components/home/Collections";
+import { CityEvents } from "@/components/home/CityEvents";
 import { FeaturedListings } from "@/components/home/FeaturedListings";
 import { Skeleton } from "@/components/ui/Skeleton";
 
@@ -27,6 +28,7 @@ export default function Home() {
     <main className="min-h-screen bg-white dark:bg-black">
       <Hero />
       <Collections />
+      <CityEvents />
       <Suspense fallback={<FeaturedSkeleton />}>
         <FeaturedListings />
       </Suspense>

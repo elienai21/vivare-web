@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Minus, Plus, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Guests } from '@/types';
@@ -20,17 +21,32 @@ export function GuestSelector({
 }: GuestSelectorProps) {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [coords, setCoords] = useState({ top: 0, left: 0, width: 0 });
 
-    // Close on click outside
+    // Close on click outside and update positioning
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                // If the click is inside the portal, don't close
+                const portal = document.getElementById('root-portal');
+                if (portal && portal.contains(event.target as Node)) return;
+
                 setIsOpen(false);
             }
         }
+
+        if (isOpen && containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            setCoords({
+                top: rect.bottom + window.scrollY,
+                left: rect.left + window.scrollX,
+                width: rect.width
+            });
+        }
+
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    }, [isOpen]);
 
     const totalGuests = guests.adults + guests.children;
 
@@ -74,9 +90,17 @@ export function GuestSelector({
                 </div>
             </button>
 
-            {/* Dropdown */}
-            {isOpen && (
-                <div className="absolute top-full left-0 right-0 mt-2 p-5 bg-white rounded-xl shadow-xl border border-neutral-100 z-50 animate-in fade-in zoom-in-95 duration-200">
+            {/* Dropdown via Portal */}
+            {isOpen && typeof document !== 'undefined' && createPortal(
+                <div
+                    className="fixed p-5 bg-white rounded-xl shadow-2xl border border-neutral-100 z-[9999] animate-in fade-in zoom-in-95 duration-200"
+                    style={{
+                        top: `${coords.top + 8}px`,
+                        left: `${coords.left}px`,
+                        width: `${coords.width}px`,
+                        minWidth: '280px'
+                    }}
+                >
                     <div className="space-y-6">
                         <CounterRow
                             label="Adultos"
@@ -105,14 +129,15 @@ export function GuestSelector({
                             onMinus={() => updateGuests('infants', -1)}
                             onPlus={() => updateGuests('infants', 1)}
                             canMinus={guests.infants > 0}
-                            canPlus={true} // Infants usually don't count towards max capacity (check policy)
+                            canPlus={true}
                         />
                     </div>
 
                     <div className="mt-4 pt-4 border-t border-neutral-100 text-xs text-neutral-500 text-center">
                         Máximo de {maxGuests} hóspedes nesta propriedade
                     </div>
-                </div>
+                </div>,
+                document.getElementById('root-portal') || document.body
             )}
         </div>
     );
