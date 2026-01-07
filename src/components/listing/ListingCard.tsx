@@ -60,11 +60,19 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
                     </div>
                 )}
 
-                {/* Gradient Overlay - Always slightly visible for text safety */}
+                {/* Gradient Overlay - Strengthened for white text readability over image */}
                 <div
-                    className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent 
-                     opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                    className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent 
+                     z-10 opacity-70 group-hover:opacity-100 transition-opacity duration-300"
                 />
+
+                {/* Price Overlay */}
+                <div className="absolute bottom-4 right-4 z-20 text-white text-right drop-shadow-md">
+                    <span className="text-xl font-bold">
+                        R$ {pricePerNight?.toLocaleString('pt-BR') ?? '---'}
+                    </span>
+                    <span className="text-white/80 text-xs block">/noite</span>
+                </div>
             </div>
 
             {/* Content */}
@@ -158,16 +166,6 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
                         {maxGuests} {maxGuests === 1 ? 'hóspede' : 'hóspedes'}
                     </span>
                 </div>
-
-                {/* Price */}
-                {pricePerNight !== undefined && (
-                    <div className="flex items-baseline gap-1.5 pt-4 border-t border-neutral-100">
-                        <span className="text-2xl font-bold text-neutral-900">
-                            R$ {pricePerNight.toLocaleString('pt-BR')}
-                        </span>
-                        <span className="text-neutral-500 text-sm">/noite</span>
-                    </div>
-                )}
             </div>
         </Link>
     );
