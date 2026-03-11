@@ -24,19 +24,6 @@ const nextConfig: NextConfig = {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60 * 60 * 24, // 24 hours
   },
-  // BFF Rewrites (optional, if we want to proxy /api requests)
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/:path*`,
-      },
-      {
-        source: '/webhooks/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/webhooks/:path*`,
-      },
-    ];
-  },
 };
 
 export default nextConfig;

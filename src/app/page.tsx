@@ -1,37 +1,413 @@
-import { Suspense } from "react";
-import { Hero } from "@/components/home/Hero";
-import { Collections } from "@/components/home/Collections";
-import { CityEvents } from "@/components/home/CityEvents";
-import { FeaturedListings } from "@/components/home/FeaturedListings";
-import { Skeleton } from "@/components/ui/Skeleton";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { OwnerPopupTrigger } from "@/components/ui/OwnerPopupTrigger";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { SiteContent } from "@/types/cms";
+import { fetchListings } from "@/services/staysService";
+import { HeroSearch } from "@/components/ui/HeroSearch";
 
-function FeaturedSkeleton() {
+export const metadata: Metadata = {
+  title: "Hospedagens de Alto Padrão em SP, Santos e Guarujá",
+  description: "Descubra e reserve apartamentos premium para temporada em São Paulo, Santos e Guarujá. Check-in digital, limpeza profissional e suporte dedicado.",
+  alternates: { canonical: "/" },
+};
+
+export default async function Home() {
+  let content: SiteContent = {
+    heroTitle: "Hospedagens de alto padrão em <span class='text-primary-500'>São Paulo</span> e no <span class='text-primary-500'>Litoral</span>",
+    heroSubtitle: "Sinta a exclusividade de um hotel boutique em apartamentos e casas curadas com rigor em localizações privilegiadas.",
+    ctaButtonText: "Reservar uma unidade"
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let listings: any[] = [];
+
+  try {
+    // Nova coleção CMS: pages/home
+    const docRef = doc(db, "pages", "home");
+    const docSnap = await Promise.race([
+      getDoc(docRef),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("Firestore timeout")), 8000)),
+    ]);
+    if (docSnap.exists()) {
+      const pageData = docSnap.data();
+      const c = pageData.content || pageData;
+      content = {
+        heroTitle: c.heroTitle || content.heroTitle,
+        heroSubtitle: c.heroSubtitle || content.heroSubtitle,
+        ctaButtonText: c.ctaButtonText || content.ctaButtonText,
+      };
+    }
+  } catch (err) {
+    console.error("Erro CMS:", err);
+  }
+
+  try {
+    const fetchedListings = await fetchListings();
+    listings = (fetchedListings || []).filter(l => l.status === "active");
+  } catch (err) {
+    console.error("Erro Stays API:", err);
+  }
+
+  const topListings = listings.slice(0, 3);
+  let heroImages = topListings.length > 1
+    ? topListings.map(l => l._t_mainImageMeta?.url).filter(Boolean)
+    : [];
+
+  // Se a API falhar ou trazer só 1 imagem, força o fallback para o Crossfade funcionar
+  if (heroImages.length < 2) {
+    heroImages = [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+      "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+    ];
+  }
+
   return (
-    <div className="py-24 px-6 max-w-7xl mx-auto">
-      <div className="flex flex-col md:flex-row justify-between mb-12 gap-6">
-        <div className="space-y-4">
-          <Skeleton className="h-10 w-64" />
-          <Skeleton className="h-6 w-96" />
+    <main>
+      {/* Hero Section */}
+      <section className="relative h-[92vh] w-full overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80 z-10 pointer-events-none"></div>
+          {heroImages.length > 1 ? (
+            heroImages.map((imgUrl, idx) => (
+              <div
+                key={idx}
+                className={`absolute inset-0 hero-slide hero-slide-${idx + 1}`}
+                style={{ backgroundImage: `url(${imgUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', animation: "heroCrossfade 24s infinite, slowZoom 14s ease-out both" }}
+              />
+            ))
+          ) : (
+            <img src={heroImages[0]} alt="Vivare Luxury" className="h-full w-full object-cover" style={{ animation: "slowZoom 14s ease-out both" }} />
+          )}
         </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="aspect-[4/3] rounded-3xl" />
-        ))}
-      </div>
-    </div>
-  );
-}
 
-export default function Home() {
-  return (
-    <main className="min-h-screen bg-white dark:bg-black">
-      <Hero />
-      <Collections />
-      <CityEvents />
-      <Suspense fallback={<FeaturedSkeleton />}>
-        <FeaturedListings />
-      </Suspense>
+        <div className="relative z-20 flex h-full flex-col items-center justify-center px-6 text-center">
+          <div className="max-w-4xl space-y-5">
+            <p className="text-[10px] md:text-xs font-semibold tracking-[.35em] uppercase text-primary drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" style={{ opacity: 0, animation: 'fadeUp .7s .3s ease forwards' }}>
+              Curadoria · Tecnologia · Hospitalidade
+            </p>
+            <h2
+              className="font-display font-light text-white leading-[1.08] text-[clamp(2.5rem,6vw,6.5rem)] drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]"
+              style={{ opacity: 0, animation: 'fadeUp .9s .5s ease forwards' }}
+              dangerouslySetInnerHTML={{ __html: content.heroTitle }}
+            />
+            <p className="mx-auto max-w-xl text-sm md:text-base font-light text-slate-100 leading-relaxed whitespace-pre-line drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]" style={{ opacity: 0, animation: 'fadeUp .8s .7s ease forwards' }}>
+              {content.heroSubtitle}
+            </p>
+          </div>
+
+          <div className="mt-10 w-full max-w-4xl" style={{ opacity: 0, animation: 'fadeUp .8s .9s ease forwards' }}>
+            <HeroSearch />
+          </div>
+
+          {/* Social Proof Badge */}
+          <div className="flex flex-col sm:flex-row items-center gap-6 mt-10" style={{ opacity: 0, animation: 'fadeUp .7s 1.1s ease forwards' }}>
+            <div className="flex -space-x-3">
+              <img className="w-8 h-8 rounded-full border-2 border-primary/50 object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64" alt="Hóspede" />
+              <img className="w-8 h-8 rounded-full border-2 border-primary/50 object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=64&h=64" alt="Hóspede" />
+              <img className="w-8 h-8 rounded-full border-2 border-primary/50 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=64&h=64" alt="Hóspede" />
+              <div className="w-8 h-8 rounded-full border-2 border-primary/50 bg-primary/20 backdrop-blur-md flex items-center justify-center text-[10px] font-bold text-white">
+                ✓
+              </div>
+            </div>
+            <div className="text-left">
+              <div className="flex items-center gap-1 text-primary" role="img" aria-label="Avaliação 5 de 5 estrelas">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">star</span>
+                ))}
+              </div>
+              <p className="text-[10px] font-medium text-white/80 tracking-wide uppercase mt-0.5">Hóspedes satisfeitos em São Paulo e Litoral</p>
+            </div>
+          </div>
+        </div>
+
+        <span className="absolute right-6 bottom-10 font-body text-[9px] tracking-[.35em] uppercase text-white/40 drop-shadow-md" style={{ writingMode: 'vertical-rl' }}>
+          Tecnologia Vivare
+        </span>
+      </section>
+
+      {/* Curated Selection */}
+      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
+        <div className="mb-14 flex items-end justify-between reveal">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-[.3em] text-primary">Coleção Exclusiva</span>
+            <h3 className="font-display font-light text-ink dark:text-parchment mt-1 text-[clamp(2rem,3.5vw,3rem)]">
+              Experiências <em>Vivare</em>
+            </h3>
+            <span className="gold-line"></span>
+          </div>
+          <Link className="hidden text-xs font-semibold tracking-widest uppercase text-primary hover:underline md:block" href="/unidades">
+            Ver todos os imóveis &rarr;
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {listings.length > 0 ? (
+            listings.slice(0, 6).map((listing, index) => (
+              <a href={`/unidades/${listing.id}`} key={listing._id} className="group cursor-pointer card-lift reveal" style={{ transitionDelay: `${index * 0.1}s` }}>
+                <div className="relative mb-5 overflow-hidden aspect-[4/3]">
+                  {listing._t_mainImageMeta?.url ? (
+                    <img
+                      src={listing._t_mainImageMeta.url}
+                      alt={listing._mstitle.pt_BR}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 text-neutral-400">Sem Imagem</div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <button aria-label="Salvar nos favoritos" className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-ink shadow backdrop-blur transition-colors hover:text-red-500">
+                    <span className="material-symbols-outlined text-lg" aria-hidden="true">favorite</span>
+                  </button>
+                  {index === 0 && (
+                    <span className="absolute bottom-4 left-4 text-[9px] font-bold tracking-[.25em] uppercase bg-primary text-ink px-3 py-1">
+                      Destaque
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <h4 className="font-display text-xl font-medium text-ink dark:text-parchment line-clamp-1">{listing._mstitle.pt_BR}</h4>
+                  <p className="text-xs font-medium text-muted tracking-wider mt-0.5 uppercase line-clamp-1">{listing.address.region}, {listing.address.city}</p>
+                </div>
+                <span className="gold-line" style={{ margin: '0.75rem 0 0.5rem', width: '2rem' }}></span>
+                <p className="font-display text-xl font-medium text-ink dark:text-parchment">
+                  {listing._d_minPrice ? `R$ ${listing._d_minPrice}` : "Ver Tarifas"}
+                  {listing._d_minPrice && <span className="text-sm font-body font-normal text-muted"> / noite</span>}
+                </p>
+              </a>
+            ))
+          ) : (
+            <div className="col-span-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="animate-pulse">
+                  <div className="bg-neutral-200 dark:bg-neutral-800 aspect-[4/3] mb-5"></div>
+                  <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-3/4 mb-2"></div>
+                  <div className="h-4 bg-neutral-200 dark:bg-neutral-800 w-1/2 mb-3"></div>
+                  <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-1/4"></div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-12 text-center md:hidden">
+          <Link href="/unidades" className="inline-block border border-primary text-primary px-8 py-4 font-bold text-xs uppercase tracking-widest transition-all hover:bg-primary hover:text-ink">
+            Mostrar todas
+          </Link>
+        </div>
+      </section>
+
+      {/* PADRÃO VIVARE (diferenciais hóspede) */}
+      <div className="gold-divider mx-6 lg:mx-10 max-w-7xl xl:mx-auto mt-20"></div>
+
+      <section className="bg-background-light py-24 dark:bg-background-dark">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="text-center max-w-2xl mx-auto mb-16 reveal">
+            <span className="text-xs font-bold uppercase tracking-[.3em] text-primary">Para quem hospeda</span>
+            <h3 className="font-display font-light text-ink dark:text-parchment mt-2 text-[clamp(2rem,3.5vw,3rem)]">
+              O Padrão <em>Vivare</em>
+            </h3>
+            <span className="gold-line mx-auto"></span>
+            <p className="text-sm font-light text-muted leading-relaxed">
+              Excelência em cada detalhe para transformar sua estadia em uma experiência memorável e sem preocupações.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="flex flex-col items-start space-y-4 p-8 bg-white dark:bg-ink border border-primary/15 card-lift reveal">
+              <div className="flex h-12 w-12 items-center justify-center border border-primary text-primary">
+                <span className="material-symbols-outlined text-2xl">auto_awesome</span>
+              </div>
+              <h4 className="font-display text-xl font-medium text-ink dark:text-parchment">Curadoria Estrita</h4>
+              <p className="text-sm leading-relaxed text-muted">Imóveis selecionados sob os mais altos critérios de design, localização e conforto.</p>
+            </div>
+            <div className="flex flex-col items-start space-y-4 p-8 bg-white dark:bg-ink border border-primary/15 card-lift reveal" style={{ transitionDelay: '.08s' }}>
+              <div className="flex h-12 w-12 items-center justify-center border border-primary text-primary">
+                <span className="material-symbols-outlined text-2xl">key</span>
+              </div>
+              <h4 className="font-display text-xl font-medium text-ink dark:text-parchment">Check-in Digital</h4>
+              <p className="text-sm leading-relaxed text-muted">Acesso rápido e seguro via fechaduras eletrônicas, sem necessidade de chaves físicas ou fiador.</p>
+            </div>
+            <div className="flex flex-col items-start space-y-4 p-8 bg-white dark:bg-ink border border-primary/15 card-lift reveal" style={{ transitionDelay: '.16s' }}>
+              <div className="flex h-12 w-12 items-center justify-center border border-primary text-primary">
+                <span className="material-symbols-outlined text-2xl">workspace_premium</span>
+              </div>
+              <h4 className="font-display text-xl font-medium text-ink dark:text-parchment">Enxoval Premium</h4>
+              <p className="text-sm leading-relaxed text-muted">Cama, banho e cozinha preparados com padrão de hotelaria — prontos para a sua chegada.</p>
+            </div>
+            <div className="flex flex-col items-start space-y-4 p-8 bg-white dark:bg-ink border border-primary/15 card-lift reveal" style={{ transitionDelay: '.24s' }}>
+              <div className="flex h-12 w-12 items-center justify-center border border-primary text-primary">
+                <span className="material-symbols-outlined text-2xl">support_agent</span>
+              </div>
+              <h4 className="font-display text-xl font-medium text-ink dark:text-parchment">Suporte Dedicado</h4>
+              <p className="text-sm leading-relaxed text-muted">Atendimento ágil e humano por WhatsApp — sem robôs, sem burocracia.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* DEPOIMENTOS — HÓSPEDES */}
+      <section className="bg-ink py-24 border-t border-primary/20">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="mb-14 reveal">
+            <span className="text-xs font-bold uppercase tracking-[.3em] text-primary">Quem hospedou aqui</span>
+            <h3 className="font-display font-light text-parchment mt-2 text-[clamp(1.8rem,3vw,2.8rem)]">
+              O que nossos <em>hóspedes</em> dizem
+            </h3>
+            <span className="gold-line"></span>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+
+            <div className="p-8 border border-primary/20 bg-white/5 reveal">
+              <div className="flex gap-0.5 mb-4" role="img" aria-label="5 de 5 estrelas">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">star</span>
+                ))}
+              </div>
+              <p className="font-display text-lg font-light italic text-warm-mid leading-relaxed mb-6">
+                &quot;O apartamento estava ainda melhor do que nas fotos. Localização perfeita, tudo impecavelmente limpo. Sem dúvida a melhor hospedagem que já tive em São Paulo.&quot;
+              </p>
+              <div>
+                <p className="text-sm font-semibold text-parchment">Karina Santos</p>
+                <p className="text-xs text-muted tracking-wider uppercase mt-0.5">Jardins · São Paulo</p>
+              </div>
+            </div>
+
+            <div className="p-8 border border-primary/20 bg-white/5 reveal" style={{ transitionDelay: '.1s' }}>
+              <div className="flex gap-0.5 mb-4" role="img" aria-label="5 de 5 estrelas">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">star</span>
+                ))}
+              </div>
+              <p className="font-display text-lg font-light italic text-warm-mid leading-relaxed mb-6">
+                &quot;Já fico na Vivare toda vez que venho a SP — há mais de um ano. A equipe tem uma atenção que você não encontra em hotel. Indico pra todo mundo sem hesitar.&quot;
+              </p>
+              <div>
+                <p className="text-sm font-semibold text-parchment">Erika Lima</p>
+                <p className="text-xs text-muted tracking-wider uppercase mt-0.5">Recorrente · 1+ ano</p>
+              </div>
+            </div>
+
+            <div className="p-8 border border-primary/20 bg-white/5 reveal" style={{ transitionDelay: '.2s' }}>
+              <div className="flex gap-0.5 mb-4" role="img" aria-label="5 de 5 estrelas">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">star</span>
+                ))}
+              </div>
+              <p className="font-display text-lg font-light italic text-warm-mid leading-relaxed mb-6">
+                &quot;Seriedade, rapidez no atendimento, excelentes localizações em SP e preços que fazem sentido. Equipe nota 10 do início ao fim.&quot;
+              </p>
+              <div>
+                <p className="text-sm font-semibold text-parchment">Luíza Castro</p>
+                <p className="text-xs text-muted tracking-wider uppercase mt-0.5">Pinheiros · São Paulo</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* PARA PROPRIETÁRIOS */}
+      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
+        <div className="relative overflow-hidden bg-ink rounded-xl border border-primary/20">
+          {/* foto de fundo */}
+          <div className="absolute right-0 top-0 hidden h-full w-1/2 lg:block">
+            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=900&q=80"
+              alt="Imóvel gerenciado Vivare"
+              className="h-full w-full object-cover opacity-50" />
+            <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/50 to-transparent"></div>
+          </div>
+
+          <div className="relative z-10 p-12 md:p-16 lg:w-7/12 reveal">
+            <span className="text-xs font-bold uppercase tracking-[.3em] text-primary">Para Proprietários</span>
+            <h3 className="font-display font-light text-parchment mt-3 leading-[1.1] text-[clamp(2rem,3.5vw,3.2rem)]">
+              Seu imóvel pode render mais<br />com gestão <em>profissional.</em>
+            </h3>
+            <span className="gold-line"></span>
+            <p className="text-sm font-light text-warm-mid leading-relaxed mb-10 max-w-prose">
+              Da divulgação nas plataformas ao repasse mensal detalhado — cuidamos de tudo enquanto você acompanha os resultados. Sem surpresas, sem burocracia, sem preocupação operacional.
+            </p>
+
+            <div className="flex flex-wrap gap-4 mb-14">
+              <a href="/para-proprietarios" className="inline-flex items-center gap-2 bg-primary text-ink px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all hover:bg-primary-light">
+                <span className="material-symbols-outlined text-base">handshake</span>
+                Fale com um Especialista
+              </a>
+              <a href="https://wa.me/5511985067840?text=Olá%2C+tenho+interesse+em+saber+mais+sobre+a+gestão+da+Vivare+para+meu+imóvel"
+                className="inline-flex items-center gap-2 border border-primary/50 text-parchment px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all hover:bg-white/5">
+                <span className="material-symbols-outlined text-base">chat</span>
+                Falar no WhatsApp
+              </a>
+            </div>
+
+            <div className="grid grid-cols-3 gap-8 border-t border-primary/20 pt-10">
+              <div>
+                <p className="font-display text-4xl font-light text-primary">30+</p>
+                <p className="text-xs text-muted tracking-wider uppercase mt-1">Imóveis gerenciados em SP</p>
+              </div>
+              <div>
+                <p className="font-display text-4xl font-light text-primary">2021</p>
+                <p className="text-xs text-muted tracking-wider uppercase mt-1">Atuando desde</p>
+              </div>
+              <div>
+                <p className="font-display text-4xl font-light text-primary">100%</p>
+                <p className="text-xs text-muted tracking-wider uppercase mt-1">Transparência nos repasses</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* DEPOIMENTOS — PROPRIETÁRIOS */}
+      <section className="bg-[#161410] py-24 border-t border-primary/15">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="mb-14 reveal">
+            <span className="text-xs font-bold uppercase tracking-[.3em] text-primary">Quem confiou o imóvel a nós</span>
+            <h3 className="font-display font-light text-parchment mt-2 text-[clamp(1.8rem,3vw,2.8rem)]">
+              O que nossos <em>proprietários</em> dizem
+            </h3>
+            <span className="gold-line"></span>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+
+            <div className="p-10 border border-primary/20 bg-white/3 reveal">
+              <p className="font-display text-xl font-light italic text-warm-mid leading-relaxed mb-8">
+                &quot;Meu studio em Moema gerava R$ 1.800/mês de aluguel tradicional. Com a Vivare, passou para R$ 4.100/mês em média — e eu não preciso me preocupar com absolutamente nada.&quot;
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-display text-lg">M</div>
+                <div>
+                  <p className="text-sm font-semibold text-parchment">Proprietário · Studio Moema</p>
+                  <p className="text-xs text-muted tracking-wider uppercase mt-0.5">São Paulo · desde 2023</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-10 border border-primary/20 bg-white/3 reveal" style={{ transitionDelay: '.12s' }}>
+              <p className="font-display text-xl font-light italic text-warm-mid leading-relaxed mb-8">
+                &quot;O relatório mensal é transparente, o repasse é pontual e qualquer problema no imóvel é resolvido antes que eu precise perguntar. É a parceria que eu precisava para ter renda passiva de verdade.&quot;
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-display text-lg">R</div>
+                <div>
+                  <p className="text-sm font-semibold text-parchment">Proprietário · Apartamento Pinheiros</p>
+                  <p className="text-xs text-muted tracking-wider uppercase mt-0.5">São Paulo · desde 2022</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div className="mt-10 text-center reveal">
+            <Link href="/para-proprietarios"
+              className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-primary border border-primary/40 px-10 py-4 transition-all hover:bg-primary hover:text-ink">
+              Ver tudo sobre gestão de imóveis &rarr;
+            </Link>
+          </div>
+        </div>
+      </section>
+
     </main>
   );
 }

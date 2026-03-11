@@ -1,0 +1,71 @@
+﻿
+> vivare-web@0.1.0 build
+> next build
+
+Ôû▓ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Ô£ô Compiled successfully in 11.6s
+  Running TypeScript ...
+  Collecting page data using 11 workers ...
+npm : Error: export const 
+dynamic = 
+"force-static"/export 
+const revalidate not 
+configured on route 
+"/sitemap.xml" with 
+"output: export". See more 
+info here: https://nextjs.o
+rg/docs/advanced-features/s
+tatic-html-export
+No linha:1 caractere:1
++ npm run build > 
+build_ssg.log 2>&1 ; 
+Get-Content build_ssg.log 
+-Tail  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: (Err  
+  or: export c...tic-htm   
+ l-export:String) [], R    
+emoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+    at module evaluation (C
+:\Projetos\Site_Vivare\web\
+.next\server\chunks\[root-o
+f-the-server]__4b16f1f9._.j
+s:16:2227)
+    at instantiateModule (C
+:\Projetos\Site_Vivare\web\
+.next\server\chunks\[turbop
+ack]_runtime.js:740:9)
+    at 
+instantiateRuntimeModule (C
+:\Projetos\Site_Vivare\web\
+.next\server\chunks\[turbop
+ack]_runtime.js:768:12)
+    at getOrInstantiateRunt
+imeModule (C:\Projetos\Site
+_Vivare\web\.next\server\ch
+unks\[turbopack]_runtime.js
+:781:12)
+    at Object.m (C:\Projeto
+s\Site_Vivare\web\.next\ser
+ver\chunks\[turbopack]_runt
+ime.js:790:18)
+    at Object.<anonymous> (
+C:\Projetos\Site_Vivare\web
+\.next\server\app\sitemap.x
+ml\route.js:5:3)
+
+> Build error occurred
+Error: Failed to collect 
+page data for /sitemap.xml
+    at ignore-listed 
+frames {
+  type: 'Error'
+}

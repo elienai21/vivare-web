@@ -15,7 +15,7 @@ const buttonVariants = {
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        premium: "bg-gradient-to-r from-vivare-gold-500 to-orange-500 text-white shadow-md hover:shadow-lg hover:brightness-110",
+        premium: "bg-[#1a1a1a] text-white shadow-md hover:shadow-lg hover:bg-[#2d2d2d] transition-colors",
     },
     size: {
         default: "h-12 px-6 py-3",

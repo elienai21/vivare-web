@@ -1,53 +1,78 @@
 @import "tailwindcss";
 
+@layer utilities {
+  .hero-slide {
+    animation: heroCrossfade 24s infinite;
+  }
+
+  .hero-slide-1 {
+    animation-delay: 0s;
+  }
+
+  .hero-slide-2 {
+    animation-delay: 8s;
+  }
+
+  .hero-slide-3 {
+    animation-delay: 16s;
+  }
+
+  @keyframes heroCrossfade {
+    0% {
+      opacity: 0;
+      z-index: 0;
+      transform: scale(1.05);
+    }
+
+    5% {
+      opacity: 1;
+      z-index: 10;
+      transform: scale(1.04);
+    }
+
+    30% {
+      opacity: 1;
+      z-index: 10;
+      transform: scale(1.01);
+    }
+
+    35% {
+      opacity: 0;
+      z-index: 0;
+      transform: scale(1);
+    }
+
+    100% {
+      opacity: 0;
+      z-index: 0;
+      transform: scale(1);
+    }
+  }
+}
+
 /* ============================================
    VIVARE PREMIUM DESIGN SYSTEM
    ============================================ */
 
-
+/* Thin, modern icons */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24 !important;
+}
 
 :root {
   /* ========== Typography ========== */
   /* --font-sans and --font-display are injected by next/font */
 
-
-  /* ========== Colors - Premium Palette ========== */
-  /* Primary - Sophisticated Blue */
-  --color-primary-50: hsl(210, 100%, 97%);
-  --color-primary-100: hsl(210, 100%, 94%);
-  --color-primary-200: hsl(210, 100%, 86%);
-  --color-primary-300: hsl(210, 100%, 74%);
-  --color-primary-400: hsl(210, 100%, 60%);
-  --color-primary-500: hsl(210, 100%, 50%);
-  --color-primary-600: hsl(210, 100%, 45%);
-  --color-primary-700: hsl(210, 100%, 38%);
-  --color-primary-800: hsl(210, 100%, 30%);
-  --color-primary-900: hsl(210, 100%, 22%);
-
-  /* Accent - Warm Gold */
-  --color-accent-50: hsl(38, 100%, 97%);
-  --color-accent-100: hsl(38, 100%, 92%);
-  --color-accent-200: hsl(38, 100%, 82%);
-  --color-accent-300: hsl(38, 95%, 70%);
-  --color-accent-400: hsl(35, 95%, 58%);
-  --color-accent-500: hsl(32, 95%, 52%);
-  --color-accent-600: hsl(28, 90%, 46%);
-  --color-accent-700: hsl(24, 85%, 38%);
-  --color-accent-800: hsl(20, 80%, 32%);
-  --color-accent-900: hsl(18, 75%, 26%);
-
-  /* Neutral - Editorial Gray */
-  --color-neutral-50: hsl(220, 15%, 98%);
-  --color-neutral-100: hsl(220, 14%, 96%);
-  --color-neutral-200: hsl(220, 13%, 91%);
-  --color-neutral-300: hsl(220, 11%, 80%);
-  --color-neutral-400: hsl(220, 10%, 64%);
-  --color-neutral-500: hsl(220, 9%, 50%);
-  --color-neutral-600: hsl(220, 10%, 40%);
-  --color-neutral-700: hsl(220, 11%, 32%);
-  --color-neutral-800: hsl(220, 14%, 22%);
-  --color-neutral-900: hsl(220, 18%, 12%);
-  --color-neutral-950: hsl(220, 22%, 8%);
+  /* ========== Colors - VIVARE Ouro Envelhecido ========== */
+  --color-primary: #b89a5c;
+  --color-primary-light: #d4b87a;
+  --color-primary-dim: rgba(184, 154, 92, 0.12);
+  --color-background-light: #f7f8fa;
+  --color-background-dark: #0f0e0c;
+  --color-ink: #0f0e0c;
+  --color-parchment: #f7f8fa;
+  --color-warm-mid: #e2e4e8;
+  --color-muted: #7a7060;
 
   /* Semantic Colors */
   --color-success: hsl(152, 69%, 42%);
@@ -60,37 +85,25 @@
   --color-info-light: hsl(210, 100%, 95%);
 
   /* ========== Background & Foreground ========== */
-  --background: var(--color-neutral-50);
-  --foreground: var(--color-neutral-900);
+  --background: var(--color-background-light);
+  --foreground: var(--color-ink);
   --card-background: #ffffff;
-  --card-border: var(--color-neutral-200);
+  --card-border: var(--color-warm-mid);
 
   /* ========== Spacing Scale (8px base) ========== */
   --space-0: 0;
   --space-1: 0.25rem;
-  /* 4px */
   --space-2: 0.5rem;
-  /* 8px */
   --space-3: 0.75rem;
-  /* 12px */
   --space-4: 1rem;
-  /* 16px */
   --space-5: 1.25rem;
-  /* 20px */
   --space-6: 1.5rem;
-  /* 24px */
   --space-8: 2rem;
-  /* 32px */
   --space-10: 2.5rem;
-  /* 40px */
   --space-12: 3rem;
-  /* 48px */
   --space-16: 4rem;
-  /* 64px */
   --space-20: 5rem;
-  /* 80px */
   --space-24: 6rem;
-  /* 96px */
 
   /* ========== Shadows - Subtle Elevation ========== */
   --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.03);
@@ -103,15 +116,10 @@
   /* ========== Border Radius ========== */
   --radius-none: 0;
   --radius-sm: 0.25rem;
-  /* 4px */
   --radius-md: 0.5rem;
-  /* 8px */
   --radius-lg: 0.75rem;
-  /* 12px */
   --radius-xl: 1rem;
-  /* 16px */
   --radius-2xl: 1.5rem;
-  /* 24px */
   --radius-full: 9999px;
 
   /* ========== Transitions ========== */
@@ -121,13 +129,20 @@
   --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ========== Dark Mode ========== */
+/* ========== Dark Mode (Toggle Support) ========== */
+:is(.dark, [data-theme='dark']) :root {
+  --background: var(--color-background-dark);
+  --foreground: var(--color-parchment);
+  --card-background: #161410;
+  --card-border: rgba(184, 154, 92, 0.2);
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: var(--color-neutral-950);
-    --foreground: var(--color-neutral-100);
-    --card-background: var(--color-neutral-900);
-    --card-border: var(--color-neutral-800);
+  :root:not([data-theme='light']) {
+    --background: var(--color-background-dark);
+    --foreground: var(--color-parchment);
+    --card-background: #161410;
+    --card-border: rgba(184, 154, 92, 0.2);
   }
 }
 
@@ -135,17 +150,153 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-body: var(--font-body);
   --font-display: var(--font-display);
 
-  /* Colors */
-  --color-primary: var(--color-primary-600);
-  --color-primary-dark: var(--color-primary-700);
-  --color-accent: var(--color-accent-500);
-  --color-success: var(--color-success);
-  --color-warning: var(--color-warning);
-  --color-error: var(--color-error);
+  /* Mapping the exact colors for usage */
+  --color-primary: var(--color-primary);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-dim: var(--color-primary-dim);
+  --color-background-light: var(--color-background-light);
+  --color-background-dark: var(--color-background-dark);
+  --color-ink: var(--color-ink);
+  --color-parchment: var(--color-parchment);
+  --color-warm-mid: var(--color-warm-mid);
+  --color-muted: var(--color-muted);
 }
+
+@layer base {
+  body {
+    @apply bg-background-light dark:bg-background-dark text-ink dark:text-parchment antialiased font-body;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold tracking-tight font-display;
+  }
+}
+
+/* ============================================
+   VIVARE PREMIUM OVERLAYS & EFFECTS
+   ============================================ */
+
+/* ── grain overlay global ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: .5;
+}
+
+/* ── scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .75s ease, transform .75s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── gold separator ── */
+.gold-line {
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  background: var(--color-primary);
+  margin: 1rem 0 1.5rem;
+}
+
+/* ── hover card lift ── */
+.card-lift {
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px -8px rgba(184, 154, 92, .18);
+}
+
+/* ── section divider gold gradient ── */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-primary) 40%, var(--color-primary) 60%, transparent);
+}
+
+@keyframes slowZoom {
+  from {
+    transform: scale(1.07);
+  }
+
+  to {
+    transform: scale(1.0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroCrossfade {
+  0% {
+    opacity: 1;
+    z-index: 10;
+  }
+
+  25% {
+    opacity: 1;
+    z-index: 10;
+  }
+
+  33.33% {
+    opacity: 0;
+    z-index: 0;
+  }
+
+  91.66% {
+    opacity: 0;
+    z-index: 0;
+  }
+
+  100% {
+    opacity: 1;
+    z-index: 10;
+  }
+}
+
+.hero-slide {
+  opacity: 0;
+}
+
+.hero-slide-1 {
+  animation-delay: 0s, 0s !important;
+}
+
+.hero-slide-2 {
+  animation-delay: 8s, 0s !important;
+}
+
+.hero-slide-3 {
+  animation-delay: 16s, 0s !important;
+}
+
 
 /* ============================================
    BASE STYLES
@@ -237,13 +388,13 @@ h3 {
 }
 
 .btn-primary {
-  background: var(--color-primary-600);
-  color: white;
+  background: #1a1a1a;
+  color: #ffffff;
 }
 
 .btn-primary:hover {
-  background: var(--color-primary-700);
-  box-shadow: 0 4px 14px rgb(0 112 243 / 0.25);
+  background: #2d2d2d;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.2);
 }
 
 .btn-primary:active {

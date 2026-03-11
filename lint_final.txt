@@ -1,45 +1,197 @@
-
+﻿
 > vivare-web@0.1.0 lint
 > eslint
 
 
-C:\Projetos\Site_Vivare\vivare-web\src\app\checkout\[id]\page.tsx
-   1:10  warning  'Suspense' is defined but never used          @typescript-eslint/no-unused-vars
-   2:20  warning  'redirect' is defined but never used          @typescript-eslint/no-unused-vars
-  10:14  warning  'error' is defined but never used             @typescript-eslint/no-unused-vars
-  35:11  warning  'checkIn' is assigned a value but never used  @typescript-eslint/no-unused-vars
-  40:43  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+C:\Projetos\Site_Vivare\web\fetch_cal.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
 
-C:\Projetos\Site_Vivare\vivare-web\src\components\checkout\CheckoutWizard.tsx
-   27:20  warning  'setGuests' is assigned a value but never used                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
-  193:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+C:\Projetos\Site_Vivare\web\fetch_props.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
 
-C:\Projetos\Site_Vivare\vivare-web\src\components\checkout\GuestStep.tsx
-  4:10  warning  'Input' is defined but never used  @typescript-eslint/no-unused-vars
+C:\Projetos\Site_Vivare\web\fetch_sample.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
 
-C:\Projetos\Site_Vivare\vivare-web\src\components\checkout\PaymentStep.tsx
-   6:10  warning  'finalizeCheckout' is defined but never used  @typescript-eslint/no-unused-vars
-  75:45  warning  'checkoutId' is defined but never used        @typescript-eslint/no-unused-vars
+C:\Projetos\Site_Vivare\web\fetch_single.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
 
-C:\Projetos\Site_Vivare\vivare-web\src\components\checkout\SummaryStep.tsx
-  4:10  warning  'useMemo' is defined but never used  @typescript-eslint/no-unused-vars
+C:\Projetos\Site_Vivare\web\src\app\(hospede)\blog\[slug]\page.tsx
+   13:5   warning  'parent' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  129:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
 
-C:\Projetos\Site_Vivare\vivare-web\src\components\home\Hero.tsx
-  12:10  warning  'cn' is defined but never used  @typescript-eslint/no-unused-vars
+C:\Projetos\Site_Vivare\web\src\app\(hospede)\blog\page.tsx
+   3:10  warning  'BlogPost' is defined but never used                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  54:41  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
 
-C:\Projetos\Site_Vivare\vivare-web\src\components\listing\Amenities.tsx
-  13:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+C:\Projetos\Site_Vivare\web\src\app\(hospede)\unidades\[slug]\page.tsx
+  80:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
 
-C:\Projetos\Site_Vivare\vivare-web\src\components\listing\BookingSidebar.tsx
-  56:26  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+C:\Projetos\Site_Vivare\web\src\app\(hospede)\unidades\page.tsx
+   69:52  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  163:25  error    Do not use an `<a>` element to navigate to `/unidades/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                           @next/next/no-html-link-for-pages
+  191:29  error    Do not use an `<a>` element to navigate to `/unidades/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                           @next/next/no-html-link-for-pages
+  201:45  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
 
-C:\Projetos\Site_Vivare\vivare-web\src\components\listing\DateRangePicker.tsx
-   5:10  warning  'addDays' is defined but never used       @typescript-eslint/no-unused-vars
-   5:19  warning  'isSameDay' is defined but never used     @typescript-eslint/no-unused-vars
-   5:30  warning  'parseISO' is defined but never used      @typescript-eslint/no-unused-vars
-   5:40  warning  'isAfter' is defined but never used       @typescript-eslint/no-unused-vars
-   7:49  warning  'CalendarIcon' is defined but never used  @typescript-eslint/no-unused-vars
-  28:5   warning  'listingId' is defined but never used     @typescript-eslint/no-unused-vars
+C:\Projetos\Site_Vivare\web\src\app\(institucional)\sobre\page.tsx
+    4:8   warning  'Image' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   43:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  104:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  219:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
 
-✖ 20 problems (2 errors, 18 warnings)
+C:\Projetos\Site_Vivare\web\src\app\(proprietario)\para-proprietarios\page.tsx
+  137:76   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  137:300  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  148:76   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  148:275  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Projetos\Site_Vivare\web\src\app\admin\blog\[postId]\page.tsx
+   37:8   warning  React Hook useEffect has a missing dependency: 'loadPost'. Either include it or remove the dependency array                                                                                                                                                                              react-hooks/exhaustive-deps
+  228:41  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Projetos\Site_Vivare\web\src\app\admin\configs\page.tsx
+  22:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\web\src\app\admin\layout.tsx
+  7:18  warning  'Settings' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\web\src\app\admin\page.tsx
+  9:17  error  Do not use an `<a>` element to navigate to `/admin/pages/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+C:\Projetos\Site_Vivare\web\src\app\admin\pages\[pageId]\page.tsx
+  7:15  warning  'CmsPage' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\web\src\app\layout.tsx
+  119:9  warning  Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+
+C:\Projetos\Site_Vivare\web\src\app\page.tsx
+   22:17   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   77:13   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  103:15   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  104:15   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  105:15   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  136:11   error    Do not use an `<a>` element to navigate to `/unidades/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                           @next/next/no-html-link-for-pages
+  147:21   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  197:11   error    Do not use an `<a>` element to navigate to `/unidades/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                           @next/next/no-html-link-for-pages
+  271:17   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  271:175  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  286:17   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  286:172  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  301:17   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  301:143  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  318:13   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  378:17   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  378:185  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  391:17   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  391:211  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+
+C:\Projetos\Site_Vivare\web\src\components\checkout\CheckoutWizard.tsx
+  108:8  warning  React Hook useEffect has a missing dependency: 'handleStateTransition'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projetos\Site_Vivare\web\src\components\forms\EmailSignupForm.tsx
+  10:12  warning  'loading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\web\src\components\ui\BookingWidget.tsx
+  25:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  47:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Projetos\Site_Vivare\web\src\components\ui\Footer.tsx
+  14:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Projetos\Site_Vivare\web\src\components\ui\GalleryLightbox.tsx
+   22:9   error    Error: This value cannot be modified
+
+Modifying a variable defined outside a component or hook is not allowed. Consider using an effect.
+
+C:\Projetos\Site_Vivare\web\src\components\ui\GalleryLightbox.tsx:22:9
+  20 |         setCurrentIndex(index);
+  21 |         setIsOpen(true);
+> 22 |         document.body.style.overflow = "hidden";
+     |         ^^^^^^^^^^^^^^^^^^^ value cannot be modified
+  23 |     };
+  24 |
+  25 |     const closeLightbox = () => {  react-hooks/immutability
+   50:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                    @next/next/no-img-element
+  101:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                    @next/next/no-img-element
+
+C:\Projetos\Site_Vivare\web\src\components\ui\Header.tsx
+   6:10  warning  'OwnerPopupTrigger' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  15:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Projetos\Site_Vivare\web\src\components\ui\Header.tsx:15:9
+  13 |     // Close menu on route change
+  14 |     useEffect(() => {
+> 15 |         setIsMenuOpen(false);
+     |         ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  16 |     }, [pathname]);
+  17 |
+  18 |     return (  react-hooks/set-state-in-effect
+  23:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @next/next/no-img-element
+
+C:\Projetos\Site_Vivare\web\src\components\ui\OwnerPopup.tsx
+  27:13  error  Error: Cannot access variable before it is declared
+
+`trackEvent` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+C:\Projetos\Site_Vivare\web\src\components\ui\OwnerPopup.tsx:27:13
+  25 |     useEffect(() => {
+  26 |         if (isOpen) {
+> 27 |             trackEvent("owner_popup_started");
+     |             ^^^^^^^^^^ `trackEvent` accessed before it is declared
+  28 |         }
+  29 |     }, [isOpen]);
+  30 |
+
+C:\Projetos\Site_Vivare\web\src\components\ui\OwnerPopup.tsx:35:5
+  33 |     };
+  34 |
+> 35 |     const trackEvent = (eventName: string) => {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 36 |         if (typeof window !== "undefined" && (window as unknown as { gtag?: (type: string, name: string) => void }).gtag) {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 37 |             const w = window as unknown as { gtag: (type: string, name: string) => void };
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 38 |             w.gtag("event", eventName);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 39 |         } else {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 40 |             console.log(`[Tracking Event] ${eventName}`);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 41 |         }
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 42 |     };
+     | ^^^^^^^ `trackEvent` is declared here
+  43 |
+  44 |     const formatMessageForWhatsApp = () => {
+  45 |         return encodeURIComponent(  react-hooks/immutability
+
+C:\Projetos\Site_Vivare\web\src\components\ui\PropertyMap.tsx
+   57:15  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   67:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   83:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   86:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  127:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Projetos\Site_Vivare\web\src\services\blogService.ts
+   15:5   warning  'serverTimestamp' is defined but never used       @typescript-eslint/no-unused-vars
+   17:25  warning  'NewsletterSubscriber' is defined but never used  @typescript-eslint/no-unused-vars
+  133:27  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+
+C:\Projetos\Site_Vivare\web\src\services\cmsService.ts
+  18:5  warning  'serverTimestamp' is defined but never used  @typescript-eslint/no-unused-vars
+  19:5  warning  'Timestamp' is defined but never used        @typescript-eslint/no-unused-vars
+
+C:\Projetos\Site_Vivare\web\src\services\staysService.ts
+  184:91  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Projetos\Site_Vivare\web\test-stays.js
+  1:15  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:1   error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Ô£û 72 problems (39 errors, 33 warnings)
 
