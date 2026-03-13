@@ -27,7 +27,6 @@ export async function listPendingQueue(): Promise<ContentQueueItem[]> {
         const snap = await getDocs(q);
         return snap.docs
             .map(d => ({ id: d.id, ...d.data() } as ContentQueueItem))
-            .filter(i => i.draftTitle)
             .sort((a, b) => (b.relevanceScore ?? 0) - (a.relevanceScore ?? 0));
     } catch (error) {
         console.error("[ContentQueue] Erro ao listar fila:", error);

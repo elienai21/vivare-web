@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { ArrowLeft, Save, Send, RefreshCw } from "lucide-react";
+import { ArrowLeft, Save, Send, RefreshCw, ImageIcon, XCircle } from "lucide-react";
 import Link from "next/link";
 import { getPostById, createPost, updatePost } from "@/services/blogService";
 import type { BlogPost } from "@/types/blog";
 import AiTextAssistant from "@/components/admin/AiTextAssistant";
+import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 
 export default function AdminBlogEditor() {
     const params = useParams();
@@ -233,17 +234,43 @@ export default function AdminBlogEditor() {
                             <h3 className="font-medium text-neutral-900 dark:text-white border-b border-neutral-100 dark:border-neutral-800 pb-3">Mídia e SEO</h3>
 
                             <div>
-                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">URL da Imagem de Capa</label>
-                                <input
-                                    type="url"
-                                    value={formData.coverImage || ""}
-                                    onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-                                    placeholder="https://exemplo.com/imagem.jpg"
-                                    className="w-full px-4 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                                />
-                                {formData.coverImage && (
-                                    <div className="mt-3 aspect-video bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200">
-                                        <img src={formData.coverImage} alt="Preview da Capa" className="w-full h-full object-cover" />
+                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Imagem de Capa</label>
+                                <div className="flex gap-2 items-center">
+                                    <input
+                                        type="url"
+                                        value={formData.coverImage || ""}
+                                        onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
+                                        placeholder="Cole a URL ou faça upload"
+                                        className="flex-1 px-4 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                                    />
+                                    <ImageUploadButton
+                                        onUploadComplete={(url) => setFormData({ ...formData, coverImage: url })}
+                                        label="Upload"
+                                    />
+                                    {formData.coverImage && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setFormData({ ...formData, coverImage: "" })}
+                                            className="text-neutral-400 hover:text-red-500 transition-colors shrink-0"
+                                            title="Remover imagem"
+                                        >
+                                            <XCircle className="w-5 h-5" />
+                                        </button>
+                                    )}
+                                </div>
+                                {formData.coverImage ? (
+                                    <div className="mt-3 aspect-video bg-neutral-100 dark:bg-neutral-900 rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800">
+                                        <img
+                                            src={formData.coverImage}
+                                            alt="Preview da Capa"
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="mt-3 flex items-center gap-3 p-4 rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700 text-neutral-400 text-sm">
+                                        <ImageIcon className="w-5 h-5 flex-shrink-0" />
+                                        <span>Nenhuma imagem. Cole uma URL ou faça upload.</span>
                                     </div>
                                 )}
                             </div>

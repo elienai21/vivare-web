@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   let content: SiteContent = {
     heroTitle: "Hospedagens de alto padrão em <span class='text-primary-500'>São Paulo</span> e no <span class='text-primary-500'>Litoral</span>",
-    heroSubtitle: "Sinta a exclusividade de um hotel boutique em apartamentos e casas curadas com rigor em localizações privilegiadas.",
+    heroSubtitle: "Check-in digital, suporte humano e imóveis selecionados a rigor. Sem depósito caução, sem fiador, sem burocracia.",
     ctaButtonText: "Reservar uma unidade"
   };
 
@@ -102,23 +102,19 @@ export default async function Home() {
             <HeroSearch />
           </div>
 
-          {/* Social Proof Badge */}
-          <div className="flex flex-col sm:flex-row items-center gap-6 mt-10" style={{ opacity: 0, animation: 'fadeUp .7s 1.1s ease forwards' }}>
-            <div className="flex -space-x-3">
-              <img className="w-8 h-8 rounded-full border-2 border-primary/50 object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64" alt="Hóspede" />
-              <img className="w-8 h-8 rounded-full border-2 border-primary/50 object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=64&h=64" alt="Hóspede" />
-              <img className="w-8 h-8 rounded-full border-2 border-primary/50 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=64&h=64" alt="Hóspede" />
-              <div className="w-8 h-8 rounded-full border-2 border-primary/50 bg-primary/20 backdrop-blur-md flex items-center justify-center text-[10px] font-bold text-white">
-                ✓
-              </div>
-            </div>
-            <div className="text-left">
-              <div className="flex items-center gap-1 text-primary" role="img" aria-label="Avaliação 5 de 5 estrelas">
+          {/* Social Proof Badge — dados reais Airbnb */}
+          <div className="flex items-center gap-4 mt-10" style={{ opacity: 0, animation: 'fadeUp .7s 1.1s ease forwards' }}>
+            <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md border border-white/10 px-5 py-3 rounded-full">
+              <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">star</span>
+                  <span key={i} className="material-symbols-outlined text-[13px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">star</span>
                 ))}
               </div>
-              <p className="text-[10px] font-medium text-white/80 tracking-wide uppercase mt-0.5">Hóspedes satisfeitos em São Paulo e Litoral</p>
+              <div className="w-px h-5 bg-white/15" />
+              <div className="text-left">
+                <p className="text-white font-bold text-sm leading-none">4,82 · 747 avaliações</p>
+                <p className="text-[10px] text-white/50 mt-0.5 tracking-wide">Superhost no Airbnb · 4 anos</p>
+              </div>
             </div>
           </div>
         </div>
@@ -126,6 +122,60 @@ export default async function Home() {
         <span className="absolute right-6 bottom-10 font-body text-[9px] tracking-[.35em] uppercase text-white/40 drop-shadow-md" style={{ writingMode: 'vertical-rl' }}>
           Tecnologia Vivare
         </span>
+      </section>
+
+      {/* Trust Bar — Prova social externa (Airbnb) */}
+      <section className="bg-ink border-b border-primary/10">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10 py-5">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+
+            {/* Nota */}
+            <div className="flex items-center gap-2.5">
+              <span className="text-2xl font-display font-bold text-white leading-none">4,82</span>
+              <div>
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="material-symbols-outlined text-[11px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                  ))}
+                </div>
+                <p className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">Nota média</p>
+              </div>
+            </div>
+
+            <div className="hidden sm:block w-px h-7 bg-white/10" />
+
+            {/* Avaliações */}
+            <div className="text-center">
+              <p className="text-2xl font-display font-bold text-white leading-none">747</p>
+              <p className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">Avaliações verificadas</p>
+            </div>
+
+            <div className="hidden sm:block w-px h-7 bg-white/10" />
+
+            {/* Superhost */}
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 shrink-0" viewBox="0 0 32 32" fill="none" aria-label="Airbnb">
+                <path d="M16 1C7.8 1 1 7.8 1 16s6.8 15 15 15 15-6.8 15-15S24.2 1 16 1zm0 4c2.4 0 4.4 2 4.4 4.4S18.4 13.8 16 13.8s-4.4-2-4.4-4.4S13.6 5 16 5zm0 21.4c-3.7 0-7-1.9-9-4.8.05-3 6-4.6 9-4.6s8.95 1.6 9 4.6c-2 2.9-5.3 4.8-9 4.8z" fill="#FF5A5F"/>
+              </svg>
+              <div>
+                <p className="text-xs font-bold text-white leading-none">Superhost</p>
+                <p className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">Airbnb · 4 anos</p>
+              </div>
+            </div>
+
+            <div className="hidden sm:block w-px h-7 bg-white/10" />
+
+            {/* Identidade verificada */}
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+              <div>
+                <p className="text-xs font-bold text-white leading-none">Identidade Verificada</p>
+                <p className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">Plataforma auditável</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </section>
 
       {/* Curated Selection */}

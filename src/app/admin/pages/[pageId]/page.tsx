@@ -7,6 +7,8 @@ import { CMS_PAGES_CATALOG } from "@/types/cms";
 import type { CmsPage, CmsPageConfig } from "@/types/cms";
 import { getDraftPage, getPublishedPage, saveDraft, publishPage } from "@/services/cmsService";
 import { useAuth } from "@/lib/auth-context";
+import { formatImageUrl } from "@/lib/formatImage";
+import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 
 export default function AdminPageEditorPage({
     params,
@@ -274,11 +276,14 @@ export default function AdminPageEditorPage({
                                         placeholder="Cole a URL da imagem (https://...)"
                                         className="flex-1 px-4 py-2.5 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-neutral-900 dark:text-white text-sm"
                                     />
+                                    <ImageUploadButton 
+                                        onUploadComplete={(url) => handleFieldChange(field.key, url)} 
+                                    />
                                     {formData[field.key] && (
                                         <button
                                             type="button"
                                             onClick={() => handleFieldChange(field.key, "")}
-                                            className="text-neutral-400 hover:text-red-500 transition-colors"
+                                            className="text-neutral-400 hover:text-red-500 transition-colors shrink-0"
                                             title="Remover imagem"
                                         >
                                             <XCircle className="w-5 h-5" />
@@ -288,7 +293,7 @@ export default function AdminPageEditorPage({
                                 {formData[field.key] ? (
                                     <div className="relative w-full max-w-sm rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900">
                                         <img
-                                            src={formData[field.key]}
+                                            src={formatImageUrl(formData[field.key])}
                                             alt="Preview"
                                             className="w-full h-48 object-cover"
                                             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}

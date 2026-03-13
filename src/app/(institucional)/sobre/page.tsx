@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { getPublishedPage } from "@/services/cmsService";
+import { formatImageUrl } from "@/lib/formatImage";
 
 export default function SobrePage() {
 
@@ -51,7 +52,7 @@ export default function SobrePage() {
             <section className="min-h-screen grid grid-cols-1 md:grid-cols-2 relative overflow-hidden pt-20 md:pt-0">
                 <div className="relative h-[50vh] md:h-full overflow-hidden order-2 md:order-1 hidden md:block">
                     <img
-                        src={cms.heroImage || "https://images.unsplash.com/photo-1548142813-c348350df52b?w=900&q=80"}
+                        src={formatImageUrl(cms.heroImage) || "https://images.unsplash.com/photo-1548142813-c348350df52b?w=900&q=80"}
                         alt="São Paulo – Grupo Vivare"
                         className="w-full h-full object-cover filter brightness-50 sepia-[.2] scale-105 animate-[slowZoom_14s_ease-out_forwards]"
                     />
@@ -112,7 +113,7 @@ export default function SobrePage() {
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-32 items-center">
                     <div className="relative reveal">
                         <img
-                            src={cms.storyImage || "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=80"}
+                            src={formatImageUrl(cms.storyImage) || "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=80"}
                             alt="Apartamento gerenciado pela Vivare"
                             className="w-full h-[400px] md:h-[520px] object-cover filter brightness-[0.7] sepia-[0.15]"
                         />
@@ -227,7 +228,7 @@ export default function SobrePage() {
                     <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-12 md:gap-20 items-center">
                         <div className="relative reveal">
                             <img
-                                src={cms.founderPhoto || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"}
+                                src={formatImageUrl(cms.founderPhoto) || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"}
                                 alt={cms.founderName || "Elienai Cordeiro – Fundador Grupo Vivare"}
                                 className="w-full h-[500px] md:h-[580px] object-cover object-top filter brightness-[0.75] sepia-[0.1]"
                             />
@@ -276,7 +277,7 @@ export default function SobrePage() {
                             {cms.partner2Photo && (
                                 <div className="relative reveal">
                                     <img
-                                        src={cms.partner2Photo}
+                                        src={formatImageUrl(cms.partner2Photo)}
                                         alt={cms.partner2Name || "Sócio – Grupo Vivare"}
                                         className="w-full h-[500px] md:h-[580px] object-cover object-top filter brightness-[0.75] sepia-[0.1]"
                                     />

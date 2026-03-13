@@ -9,6 +9,8 @@ export const metadata: Metadata = {
     alternates: { canonical: "/blog" },
 };
 
+export const dynamic = 'force-dynamic';
+
 function formatDate(timestamp: number) {
     return new Intl.DateTimeFormat('pt-BR', {
         day: '2-digit',

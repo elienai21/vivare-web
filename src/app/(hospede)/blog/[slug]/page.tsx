@@ -4,15 +4,18 @@ import { notFound } from "next/navigation";
 import { getPostBySlugServer } from "@/services/cmsServiceServer";
 import { CalendarIcon, ClockIcon, UserIcon, ArrowLeftIcon } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 type Props = {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata(
     { params }: Props,
     parent: ResolvingMetadata
 ): Promise<Metadata> {
-    const post = await getPostBySlugServer(params.slug);
+    const { slug } = await params;
+    const post = await getPostBySlugServer(slug);
     if (!post) {
         return { title: "Post não encontrado" };
     }
@@ -47,7 +50,8 @@ function getReadingTime(text: string) {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-    const post = await getPostBySlugServer(params.slug);
+    const { slug } = await params;
+    const post = await getPostBySlugServer(slug);
 
     if (!post) {
         notFound();

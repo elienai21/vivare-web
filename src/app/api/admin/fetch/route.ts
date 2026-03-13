@@ -16,6 +16,8 @@ const SOURCES_COL = "feed_sources";
 const QUEUE_COL = "content_queue";
 const TIMEOUT = 15000;
 
+export const maxDuration = 30;
+
 const parser = new Parser({
     timeout: 10000,
     headers: { "User-Agent": "VivareBot/1.0" },
@@ -37,7 +39,10 @@ export async function fetchAllSources() {
         let totalFetched = 0;
         let sourcesProcessed = 0;
 
-        for (const sourceDoc of sourcesSnap.docs) {
+        // Limita a varredura a maximo de 3 fontes por ciclo para poupar tempo
+        const activeSources = sourcesSnap.docs.slice(0, 3);
+
+        for (const sourceDoc of activeSources) {
             const source = sourceDoc.data();
 
             try {
@@ -46,14 +51,17 @@ export async function fetchAllSources() {
                 const feed = await parser.parseURL(source.url);
                 sourcesProcessed++;
 
-                for (const item of feed.items) {
+                // Pega apenas as 5 noticias mais recentes para não estourar a Vercel 10s
+                const recentItems = feed.items.slice(0, 5);
+
+                const processItemPromises = recentItems.map(async (item) => {
                     const sourceUrl = item.link || item.guid || "";
-                    if (!sourceUrl) continue;
+                    if (!sourceUrl) return 0;
 
                     const existing = await getDocs(
                         query(collection(db, QUEUE_COL), where("sourceUrl", "==", sourceUrl), limit(1))
                     );
-                    if (!existing.empty) continue;
+                    if (!existing.empty) return 0;
 
                     await addDoc(collection(db, QUEUE_COL), {
                         sourceUrl,
@@ -77,12 +85,17 @@ export async function fetchAllSources() {
                         publishedAt: null,
                         publishedUrl: null,
                     });
-                    totalFetched++;
-                }
-
-                await updateDoc(doc(db, SOURCES_COL, sourceDoc.id), {
-                    lastRun: Date.now(),
+                    return 1;
                 });
+
+                const results = await Promise.all(processItemPromises);
+                totalFetched += results.reduce((a: number, b) => a + Number(b), 0);
+
+                // Update source quietly
+                updateDoc(doc(db, SOURCES_COL, sourceDoc.id), {
+                    lastRun: Date.now(),
+                }).catch(() => {});
+
             } catch (err) {
                 console.error(`[Fetcher] Erro na fonte "${source.name}":`, err);
             }

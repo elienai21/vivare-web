@@ -26,6 +26,8 @@ import {
 import { db } from "@/lib/firebase";
 import { collection, getDocs, addDoc, deleteDoc, doc } from "firebase/firestore";
 import type { ContentQueueItem, ContentAudience } from "@/types/content-queue";
+import { formatImageUrl } from "@/lib/formatImage";
+import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 
 type Tab = "queue" | "history";
 
@@ -46,6 +48,7 @@ export default function ContentQueuePage() {
     const [editedTags, setEditedTags] = useState("");
     const [rejectNote, setRejectNote] = useState("");
     const [regenerateInstruction, setRegenerateInstruction] = useState("");
+    const [editedCoverImage, setEditedCoverImage] = useState("");
     const [showOriginal, setShowOriginal] = useState(false);
     const [showConfirmPublish, setShowConfirmPublish] = useState(false);
     const [showRejectForm, setShowRejectForm] = useState(false);
@@ -147,21 +150,24 @@ export default function ContentQueuePage() {
         setFetching(true);
         try {
             const res = await fetch("/api/admin/fetch", { method: "POST" });
-            const data = await res.json();
-            alert(`Buscados: ${data.fetched} itens de ${data.sources} fontes.`);
-
-            // Also run drafter
-            const draftRes = await fetch("/api/admin/draft", { method: "POST" });
-            const draftData = await draftRes.json();
-            if (draftData.error) {
-                alert(`Erro: ${draftData.error}`);
-            } else {
-                alert(`Rascunhos: ${draftData.drafted} gerados, ${draftData.rejected} rejeitados.`);
+            if (!res.ok) {
+                alert(`Erro ao buscar fontes (status ${res.status}). A operação pode ter demorado demais. Tente novamente.`);
                 loadQueue();
+                return;
             }
+            let data;
+            try {
+                data = await res.json();
+            } catch {
+                alert("A busca foi concluída, mas a resposta veio num formato inesperado. Recarregando a fila...");
+                loadQueue();
+                return;
+            }
+            alert(`✅ Buscados: ${data.fetched ?? 0} itens de ${data.sources ?? 0} fontes.\n\nAgora clique em "Gerar Rascunhos" para a IA redigir os artigos.`);
+            loadQueue();
         } catch (e) {
             console.error(e);
-            alert("Erro inesperado ao gerar rascunhos. Use F12 para ver o erro.");
+            alert("Erro de conexão ao buscar fontes. Verifique sua internet e tente novamente.");
         } finally {
             setFetching(false);
         }
@@ -171,16 +177,31 @@ export default function ContentQueuePage() {
         setDrafting(true);
         try {
             const res = await fetch("/api/admin/draft", { method: "POST" });
-            const data = await res.json();
+            if (!res.ok) {
+                alert(`Erro ao gerar rascunhos (status ${res.status}). A IA pode ter demorado demais. Tente novamente com menos itens na fila.`);
+                return;
+            }
+            let data;
+            try {
+                data = await res.json();
+            } catch {
+                alert("Os rascunhos podem ter sido gerados, mas a resposta veio num formato inesperado. Recarregando...");
+                loadQueue();
+                return;
+            }
             if (data.error) {
                 alert(`Erro: ${data.error}`);
             } else {
-                alert(`Rascunhos: ${data.drafted} gerados, ${data.rejected} rejeitados.`);
+                const msg = [`✅ Rascunhos: ${data.drafted ?? 0} gerados, ${data.rejected ?? 0} rejeitados.`];
+                if (data.errors?.length) {
+                    msg.push(`\n⚠️ ${data.errors.length} erro(s):\n${data.errors.join("\n")}`);
+                }
+                alert(msg.join(""));
                 loadQueue();
             }
         } catch (e) {
             console.error(e);
-            alert("Erro inesperado ao gerar rascunhos. Use F12 para ver o erro.");
+            alert("Erro de conexão ao gerar rascunhos. Verifique sua internet e tente novamente.");
         } finally {
             setDrafting(false);
         }
@@ -192,6 +213,7 @@ export default function ContentQueuePage() {
         setEditedBody(item.editedBody || item.draftBody || "");
         setEditedMeta(item.draftMetaDesc || "");
         setEditedTags((item.draftTags || []).join(", "));
+        setEditedCoverImage((item as any).coverImage || "");
         setShowOriginal(false);
         setShowConfirmPublish(false);
         setShowRejectForm(false);
@@ -229,6 +251,8 @@ export default function ContentQueuePage() {
         try {
             const res = await fetch(`/api/admin/queue/${reviewItem.id}/approve`, {
                 method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ coverImage: editedCoverImage }),
             });
             const data = await res.json();
             if (!res.ok) {
@@ -378,7 +402,7 @@ export default function ContentQueuePage() {
                             </button>
                             <button
                                 onClick={handleDraftNext}
-                                disabled={drafting || queue.every(i => i.draftTitle)}
+                                disabled={drafting || !queue.some(i => !i.draftTitle)}
                                 className="flex items-center gap-2 px-4 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl font-medium transition-all shadow-md text-sm disabled:opacity-50"
                             >
                                 <Sparkles
@@ -695,6 +719,38 @@ export default function ContentQueuePage() {
                                                 placeholder="ex: turismo, sp"
                                             />
                                         </div>
+                                    </div>
+
+                                    {/* Imagem de Capa */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                                            Imagem de Capa (URL)
+                                        </label>
+                                        <div className="flex gap-2 items-center mb-1.5">
+                                            <input
+                                                type="url"
+                                                value={editedCoverImage}
+                                                onChange={e => setEditedCoverImage(e.target.value)}
+                                                className="flex-1 w-full px-4 py-3 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all dark:text-white text-sm"
+                                                placeholder="https://exemplo.com/imagem.jpg"
+                                            />
+                                            <ImageUploadButton 
+                                                onUploadComplete={(url) => setEditedCoverImage(url)} 
+                                            />
+                                        </div>
+                                        {editedCoverImage && (
+                                            <div className="mt-2 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700">
+                                                <img
+                                                    src={formatImageUrl(editedCoverImage)}
+                                                    alt="Pré-visualização da capa"
+                                                    className="w-full h-32 object-cover"
+                                                    onError={e => (e.currentTarget.style.display = 'none')}
+                                                />
+                                            </div>
+                                        )}
+                                        <span className="text-xs text-neutral-400 mt-1 block">
+                                            Cole a URL de uma imagem (Unsplash, Google Drive, etc.)
+                                        </span>
                                     </div>
                                     
                                     {/* Reject e Confirm Forms entram aqui se ativos (renderizados via código abaixo em vez de no layout) */}

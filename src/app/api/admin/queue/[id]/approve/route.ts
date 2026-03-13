@@ -23,12 +23,21 @@ function slugify(text: string): string {
 }
 
 export async function POST(
-    _request: NextRequest,
+    request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const { id } = await params;
         const db = getServerDb();
+
+        // Read optional body (coverImage)
+        let coverImage = "";
+        try {
+            const body = await request.json();
+            coverImage = body.coverImage || "";
+        } catch {
+            // No body or invalid JSON — that's fine
+        }
 
         // 1. Read queue item
         const queueSnap = await withTimeout(getDoc(doc(db, QUEUE_COL, id)), TIMEOUT);
@@ -43,8 +52,8 @@ export async function POST(
 
         // 2. Use edited version if available, otherwise use draft
         const title = item.editedTitle || item.draftTitle || item.originalTitle;
-        const body = item.editedBody || item.draftBody || "";
-        const excerpt = (item.draftMetaDesc || body.slice(0, 160)).replace(/<[^>]*>/g, "");
+        const body2 = item.editedBody || item.draftBody || "";
+        const excerpt = (item.draftMetaDesc || body2.slice(0, 160)).replace(/<[^>]*>/g, "");
         const slug = slugify(title);
         const now = Date.now();
 
@@ -55,7 +64,8 @@ export async function POST(
             slug,
             title,
             excerpt,
-            content: body,
+            content: body2,
+            coverImage: coverImage || item.coverImage || "",
             author: "Vivare Stay",
             tags: item.draftTags || [],
             status: "published",

@@ -12,9 +12,11 @@ import {
 } from "firebase/firestore";
 import Anthropic from "@anthropic-ai/sdk";
 
+export const maxDuration = 60;
+
 const QUEUE_COL = "content_queue";
 const TIMEOUT = 15000;
-const DRAFT_LIMIT = parseInt(process.env.DRAFT_LIMIT || "10", 10);
+const DRAFT_LIMIT = parseInt(process.env.DRAFT_LIMIT || "3", 10);
 const RELEVANCE_THRESHOLD = parseFloat(process.env.RELEVANCE_THRESHOLD || "0.4");
 
 /** System prompt hardcoded — NÃO deve ser alterável pela interface. */
@@ -79,9 +81,8 @@ export async function draftItems(itemLimit?: number, extraInstruction?: string) 
     let rejected = 0;
     const errors: string[] = [];
 
-    for (const queueDoc of pendingDraft) {
+    const draftPromises = pendingDraft.map(async (queueDoc) => {
         const item = queueDoc.data();
-
         try {
             const message = await anthropic.messages.create({
                 model: "claude-sonnet-4-5-20250929",
@@ -103,9 +104,16 @@ export async function draftItems(itemLimit?: number, extraInstruction?: string) 
                 ],
             });
 
-            const text = message.content[0].type === "text" ? message.content[0].text : "";
+            let text = message.content[0].type === "text" ? message.content[0].text : "";
+            
+            // Extract just the JSON object from the response
+            const firstBrace = text.indexOf('{');
+            const lastBrace = text.lastIndexOf('}');
+            if (firstBrace !== -1 && lastBrace !== -1) {
+                text = text.substring(firstBrace, lastBrace + 1);
+            }
+            
             const parsed = JSON.parse(text);
-
             const relevance = parsed.relevance_score ?? 0;
 
             if (relevance < RELEVANCE_THRESHOLD) {
@@ -115,7 +123,7 @@ export async function draftItems(itemLimit?: number, extraInstruction?: string) 
                     editorNote: "auto-rejected: low relevance",
                     reviewedAt: Date.now(),
                 });
-                rejected++;
+                return { status: "rejected" };
             } else {
                 await updateDoc(doc(db, QUEUE_COL, queueDoc.id), {
                     draftTitle: parsed.title || null,
@@ -125,13 +133,20 @@ export async function draftItems(itemLimit?: number, extraInstruction?: string) 
                     relevanceScore: relevance,
                     draftedAt: Date.now(),
                 });
-                drafted++;
+                return { status: "drafted" };
             }
         } catch (err) {
             const msg = err instanceof Error ? err.message : String(err);
             console.error(`[Drafter] Erro ao gerar draft para "${item.originalTitle}":`, msg);
-            errors.push(`${item.originalTitle?.substring(0, 30)}: ${msg.substring(0, 80)}`);
+            return { status: "error", error: `${item.originalTitle?.substring(0, 30)}: ${msg.substring(0, 80)}` };
         }
+    });
+
+    const results = await Promise.all(draftPromises);
+    for (const res of results) {
+        if (res.status === "drafted") drafted++;
+        else if (res.status === "rejected") rejected++;
+        else if (res.status === "error" && res.error) errors.push(res.error);
     }
 
     return { drafted, rejected, total: pendingDraft.length, errors: errors.length > 0 ? errors : undefined };
