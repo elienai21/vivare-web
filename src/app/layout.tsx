@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope, Cormorant_Garamond } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE } from "@/lib/constants";
 
@@ -117,6 +118,19 @@ export default function RootLayout({
     <html lang="pt-BR" className={`${manrope.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+        {/* Google Analytics (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-NS503CK9EC"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-NS503CK9EC');
+          `}
+        </Script>
       </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
