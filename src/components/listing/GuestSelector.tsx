@@ -165,18 +165,20 @@ function CounterRow({ label, sublabel, value, onMinus, onPlus, canMinus, canPlus
                     onClick={onMinus}
                     disabled={!canMinus}
                     type="button"
-                    className="w-8 h-8 rounded-full border border-neutral-300 flex items-center justify-center text-neutral-600 hover:border-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    aria-label={`Diminuir ${label.toLowerCase()}`}
+                    className="w-8 h-8 rounded-full border border-neutral-300 flex items-center justify-center text-neutral-600 hover:border-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
                 >
-                    <Minus className="w-4 h-4" />
+                    <Minus className="w-4 h-4" aria-hidden="true" />
                 </button>
-                <span className="w-4 text-center font-medium text-neutral-900">{value}</span>
+                <span aria-live="polite" aria-atomic="true" className="w-4 text-center font-medium text-neutral-900">{value}</span>
                 <button
                     onClick={onPlus}
                     disabled={!canPlus}
                     type="button"
-                    className="w-8 h-8 rounded-full border border-neutral-300 flex items-center justify-center text-neutral-600 hover:border-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    aria-label={`Aumentar ${label.toLowerCase()}`}
+                    className="w-8 h-8 rounded-full border border-neutral-300 flex items-center justify-center text-neutral-600 hover:border-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
                 >
-                    <Plus className="w-4 h-4" />
+                    <Plus className="w-4 h-4" aria-hidden="true" />
                 </button>
             </div>
         </div>

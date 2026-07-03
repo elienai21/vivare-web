@@ -1,23 +1,22 @@
 /**
- * API Client for Vivare BFF
- * 
- * Handles all communication with the backend API
+ * API Client (browser-side) — agora aponta tudo pra Next.js API routes
+ * locais (`/api/*`), sem dependência do BFF Express. O fluxo de checkout
+ * (initialize/hold/payment-intent/finalize/cancel) roda em Vercel
+ * Functions servindo `firebase-admin` + `stripe` server-side.
+ *
+ * Sessão: `initialize` devolve `sessionToken` (256 bits). Cliente
+ * armazena em sessionStorage (mesmo escopo do checkoutId — vide
+ * `CheckoutWizard`) e envia em `X-Checkout-Session` em todas as
+ * chamadas subsequentes do mesmo checkout.
  */
 
 import {
-    ListingDetail,
-    ListingCalendar,
     Quote,
     Checkout,
     CreateCheckoutParams,
     PaymentIntentResult,
-    Booking,
-    SearchFilters,
-    SearchResults,
     GuestInfo,
 } from '@/types';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 class ApiError extends Error {
     constructor(
@@ -30,13 +29,8 @@ class ApiError extends Error {
     }
 }
 
-async function request<T>(
-    path: string,
-    options: RequestInit = {},
-): Promise<T> {
-    const url = `${API_URL}${path}`;
-
-    const response = await fetch(url, {
+async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+    const response = await fetch(path, {
         ...options,
         headers: {
             'Content-Type': 'application/json',
@@ -56,37 +50,14 @@ async function request<T>(
     return response.json();
 }
 
+/** Header obrigatório para autorizar chamadas em `/api/checkout/[id]/*`. */
+function sessionHeaders(sessionToken: string | null | undefined): HeadersInit {
+    return sessionToken ? { 'X-Checkout-Session': sessionToken } : {};
+}
+
 // ============================================
-// Listings API
+// Price calculation
 // ============================================
-
-export async function searchListings(filters: SearchFilters = {}): Promise<SearchResults> {
-    const params = new URLSearchParams();
-    Object.entries(filters).forEach(([key, value]) => {
-        if (value !== undefined) {
-            if (Array.isArray(value)) {
-                params.set(key, value.join(','));
-            } else {
-                params.set(key, String(value));
-            }
-        }
-    });
-
-    return request<SearchResults>(`/listings?${params.toString()}`);
-}
-
-export async function getListingDetail(id: string): Promise<ListingDetail> {
-    return request<ListingDetail>(`/listings/${id}`);
-}
-
-export async function getListingCalendar(
-    listingId: string,
-    startDate: string,
-    endDate: string,
-): Promise<ListingCalendar> {
-    const params = new URLSearchParams({ startDate, endDate });
-    return request<ListingCalendar>(`/listings/${listingId}/calendar?${params.toString()}`);
-}
 
 export async function calculatePrice(params: {
     listingId: string;
@@ -95,63 +66,82 @@ export async function calculatePrice(params: {
     guests: number;
     couponCode?: string;
 }): Promise<Quote> {
-    return request<Quote>('/listings/calculate-price', {
+    return request<Quote>('/api/calculate-price', {
         method: 'POST',
         body: JSON.stringify(params),
     });
 }
 
 // ============================================
-// Checkout API
+// Checkout API (Next.js API routes — substitui BFF Express)
 // ============================================
 
-export async function initializeCheckout(params: CreateCheckoutParams): Promise<Checkout> {
-    return request<Checkout>('/checkout/initialize', {
+/**
+ * Inicializa o checkout. Resposta inclui `sessionToken` (visível UMA vez).
+ * O caller deve guardar `sessionToken` junto com o `checkoutId` e enviar
+ * em todas as chamadas subsequentes via `getCheckout`/`updateGuestInfo`/etc.
+ */
+export async function initializeCheckout(
+    params: CreateCheckoutParams,
+): Promise<Checkout & { sessionToken: string }> {
+    return request<Checkout & { sessionToken: string }>('/api/checkout/initialize', {
         method: 'POST',
         body: JSON.stringify(params),
     });
 }
 
-export async function getCheckout(checkoutId: string): Promise<Checkout> {
-    return request<Checkout>(`/checkout/${checkoutId}`);
+export async function getCheckout(
+    checkoutId: string,
+    sessionToken: string,
+): Promise<Checkout> {
+    return request<Checkout>(`/api/checkout/${checkoutId}`, {
+        headers: sessionHeaders(sessionToken),
+    });
 }
 
 export async function updateGuestInfo(
     checkoutId: string,
+    sessionToken: string,
     guest: GuestInfo,
 ): Promise<Checkout> {
-    return request<Checkout>(`/checkout/${checkoutId}/guest`, {
+    return request<Checkout>(`/api/checkout/${checkoutId}/guest`, {
         method: 'PATCH',
+        headers: sessionHeaders(sessionToken),
         body: JSON.stringify({ guest }),
     });
 }
 
 export async function createHold(
     checkoutId: string,
+    sessionToken: string,
     idempotencyKey: string,
 ): Promise<{ checkoutId: string; state: string; staysReservationId: string }> {
-    return request(`/checkout/${checkoutId}/hold`, {
+    return request(`/api/checkout/${checkoutId}/hold`, {
         method: 'POST',
         headers: {
             'Idempotency-Key': idempotencyKey,
+            ...sessionHeaders(sessionToken),
         },
     });
 }
 
 export async function createPaymentIntent(
     checkoutId: string,
+    sessionToken: string,
     idempotencyKey: string,
 ): Promise<PaymentIntentResult> {
-    return request<PaymentIntentResult>(`/checkout/${checkoutId}/payment-intent`, {
+    return request<PaymentIntentResult>(`/api/checkout/${checkoutId}/payment-intent`, {
         method: 'POST',
         headers: {
             'Idempotency-Key': idempotencyKey,
+            ...sessionHeaders(sessionToken),
         },
     });
 }
 
 export async function finalizeCheckout(
     checkoutId: string,
+    sessionToken: string,
     maxWaitMs = 10000,
 ): Promise<{
     success: boolean;
@@ -160,57 +150,21 @@ export async function finalizeCheckout(
     message?: string;
     checkout: Checkout;
 }> {
-    return request(`/checkout/${checkoutId}/finalize`, {
+    return request(`/api/checkout/${checkoutId}/finalize`, {
         method: 'POST',
+        headers: sessionHeaders(sessionToken),
         body: JSON.stringify({ maxWaitMs }),
     });
 }
 
 export async function cancelCheckout(
     checkoutId: string,
+    sessionToken: string,
     reason?: string,
 ): Promise<{ checkoutId: string; state: string; canceled: boolean }> {
-    return request(`/checkout/${checkoutId}/cancel`, {
+    return request(`/api/checkout/${checkoutId}/cancel`, {
         method: 'POST',
+        headers: sessionHeaders(sessionToken),
         body: JSON.stringify({ reason }),
     });
-}
-
-// ============================================
-// Booking API
-// ============================================
-
-export async function lookupBooking(
-    code: string,
-    email: string,
-): Promise<Booking> {
-    const params = new URLSearchParams({ code, email });
-    return request<Booking>(`/bookings/lookup?${params.toString()}`);
-}
-
-export async function cancelBooking(
-    code: string,
-    email: string,
-    reason?: string,
-): Promise<{ success: boolean; message: string }> {
-    return request('/bookings/cancel', {
-        method: 'POST',
-        body: JSON.stringify({ code, email, reason }),
-    });
-}
-
-// ============================================
-// Content API
-// ============================================
-
-export async function getHomeContent(): Promise<unknown> {
-    return request('/content/home');
-}
-
-export async function getFAQ(): Promise<unknown> {
-    return request('/content/faq');
-}
-
-export async function getActiveBanners(): Promise<unknown> {
-    return request('/content/banners/active');
 }

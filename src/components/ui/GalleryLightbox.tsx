@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect } from "react";
 
 interface GalleryLightboxProps {
@@ -11,11 +12,7 @@ export default function GalleryLightbox({ images, title }: GalleryLightboxProps)
     const [isOpen, setIsOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    if (!images || images.length === 0) return null;
-
-    const mainImages = images.slice(0, 5);
-    const hasMore = images.length > 5;
-
+    // Hooks must run unconditionally — keep them before any early return.
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
@@ -26,6 +23,11 @@ export default function GalleryLightbox({ images, title }: GalleryLightboxProps)
             document.body.style.overflow = "auto";
         };
     }, [isOpen]);
+
+    if (!images || images.length === 0) return null;
+
+    const mainImages = images.slice(0, 5);
+    const hasMore = images.length > 5;
 
     const openLightbox = (index: number) => {
         setCurrentIndex(index);
@@ -56,10 +58,17 @@ export default function GalleryLightbox({ images, title }: GalleryLightboxProps)
                         onClick={() => openLightbox(idx)}
                         className={`bg-neutral-200 relative group overflow-hidden ${idx === 0 ? "col-span-2 row-span-2" : "col-span-1 row-span-1"}`}
                     >
-                        <img
+                        <Image
                             src={img.url}
                             alt={`${title} - Foto ${idx + 1}`}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            fill
+                            sizes={idx === 0
+                                ? "(max-width: 768px) 100vw, 50vw"
+                                : "(max-width: 768px) 50vw, 25vw"}
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            // First (large) image is LCP candidate on listing detail
+                            priority={idx === 0}
+                            loading={idx === 0 ? "eager" : "lazy"}
                         />
                         {/* Overlay on hover */}
                         <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -92,25 +101,33 @@ export default function GalleryLightbox({ images, title }: GalleryLightboxProps)
 
                     {/* Navigation Buttons */}
                     <button
+                        type="button"
                         onClick={prevImage}
-                        className="absolute left-6 text-white text-5xl hover:scale-110 transition drop-shadow-lg p-4"
+                        aria-label="Imagem anterior"
+                        className="absolute left-6 text-white text-5xl hover:scale-110 transition drop-shadow-lg p-4 focus:outline-none focus:ring-2 focus:ring-white rounded"
                     >
-                        ‹
+                        <span aria-hidden="true">‹</span>
                     </button>
 
                     <button
+                        type="button"
                         onClick={nextImage}
-                        className="absolute right-6 text-white text-5xl hover:scale-110 transition drop-shadow-lg p-4"
+                        aria-label="Próxima imagem"
+                        className="absolute right-6 text-white text-5xl hover:scale-110 transition drop-shadow-lg p-4 focus:outline-none focus:ring-2 focus:ring-white rounded"
                     >
-                        ›
+                        <span aria-hidden="true">›</span>
                     </button>
 
                     {/* Main Image View */}
-                    <div className="h-[80vh] w-full max-w-5xl flex items-center justify-center px-12" onClick={(e) => e.stopPropagation()}>
-                        <img
+                    <div className="h-[80vh] w-full max-w-5xl flex items-center justify-center px-12 relative" onClick={(e) => e.stopPropagation()}>
+                        <Image
                             src={images[currentIndex].url}
                             alt={`${title} - Galeria ${currentIndex + 1}`}
-                            className="max-h-full max-w-full object-contain select-none"
+                            fill
+                            sizes="100vw"
+                            quality={85}
+                            className="object-contain select-none"
+                            priority
                         />
                     </div>
 

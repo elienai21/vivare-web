@@ -1,20 +1,43 @@
 import Link from 'next/link';
 import { ListingCard } from '@/components/listing/ListingCard';
-import { searchListings } from '@/lib/api-client';
+import { fetchListings } from '@/services/staysService';
 import { Button } from '@/components/ui/Button';
 import { ArrowRight } from 'lucide-react';
 import { Listing } from '@/types';
 
 export async function FeaturedListings() {
-    // Fetch featured listings (limit to 6 for example, though API handles pagination)
-    // We assume default page size is enough or we might want to specify pageSize
+    // Fetch directly from Stays via the existing service (no BFF dependency).
+    // Filter to active listings; until we add a "featured" flag in Stays, we
+    // just pick the first 6 active properties.
     let listings: Listing[] = [];
     try {
-        const result = await searchListings({ featured: true });
-        listings = result.listings || [];
+        const all = await fetchListings();
+        listings = (all || [])
+            .filter((l) => l.status === 'active')
+            .map((l) => ({
+                id: l.id || l._id,
+                name: l._mstitle?.pt_BR ?? l.internalName ?? 'Acomodação Vivare',
+                address: {
+                    neighborhood: l.address?.region ?? '',
+                    city: l.address?.city ?? '',
+                    state: '',
+                },
+                bedrooms: l._i_rooms ?? 0,
+                bathrooms: l._f_bathrooms ?? 0,
+                maxGuests: l._i_maxGuests ?? 1,
+                propertyType: '',
+                amenities: [],
+                photos: (l._t_imagesMeta || []).map((img, idx) => ({
+                    id: `${l._id}-${idx}`,
+                    url: img.url,
+                    order: idx,
+                })),
+                description: l._msdesc?.pt_BR,
+                thumbnail: l._t_mainImageMeta?.url ?? '',
+                pricePerNight: l._d_minPrice,
+            }));
     } catch (error) {
         console.warn('Failed to fetch featured listings (ignoring for build safety):', error);
-        // listings remains empty
     }
 
     if (!listings || listings.length === 0) {

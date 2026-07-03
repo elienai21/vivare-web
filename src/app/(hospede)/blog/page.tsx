@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { BlogPost, listPublishedPostsServer } from "@/services/cmsServiceServer";
 import { CalendarIcon, ClockIcon } from "lucide-react";
@@ -53,10 +54,13 @@ export default async function BlogIndexPage() {
                                 {/* Cover Image */}
                                 <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
                                     {post.coverImage ? (
-                                        <img
+                                        <Image
                                             src={post.coverImage}
                                             alt={post.title}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                            loading="lazy"
                                         />
                                     ) : (
                                         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-neutral-200 dark:to-neutral-800 flex items-center justify-center">

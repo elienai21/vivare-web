@@ -3,6 +3,14 @@
     {
       "path": "/api/cron/content",
       "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/cron/expire-holds",
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/reconcile-orphans",
+      "schedule": "*/15 * * * *"
     }
   ]
 }

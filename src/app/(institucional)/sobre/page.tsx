@@ -1,34 +1,35 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
-import { getPublishedPage } from "@/services/cmsService";
+import { getPublishedPageServer } from "@/services/cmsServiceServer";
 import { formatImageUrl } from "@/lib/formatImage";
 
-export default function SobrePage() {
+export const metadata: Metadata = {
+    title: "Quem Somos – A Experiência Vivare",
+    description:
+        "Conheça o Grupo Vivare: gestão profissional de locação por temporada em São Paulo, Santos e Guarujá com hospitalidade genuína, tecnologia e total transparência.",
+    alternates: { canonical: "/sobre" },
+    openGraph: {
+        title: "Quem Somos – Grupo Vivare",
+        description:
+            "Cuidamos do seu imóvel como se fosse nosso. Conheça a história, missão e valores do Grupo Vivare.",
+        type: "website",
+    },
+};
 
-    const [cms, setCms] = useState<Record<string, string>>({});
+/**
+ * ISR: re-render every 10 minutes. The CMS content here changes rarely,
+ * so we keep the Firestore read out of the request hot path.
+ */
+export const revalidate = 600;
 
-    // Carregar dados do CMS (Firestore → publicado)
-    useEffect(() => {
-        getPublishedPage("sobre").then(page => {
-            if (page?.content) setCms(page.content);
-        });
-    }, []);
+export default async function SobrePage() {
+    // Server-side CMS fetch — never blocks the client bundle and always
+    // ships fresh content within the revalidation window.
+    const page = await getPublishedPageServer("sobre");
+    const cms: Record<string, string> = (page?.content as Record<string, string>) || {};
 
-    // Intersection Observer for scroll reveal effect
-    useEffect(() => {
-        const reveals = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.12 });
-        reveals.forEach(el => observer.observe(el));
-        return () => observer.disconnect();
-    }, []);
+    // Scroll-reveal classes are wired up by the global <ScrollObserver/>
+    // mounted in app/layout.tsx — no need for a per-page useEffect.
 
     return (
         <main className="min-h-screen bg-[#0f0e0c] text-[#f5f0e8] font-sans selection:bg-[#b89a5c] selection:text-[#0f0e0c]">
@@ -41,20 +42,17 @@ export default function SobrePage() {
                 }}
             />
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-        .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-        .display-text { font-family: var(--font-display); }
-      `}} />
-
             {/* HERO SECTION */}
             <section className="min-h-screen grid grid-cols-1 md:grid-cols-2 relative overflow-hidden pt-20 md:pt-0">
                 <div className="relative h-[50vh] md:h-full overflow-hidden order-2 md:order-1 hidden md:block">
-                    <img
-                        src={formatImageUrl(cms.heroImage) || "https://images.unsplash.com/photo-1548142813-c348350df52b?w=900&q=80"}
-                        alt="São Paulo – Grupo Vivare"
-                        className="w-full h-full object-cover filter brightness-50 sepia-[.2] scale-105 animate-[slowZoom_14s_ease-out_forwards]"
+                    <Image
+                        src={formatImageUrl(cms.heroImage) || "https://images.unsplash.com/photo-1548142813-c348350df52b?w=1200&q=70"}
+                        alt="São Paulo – sede do Grupo Vivare"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover filter brightness-50 sepia-[.2] scale-105 animate-[slowZoom_14s_ease-out_forwards]"
+                        priority
+                        quality={70}
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0f0e0c] hidden md:block" />
                 </div>
@@ -111,11 +109,14 @@ export default function SobrePage() {
             {/* STORY */}
             <section className="bg-[#0f0e0c] text-[#f5f0e8] py-32 px-8">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-32 items-center">
-                    <div className="relative reveal">
-                        <img
-                            src={formatImageUrl(cms.storyImage) || "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=80"}
+                    <div className="relative reveal w-full h-[400px] md:h-[520px]">
+                        <Image
+                            src={formatImageUrl(cms.storyImage) || "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=900&q=70"}
                             alt="Apartamento gerenciado pela Vivare"
-                            className="w-full h-[400px] md:h-[520px] object-cover filter brightness-[0.7] sepia-[0.15]"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover filter brightness-[0.7] sepia-[0.15]"
+                            quality={70}
                         />
                         <div className="absolute -bottom-6 -right-6 md:-bottom-6 md:-right-6 bg-[#b89a5c] text-[#0f0e0c] p-6 display-text text-lg italic leading-[1.4] max-w-[220px]">
                             &quot;Cada imóvel é tratado com atenção de boutique.&quot;
@@ -226,11 +227,14 @@ export default function SobrePage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-12 md:gap-20 items-center">
-                        <div className="relative reveal">
-                            <img
-                                src={formatImageUrl(cms.founderPhoto) || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"}
+                        <div className="relative reveal w-full h-[500px] md:h-[580px]">
+                            <Image
+                                src={formatImageUrl(cms.founderPhoto) || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=70"}
                                 alt={cms.founderName || "Elienai Cordeiro – Fundador Grupo Vivare"}
-                                className="w-full h-[500px] md:h-[580px] object-cover object-top filter brightness-[0.75] sepia-[0.1]"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 40vw"
+                                className="object-cover object-top filter brightness-[0.75] sepia-[0.1]"
+                                quality={70}
                             />
                             <div className="absolute top-8 -left-4 md:-left-6 bg-[#b89a5c] text-[#0f0e0c] py-2 px-6 text-[11px] tracking-[0.2em] uppercase font-medium">
                                 {cms.founderRole || "Fundador & CEO"}
@@ -275,11 +279,14 @@ export default function SobrePage() {
                                 ) : null}
                             </div>
                             {cms.partner2Photo && (
-                                <div className="relative reveal">
-                                    <img
+                                <div className="relative reveal w-full h-[500px] md:h-[580px]">
+                                    <Image
                                         src={formatImageUrl(cms.partner2Photo)}
                                         alt={cms.partner2Name || "Sócio – Grupo Vivare"}
-                                        className="w-full h-[500px] md:h-[580px] object-cover object-top filter brightness-[0.75] sepia-[0.1]"
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, 40vw"
+                                        className="object-cover object-top filter brightness-[0.75] sepia-[0.1]"
+                                        quality={70}
                                     />
                                     {cms.partner2Role && (
                                         <div className="absolute top-8 -right-4 md:-right-6 bg-[#b89a5c] text-[#0f0e0c] py-2 px-6 text-[11px] tracking-[0.2em] uppercase font-medium">

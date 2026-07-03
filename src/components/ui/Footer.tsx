@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BadgeCheck, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '@/lib/constants';
 import { EmailSignupForm } from '@/components/forms/EmailSignupForm';
 
@@ -11,14 +12,21 @@ export default function Footer() {
                     {/* Coluna 1 — Logo + Selo */}
                     <div className="space-y-6 md:col-span-2 lg:col-span-1">
                         <Link href="/" className="flex flex-col leading-none">
-                            <img src="/new_logo_vivare_sem_fundo.svg" alt="VIVARE" className="h-[100px] md:h-[120px] w-auto object-contain object-left" />
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src="/new_logo_vivare_sem_fundo.svg"
+                                alt="VIVARE"
+                                width={200}
+                                height={120}
+                                className="h-[100px] md:h-[120px] w-auto object-contain object-left"
+                            />
                         </Link>
                         <p className="text-xs font-light tracking-wide text-warm-mid leading-relaxed">
                             Curadoria de excelência para hospedagens premium em São Paulo e Litoral.
                         </p>
 
                         <div className="flex items-center gap-2 mt-4">
-                            <span className="material-symbols-outlined text-primary text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+                            <BadgeCheck className="text-primary w-5 h-5" aria-hidden="true" />
                             <div className="flex flex-col">
                                 <span className="text-[10px] uppercase tracking-widest text-primary font-bold">Empresa Verificada</span>
                                 <span className="text-xs text-muted">CNPJ 51.486.823/0001-00</span>
@@ -58,13 +66,13 @@ export default function Footer() {
                         <ul className="space-y-4 text-sm font-light text-warm-mid">
                             <li>
                                 <a href="mailto:contato@vivarestay.com" className="flex items-center gap-3 hover:text-primary transition-colors">
-                                    <span className="material-symbols-outlined text-primary text-lg">mail</span>
+                                    <Mail className="text-primary w-[18px] h-[18px]" aria-hidden="true" />
                                     <span>contato@vivarestay.com</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="tel:+5511985067840" className="flex items-center gap-3 hover:text-primary transition-colors">
-                                    <span className="material-symbols-outlined text-primary text-lg">phone</span>
+                                    <Phone className="text-primary w-[18px] h-[18px]" aria-hidden="true" />
                                     <span>+55 (11) 98506-7840</span>
                                 </a>
                             </li>
@@ -72,12 +80,12 @@ export default function Footer() {
                                 <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Olá! Vim pelo site da Vivare e gostaria de mais informações.')}`}
                                     target="_blank" rel="noopener noreferrer"
                                     className="flex items-center gap-3 hover:text-primary transition-colors">
-                                    <span className="material-symbols-outlined text-primary text-lg">chat</span>
+                                    <MessageCircle className="text-primary w-[18px] h-[18px]" aria-hidden="true" />
                                     <span>WhatsApp</span>
                                 </a>
                             </li>
                             <li className="flex items-start gap-3 mt-4 text-xs">
-                                <span className="material-symbols-outlined text-primary text-lg">location_on</span>
+                                <MapPin className="text-primary w-[18px] h-[18px] shrink-0 mt-0.5" aria-hidden="true" />
                                 <span className="leading-relaxed">Rua Rondinha, 180<br />Chácara Inglesa, São Paulo — SP</span>
                             </li>
                         </ul>

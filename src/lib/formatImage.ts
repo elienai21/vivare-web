@@ -1,5 +1,9 @@
-export function formatImageUrl(url: string | null | undefined): string {
-    if (!url) return "";
+export function formatImageUrl(url: unknown): string {
+    // Defensive: callers occasionally pass values from Firestore/CMS that
+    // come back as non-strings (Timestamp, undefined, null, number) under
+    // a `Record<string, string>` cast. Bail on anything that isn't a
+    // usable string so `.match()` / `.includes()` never blow up the page.
+    if (typeof url !== "string" || url.length === 0) return "";
 
     // Se for link de view ou open do Google Drive
     if (url.includes("drive.google.com")) {

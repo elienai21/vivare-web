@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { WHATSAPP_NUMBER, trackEvent } from "@/lib/constants";
+import {
+    HONEYPOT_FIELD,
+    checkSubmitRateLimit,
+    honeypotHiddenClass,
+    isHoneypotTriggered,
+} from "@/lib/anti-bot";
 
 const RATE_MAP: Record<string, number> = {
     studio: 130,
@@ -19,6 +27,8 @@ export function SimulacaoForm() {
         metragem: "",
         nome: "",
         whatsapp: "",
+        // Honeypot — humans never fill this; bots tend to.
+        [HONEYPOT_FIELD]: "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -30,14 +40,44 @@ export function SimulacaoForm() {
         setStep(2);
     };
 
-    const calculateResult = (e: React.FormEvent) => {
+    const calculateResult = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Drop honeypot/rate-limited submissions silently — show the
+        // result step so a bot can't differentiate from a real success.
+        if (isHoneypotTriggered(formData) || !checkSubmitRateLimit("simulacao").ok) {
+            const m2 = parseInt(formData.metragem) || 45;
+            const rate = RATE_MAP[formData.tipo] || 120;
+            setResult(rate * m2);
+            setStep(3);
+            return;
+        }
+
         trackEvent("simulacao_submitted");
 
         const m2 = parseInt(formData.metragem) || 45;
         const rate = RATE_MAP[formData.tipo] || 120;
-        setResult(rate * m2);
+        const estimated = rate * m2;
+        setResult(estimated);
         setStep(3);
+
+        // Strip honeypot before persisting.
+        const { [HONEYPOT_FIELD]: _hp, ...payload } = formData;
+        void _hp;
+
+        // Persist the lead so the team can follow up even if the user
+        // doesn't click the WhatsApp meeting link afterwards. Same
+        // collection / schema as OwnerPopup and OwnerContactForm.
+        try {
+            await addDoc(collection(db, "leads_proprietarios"), {
+                ...payload,
+                estimatedMonthly: estimated,
+                createdAt: serverTimestamp(),
+                source: "Simulacao",
+            });
+        } catch (error) {
+            console.error("Erro ao salvar lead (Simulacao):", error);
+        }
     };
 
     const getMeetingLink = () => {
@@ -115,6 +155,21 @@ export function SimulacaoForm() {
                 <form onSubmit={calculateResult} className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                     <h2 className="text-xl font-bold border-b pb-4">Etapa 2: Para quem enviamos?</h2>
                     <p className="text-sm text-neutral-500">Preencha seus dados para liberar a estimativa na tela e entrar em contato com nossa equipe.</p>
+
+                    {/* Honeypot — invisible to humans, irresistible to bots. */}
+                    <div className={honeypotHiddenClass} aria-hidden="true">
+                        <label>
+                            Website (não preencher)
+                            <input
+                                type="text"
+                                name={HONEYPOT_FIELD}
+                                tabIndex={-1}
+                                autoComplete="off"
+                                value={formData[HONEYPOT_FIELD]}
+                                onChange={handleChange}
+                            />
+                        </label>
+                    </div>
 
                     <div>
                         <label htmlFor="sim-nome" className="block text-sm font-semibold mb-2">Nome *</label>

@@ -1,4 +1,5 @@
 import type { Metadata, ResolvingMetadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPostBySlugServer } from "@/services/cmsServiceServer";
@@ -130,10 +131,13 @@ export default async function BlogPostPage({ params }: Props) {
                 {/* Cover Image */}
                 {post.coverImage && (
                     <figure className="mb-16 -mx-6 lg:-mx-16 aspect-[21/9] relative rounded-none lg:rounded-2xl overflow-hidden shadow-lg">
-                        <img
+                        <Image
                             src={post.coverImage}
                             alt={`Capa do artigo: ${post.title}`}
-                            className="w-full h-full object-cover"
+                            fill
+                            sizes="(max-width: 1024px) 100vw, 1024px"
+                            className="object-cover"
+                            priority
                         />
                     </figure>
                 )}

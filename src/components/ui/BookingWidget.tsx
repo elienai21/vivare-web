@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import DatePicker, { registerLocale } from "react-datepicker";
 import { ptBR } from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
@@ -27,6 +28,7 @@ interface BookingWidgetProps {
 }
 
 export default function BookingWidget({ listingId, whatsapp, listingName, calendarData, maxGuests = 5 }: BookingWidgetProps) {
+    const router = useRouter();
     const [checkIn, setCheckIn] = useState<Date | null>(null);
     const [checkOut, setCheckOut] = useState<Date | null>(null);
     const [guests, setGuests] = useState("1");
@@ -112,15 +114,33 @@ export default function BookingWidget({ listingId, whatsapp, listingName, calend
         return () => clearTimeout(timer);
     }, [checkIn, checkOut, guests, nightsCount, fetchPrice]);
 
-    // Monta a URL do booking engine público da Stays.net
+    // Roteamento do checkout:
+    //   • Padrão → checkout interno em `/reserva` (CheckoutWizard com cupom
+    //     Vivare + Stripe + integração Stays via Next.js API routes).
+    //   • Escape hatch: setar `NEXT_PUBLIC_USE_STAYS_HOSTED_CHECKOUT="1"`
+    //     reverte para a página hospedada da Stays — útil pra rollback
+    //     rápido sem redeploy de código se algo quebrar em produção.
     const handleReservar = () => {
         if (!checkIn || !checkOut) return;
 
         const fromStr = checkIn.toISOString().split('T')[0];
         const toStr = checkOut.toISOString().split('T')[0];
 
-        const bookingUrl = `https://vivare.stays.net/customer/pt/booking?id=${listingId}&from=${fromStr}&to=${toStr}&persons=${guests}`;
-        window.open(bookingUrl, '_blank');
+        const useStaysHosted = process.env.NEXT_PUBLIC_USE_STAYS_HOSTED_CHECKOUT === '1';
+
+        if (useStaysHosted) {
+            const bookingUrl = `https://vivare.stays.net/customer/pt/booking?id=${listingId}&from=${fromStr}&to=${toStr}&persons=${guests}`;
+            window.open(bookingUrl, '_blank');
+            return;
+        }
+
+        const params = new URLSearchParams({
+            id: listingId,
+            from: fromStr,
+            to: toStr,
+            persons: guests,
+        });
+        router.push(`/reserva?${params.toString()}`);
     };
 
     const formatBRL = (value: number) =>
@@ -253,7 +273,7 @@ export default function BookingWidget({ listingId, whatsapp, listingName, calend
             )}
 
             <div className="text-center text-xs text-neutral-500 mb-4 font-medium">
-                Você será redirecionado para preencher os dados e pagamento no ambiente seguro da Stays.
+                Pagamento seguro com Stripe. Aplique cupons de desconto no próximo passo.
             </div>
 
             <button

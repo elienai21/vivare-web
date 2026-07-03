@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { fetchListingById, fetchListingCalendar } from "@/services/staysService";
@@ -77,7 +78,14 @@ export default async function UnidadeDetalhePage({
                 ) : (
                     <div className="w-full h-[50vh] min-h-[400px] rounded-2xl overflow-hidden bg-neutral-200 relative mb-12 flex items-center justify-center text-neutral-500">
                         {imageUrl ? (
-                            <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
+                            <Image
+                                src={imageUrl}
+                                alt={title}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 80vw"
+                                className="object-cover"
+                                priority
+                            />
                         ) : (
                             "Imagem indisponível"
                         )}

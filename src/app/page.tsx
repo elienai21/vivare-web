@@ -1,8 +1,19 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import {
+    Award,
+    BadgeCheck,
+    Handshake,
+    Headphones,
+    Heart,
+    Key,
+    MessageCircle,
+    Sparkles,
+    Star,
+} from "lucide-react";
 import { OwnerPopupTrigger } from "@/components/ui/OwnerPopupTrigger";
-import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { getPublishedPageServer } from "@/services/cmsServiceServer";
 import { SiteContent } from "@/types/cms";
 import { fetchListings } from "@/services/staysService";
 import { HeroSearch } from "@/components/ui/HeroSearch";
@@ -12,6 +23,15 @@ export const metadata: Metadata = {
   description: "Descubra e reserve apartamentos premium para temporada em São Paulo, Santos e Guarujá. Check-in digital, limpeza profissional e suporte dedicado.",
   alternates: { canonical: "/" },
 };
+
+/**
+ * ISR: re-render the home page every 10 minutes. Both the Firestore CMS read
+ * and the Stays listings fetch are slow on cold paths (Firestore in particular
+ * has an 8s timeout below) — caching the whole page keeps them off the LCP
+ * critical path for the vast majority of visitors. Listings availability
+ * changes constantly, but property listings/photos don't.
+ */
+export const revalidate = 600;
 
 export default async function Home() {
   let content: SiteContent = {
@@ -24,15 +44,14 @@ export default async function Home() {
   let listings: any[] = [];
 
   try {
-    // Nova coleção CMS: pages/home
-    const docRef = doc(db, "pages", "home");
-    const docSnap = await Promise.race([
-      getDoc(docRef),
-      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("Firestore timeout")), 8000)),
-    ]);
-    if (docSnap.exists()) {
-      const pageData = docSnap.data();
-      const c = pageData.content || pageData;
+    // CMS via `cmsServiceServer` — usa Firebase Admin SDK (REST) quando
+    // as credenciais server-side estão setadas, com fallback pro Web SDK.
+    // Admin SDK evita os "GRPC error" intermitentes que apareciam ao usar
+    // o Web SDK em contexto server-side.
+    const page = await getPublishedPageServer("home");
+    if (page) {
+      const c = (page as unknown as { content?: Partial<SiteContent> } & Partial<SiteContent>).content
+        ?? (page as unknown as Partial<SiteContent>);
       content = {
         heroTitle: c.heroTitle || content.heroTitle,
         heroSubtitle: c.heroSubtitle || content.heroSubtitle,
@@ -40,7 +59,7 @@ export default async function Home() {
       };
     }
   } catch (err) {
-    console.error("Erro CMS:", err);
+    console.error("Erro CMS (home):", err);
   }
 
   try {
@@ -55,31 +74,66 @@ export default async function Home() {
     ? topListings.map(l => l._t_mainImageMeta?.url).filter(Boolean)
     : [];
 
-  // Se a API falhar ou trazer só 1 imagem, força o fallback para o Crossfade funcionar
+  // Se a API falhar ou trazer só 1 imagem, força o fallback para o Crossfade funcionar.
+  // Unsplash w=1600 (era 2000) — next/image redimensiona ainda mais conforme o viewport.
   if (heroImages.length < 2) {
     heroImages = [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-      "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
     ];
   }
 
   return (
     <main>
-      {/* Hero Section */}
-      <section className="relative h-[92vh] w-full overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80 z-10 pointer-events-none"></div>
+      {/* Hero Section
+          Note: overflow-hidden lives on the inner background layer (not the
+          <section>) so the HeroSearch suggestion popover can escape the hero
+          bounds without being clipped by the trust bar below. The bg layer
+          still clips the slowZoom scale() animation. */}
+      <section className="relative z-30 h-[92vh] w-full">
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          {/* Gradient overlay sits ABOVE the slides (z-10) so darkening is preserved.
+              Middle stop bumped from /40 to /50 to keep text >= 3:1 contrast
+              (WCAG AA for large text) on lighter hero photos. */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 z-10 pointer-events-none"></div>
           {heroImages.length > 1 ? (
             heroImages.map((imgUrl, idx) => (
               <div
                 key={idx}
                 className={`absolute inset-0 hero-slide hero-slide-${idx + 1}`}
-                style={{ backgroundImage: `url(${imgUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', animation: "heroCrossfade 24s infinite, slowZoom 14s ease-out both" }}
-              />
+                style={{ animation: "heroCrossfade 24s infinite, slowZoom 14s ease-out both" }}
+              >
+                <Image
+                  src={imgUrl}
+                  alt={idx === 0 ? "Apartamento premium gerenciado pela Vivare" : ""}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  // Only the first slide is LCP candidate.
+                  priority={idx === 0}
+                  fetchPriority={idx === 0 ? "high" : "low"}
+                  // Subsequent slides start hidden (driven by heroCrossfade keyframes),
+                  // so we let the browser lazy-load them.
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  // Quality 70 instead of 80 — visually indistinguishable on photos
+                  // at this scale, ~15% smaller payload.
+                  quality={70}
+                />
+              </div>
             ))
           ) : (
-            <img src={heroImages[0]} alt="Vivare Luxury" className="h-full w-full object-cover" style={{ animation: "slowZoom 14s ease-out both" }} />
+            <Image
+              src={heroImages[0]}
+              alt="Apartamento premium gerenciado pela Vivare"
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority
+              fetchPriority="high"
+              quality={70}
+              style={{ animation: "slowZoom 14s ease-out both" }}
+            />
           )}
         </div>
 
@@ -107,7 +161,7 @@ export default async function Home() {
             <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md border border-white/10 px-5 py-3 rounded-full">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="material-symbols-outlined text-[13px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">star</span>
+                  <Star key={i} className="w-[13px] h-[13px] text-primary fill-primary" aria-hidden="true" />
                 ))}
               </div>
               <div className="w-px h-5 bg-white/15" />
@@ -119,7 +173,7 @@ export default async function Home() {
           </div>
         </div>
 
-        <span className="absolute right-6 bottom-10 font-body text-[9px] tracking-[.35em] uppercase text-white/40 drop-shadow-md" style={{ writingMode: 'vertical-rl' }}>
+        <span className="absolute right-6 bottom-10 font-body text-[9px] tracking-[.35em] uppercase text-white/70 drop-shadow-md" style={{ writingMode: 'vertical-rl' }}>
           Tecnologia Vivare
         </span>
       </section>
@@ -135,7 +189,7 @@ export default async function Home() {
               <div>
                 <div className="flex gap-0.5">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className="material-symbols-outlined text-[11px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <Star key={i} className="w-[11px] h-[11px] text-primary fill-primary" aria-hidden="true" />
                   ))}
                 </div>
                 <p className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">Nota média</p>
@@ -167,7 +221,7 @@ export default async function Home() {
 
             {/* Identidade verificada */}
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+              <BadgeCheck className="text-primary w-5 h-5" aria-hidden="true" />
               <div>
                 <p className="text-xs font-bold text-white leading-none">Identidade Verificada</p>
                 <p className="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">Plataforma auditável</p>
@@ -199,17 +253,22 @@ export default async function Home() {
               <a href={`/unidades/${listing.id}`} key={listing._id} className="group cursor-pointer card-lift reveal" style={{ transitionDelay: `${index * 0.1}s` }}>
                 <div className="relative mb-5 overflow-hidden aspect-[4/3]">
                   {listing._t_mainImageMeta?.url ? (
-                    <img
+                    <Image
                       src={listing._t_mainImageMeta.url}
                       alt={listing._mstitle.pt_BR}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      // First 3 cards are likely above the fold on most viewports
+                      // — give them eager loading; rest stay lazy.
+                      loading={index < 3 ? "eager" : "lazy"}
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 text-neutral-400">Sem Imagem</div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                   <button aria-label="Salvar nos favoritos" className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-ink shadow backdrop-blur transition-colors hover:text-red-500">
-                    <span className="material-symbols-outlined text-lg" aria-hidden="true">favorite</span>
+                    <Heart className="w-5 h-5" aria-hidden="true" />
                   </button>
                   {index === 0 && (
                     <span className="absolute bottom-4 left-4 text-[9px] font-bold tracking-[.25em] uppercase bg-primary text-ink px-3 py-1">
@@ -268,28 +327,28 @@ export default async function Home() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="flex flex-col items-start space-y-4 p-8 bg-white dark:bg-ink border border-primary/15 card-lift reveal">
               <div className="flex h-12 w-12 items-center justify-center border border-primary text-primary">
-                <span className="material-symbols-outlined text-2xl">auto_awesome</span>
+                <Sparkles className="w-6 h-6" aria-hidden="true" />
               </div>
               <h4 className="font-display text-xl font-medium text-ink dark:text-parchment">Curadoria Estrita</h4>
               <p className="text-sm leading-relaxed text-muted">Imóveis selecionados sob os mais altos critérios de design, localização e conforto.</p>
             </div>
             <div className="flex flex-col items-start space-y-4 p-8 bg-white dark:bg-ink border border-primary/15 card-lift reveal" style={{ transitionDelay: '.08s' }}>
               <div className="flex h-12 w-12 items-center justify-center border border-primary text-primary">
-                <span className="material-symbols-outlined text-2xl">key</span>
+                <Key className="w-6 h-6" aria-hidden="true" />
               </div>
               <h4 className="font-display text-xl font-medium text-ink dark:text-parchment">Check-in Digital</h4>
               <p className="text-sm leading-relaxed text-muted">Acesso rápido e seguro via fechaduras eletrônicas, sem necessidade de chaves físicas ou fiador.</p>
             </div>
             <div className="flex flex-col items-start space-y-4 p-8 bg-white dark:bg-ink border border-primary/15 card-lift reveal" style={{ transitionDelay: '.16s' }}>
               <div className="flex h-12 w-12 items-center justify-center border border-primary text-primary">
-                <span className="material-symbols-outlined text-2xl">workspace_premium</span>
+                <Award className="w-6 h-6" aria-hidden="true" />
               </div>
               <h4 className="font-display text-xl font-medium text-ink dark:text-parchment">Enxoval Premium</h4>
               <p className="text-sm leading-relaxed text-muted">Cama, banho e cozinha preparados com padrão de hotelaria — prontos para a sua chegada.</p>
             </div>
             <div className="flex flex-col items-start space-y-4 p-8 bg-white dark:bg-ink border border-primary/15 card-lift reveal" style={{ transitionDelay: '.24s' }}>
               <div className="flex h-12 w-12 items-center justify-center border border-primary text-primary">
-                <span className="material-symbols-outlined text-2xl">support_agent</span>
+                <Headphones className="w-6 h-6" aria-hidden="true" />
               </div>
               <h4 className="font-display text-xl font-medium text-ink dark:text-parchment">Suporte Dedicado</h4>
               <p className="text-sm leading-relaxed text-muted">Atendimento ágil e humano por WhatsApp — sem robôs, sem burocracia.</p>
@@ -313,7 +372,7 @@ export default async function Home() {
             <div className="p-8 border border-primary/20 bg-white/5 reveal">
               <div className="flex gap-0.5 mb-4" role="img" aria-label="5 de 5 estrelas">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">star</span>
+                  <Star key={i} className="w-3.5 h-3.5 text-primary fill-primary" aria-hidden="true" />
                 ))}
               </div>
               <p className="font-display text-lg font-light italic text-warm-mid leading-relaxed mb-6">
@@ -328,7 +387,7 @@ export default async function Home() {
             <div className="p-8 border border-primary/20 bg-white/5 reveal" style={{ transitionDelay: '.1s' }}>
               <div className="flex gap-0.5 mb-4" role="img" aria-label="5 de 5 estrelas">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">star</span>
+                  <Star key={i} className="w-3.5 h-3.5 text-primary fill-primary" aria-hidden="true" />
                 ))}
               </div>
               <p className="font-display text-lg font-light italic text-warm-mid leading-relaxed mb-6">
@@ -343,7 +402,7 @@ export default async function Home() {
             <div className="p-8 border border-primary/20 bg-white/5 reveal" style={{ transitionDelay: '.2s' }}>
               <div className="flex gap-0.5 mb-4" role="img" aria-label="5 de 5 estrelas">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">star</span>
+                  <Star key={i} className="w-3.5 h-3.5 text-primary fill-primary" aria-hidden="true" />
                 ))}
               </div>
               <p className="font-display text-lg font-light italic text-warm-mid leading-relaxed mb-6">
@@ -364,9 +423,15 @@ export default async function Home() {
         <div className="relative overflow-hidden bg-ink rounded-xl border border-primary/20">
           {/* foto de fundo */}
           <div className="absolute right-0 top-0 hidden h-full w-1/2 lg:block">
-            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=900&q=80"
-              alt="Imóvel gerenciado Vivare"
-              className="h-full w-full object-cover opacity-50" />
+            <Image
+              src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=70"
+              alt="Imóvel gerenciado pela Vivare em São Paulo"
+              fill
+              sizes="50vw"
+              quality={70}
+              loading="lazy"
+              className="object-cover opacity-50"
+            />
             <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/50 to-transparent"></div>
           </div>
 
@@ -382,12 +447,12 @@ export default async function Home() {
 
             <div className="flex flex-wrap gap-4 mb-14">
               <a href="/para-proprietarios" className="inline-flex items-center gap-2 bg-primary text-ink px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all hover:bg-primary-light">
-                <span className="material-symbols-outlined text-base">handshake</span>
+                <Handshake className="w-4 h-4" aria-hidden="true" />
                 Fale com um Especialista
               </a>
               <a href="https://wa.me/5511985067840?text=Olá%2C+tenho+interesse+em+saber+mais+sobre+a+gestão+da+Vivare+para+meu+imóvel"
                 className="inline-flex items-center gap-2 border border-primary/50 text-parchment px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all hover:bg-white/5">
-                <span className="material-symbols-outlined text-base">chat</span>
+                <MessageCircle className="w-4 h-4" aria-hidden="true" />
                 Falar no WhatsApp
               </a>
             </div>

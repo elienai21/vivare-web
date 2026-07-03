@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
     title: "Reserva Confirmada",
+    description: "Sua reserva na Vivare foi confirmada com sucesso. Você receberá os detalhes por e-mail.",
+    // Confirmation pages reflect a completed transaction tied to a session —
+    // never useful as a search result.
     robots: { index: false, follow: false },
 };
 

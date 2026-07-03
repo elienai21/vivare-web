@@ -3,9 +3,15 @@
 import { useState } from "react";
 import { trackEvent } from "@/lib/constants";
 import { subscribeToNewsletter } from "@/services/blogService";
+import {
+    HONEYPOT_FIELD,
+    checkSubmitRateLimit,
+    honeypotHiddenClass,
+} from "@/lib/anti-bot";
 
 export function EmailSignupForm() {
     const [email, setEmail] = useState("");
+    const [honeypot, setHoneypot] = useState("");
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -13,6 +19,13 @@ export function EmailSignupForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email) return;
+
+        // Drop honeypot/rate-limited submissions silently — show the
+        // success state so bots can't probe the response.
+        if (honeypot.trim() || !checkSubmitRateLimit("email_signup").ok) {
+            setSubmitted(true);
+            return;
+        }
 
         setLoading(true);
         setError(false);
@@ -40,6 +53,20 @@ export function EmailSignupForm() {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* Honeypot — off-screen, invisible to real users. */}
+            <div className={honeypotHiddenClass} aria-hidden="true">
+                <label>
+                    Website (não preencher)
+                    <input
+                        type="text"
+                        name={HONEYPOT_FIELD}
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                    />
+                </label>
+            </div>
             <input
                 type="email"
                 required

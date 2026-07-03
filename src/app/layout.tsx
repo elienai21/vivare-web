@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Cormorant_Garamond } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE } from "@/lib/constants";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE, META_PIXEL_ID, GA4_ID, GOOGLE_ADS_ID } from "@/lib/constants";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
 };
 
 import { OwnerPopupProvider } from "@/components/ui/OwnerPopupProvider";
-import { OwnerPopup } from "@/components/ui/OwnerPopup";
+import { LazyOwnerPopup } from "@/components/ui/LazyOwnerPopup";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { Header } from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
@@ -117,10 +117,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${manrope.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-        {/* Google Analytics (gtag.js) */}
+        {/* Google Tag (gtag.js) — carrega o loader com a MEDIÇÃO principal (GA4).
+            O mesmo loader serve pra Google Ads: basta um `gtag('config', 'AW-...')`
+            adicional quando NEXT_PUBLIC_GOOGLE_ADS_ID estiver setado. Não
+            é necessário carregar o script duas vezes. */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-NS503CK9EC"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -128,17 +130,64 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-NS503CK9EC');
+            gtag('config', '${GA4_ID}');
+            ${GOOGLE_ADS_ID ? `gtag('config', '${GOOGLE_ADS_ID}');` : ''}
           `}
         </Script>
+        {/* Meta Pixel — only loads when NEXT_PUBLIC_META_PIXEL_ID is set.
+            Set the env var in Vercel (Production + Preview) to activate
+            without redeploying app code. fbq becomes a no-op when the
+            ID is empty, so trackEvent() is safe either way. */}
+        {META_PIXEL_ID && (
+          <>
+            <Script id="meta-pixel" strategy="afterInteractive">
+              {`
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '${META_PIXEL_ID}');
+                fbq('track', 'PageView');
+              `}
+            </Script>
+            {/* noscript fallback for users with JS disabled */}
+            <noscript>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                height="1"
+                width="1"
+                style={{ display: 'none' }}
+                alt=""
+                src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+              />
+            </noscript>
+          </>
+        )}
       </head>
       <body>
+        {/* Skip-to-content link — visible only when keyboard-focused. Lets
+            screen-reader & keyboard users bypass the sticky header on every
+            page. WCAG 2.4.1 (Bypass Blocks). */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-ink focus:text-parchment focus:px-4 focus:py-2 focus:rounded focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          Pular para o conteúdo
+        </a>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <OwnerPopupProvider>
             <Header />
-            {children}
+            {/* Wrapper target for the skip-link. tabIndex=-1 lets focus land
+                here programmatically without putting it into the tab order. */}
+            <div id="main-content" tabIndex={-1} className="focus:outline-none">
+              {children}
+            </div>
             <Footer />
-            <OwnerPopup />
+            <LazyOwnerPopup />
             <FloatingWhatsApp />
             <ScrollObserver />
           </OwnerPopupProvider>

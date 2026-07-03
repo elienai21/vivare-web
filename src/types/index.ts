@@ -77,6 +77,8 @@ export interface PriceBreakdown {
     cleaningFee: number;
     serviceFee: number;
     taxes: number;
+    discountAmount?: number;
+    appliedCouponCode?: string;
 }
 
 export interface Quote {

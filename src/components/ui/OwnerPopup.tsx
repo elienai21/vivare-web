@@ -1,10 +1,26 @@
 "use client";
 
 import { useOwnerPopup } from "./OwnerPopupProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import {
+    HONEYPOT_FIELD,
+    checkSubmitRateLimit,
+    honeypotHiddenClass,
+    isHoneypotTriggered,
+} from "@/lib/anti-bot";
+
+/** CSS selector matching every focusable descendant inside the modal. */
+const FOCUSABLE_SELECTOR = [
+    "a[href]",
+    "button:not([disabled])",
+    "input:not([disabled]):not([type='hidden'])",
+    "select:not([disabled])",
+    "textarea:not([disabled])",
+    "[tabindex]:not([tabindex='-1'])",
+].join(",");
 
 export function OwnerPopup() {
     const { isOpen, closeOwnerPopup } = useOwnerPopup();
@@ -19,6 +35,8 @@ export function OwnerPopup() {
         mobiliado: "",
         linkAnuncio: "",
         mensagem: "",
+        // Honeypot — must stay empty for legit submissions.
+        [HONEYPOT_FIELD]: "",
     });
 
     const trackEvent = (eventName: string) => {
@@ -36,6 +54,72 @@ export function OwnerPopup() {
             trackEvent("owner_popup_started");
         }
     }, [isOpen]);
+
+    // ── A11y: dialog focus management ────────────────────────────────
+    // Refs for focus trap & restore.
+    const dialogRef = useRef<HTMLDivElement | null>(null);
+    const lastFocusedRef = useRef<HTMLElement | null>(null);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        // Remember what triggered the modal so we can restore focus on close.
+        lastFocusedRef.current = (document.activeElement as HTMLElement) ?? null;
+
+        // Lock body scroll while the dialog is open.
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+
+        // Move focus into the dialog on the next tick so the browser
+        // doesn't fight us during the open animation.
+        const focusFirst = () => {
+            const node = dialogRef.current;
+            if (!node) return;
+            const first = node.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+            (first ?? node).focus();
+        };
+        const raf = window.requestAnimationFrame(focusFirst);
+
+        // Esc closes; Tab/Shift+Tab cycles within the modal (focus trap).
+        const handleKey = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                event.preventDefault();
+                closeOwnerPopup();
+                return;
+            }
+            if (event.key !== "Tab" || !dialogRef.current) return;
+
+            const focusables = Array.from(
+                dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+            ).filter((el) => !el.hasAttribute("data-skip-focus"));
+            if (focusables.length === 0) return;
+
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            const active = document.activeElement as HTMLElement | null;
+
+            if (event.shiftKey && active === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && active === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        };
+        document.addEventListener("keydown", handleKey);
+
+        return () => {
+            window.cancelAnimationFrame(raf);
+            document.removeEventListener("keydown", handleKey);
+            document.body.style.overflow = previousOverflow;
+            // Return focus to the element that opened the dialog (the
+            // OwnerPopupTrigger button), unless the user navigated away.
+            const last = lastFocusedRef.current;
+            if (last && document.contains(last)) {
+                last.focus();
+            }
+        };
+    }, [isOpen, closeOwnerPopup]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -58,11 +142,31 @@ export function OwnerPopup() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Anti-bot gate: silently drop honeypot hits and rate-limited
+        // resubmissions before they reach Firestore or analytics.
+        if (isHoneypotTriggered(formData)) {
+            // Mimic success UX so a bot can't probe by output. Just close.
+            closeOwnerPopup();
+            return;
+        }
+        const rate = checkSubmitRateLimit("owner_popup");
+        if (!rate.ok) {
+            // Pretend success — same reasoning as honeypot.
+            closeOwnerPopup();
+            return;
+        }
+
         trackEvent("owner_popup_submitted");
+
+        // Strip the honeypot before persisting — keeps the Firestore
+        // doc clean and avoids tipping off attackers via leaked data.
+        const { [HONEYPOT_FIELD]: _hp, ...payload } = formData;
+        void _hp;
 
         try {
             await addDoc(collection(db, "leads_proprietarios"), {
-                ...formData,
+                ...payload,
                 createdAt: serverTimestamp(),
                 source: "Popup_B2B",
             });
@@ -87,33 +191,58 @@ export function OwnerPopup() {
 
     return (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            {/* Click outside to close */}
-            <div className="absolute inset-0" onClick={closeOwnerPopup} />
+            {/* Click outside to close — purely decorative for assistive
+                tech (the dialog itself has aria-modal). */}
+            <div className="absolute inset-0" onClick={closeOwnerPopup} aria-hidden="true" />
 
             <div
-                className="relative bg-white w-full max-w-2xl sm:rounded-2xl rounded-t-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh] animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-10 sm:zoom-in-95 duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+                ref={dialogRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="owner-popup-title"
+                aria-describedby="owner-popup-description"
+                tabIndex={-1}
+                className="relative bg-white w-full max-w-2xl sm:rounded-2xl rounded-t-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh] animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-10 sm:zoom-in-95 duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] focus:outline-none"
             >
                 {/* Header Ribbon */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-neutral-900 via-accent-500 to-neutral-900"></div>
+                <div className="h-1.5 w-full bg-gradient-to-r from-neutral-900 via-accent-500 to-neutral-900" aria-hidden="true"></div>
 
                 <div className="p-6 md:p-8 overflow-y-auto flex-1 custom-scrollbar">
                     <button
+                        type="button"
                         onClick={closeOwnerPopup}
-                        className="absolute top-6 right-6 p-2 rounded-full hover:bg-neutral-100 transition-colors text-neutral-400 hover:text-neutral-900"
+                        aria-label="Fechar formulário"
+                        className="absolute top-6 right-6 p-2 rounded-full hover:bg-neutral-100 transition-colors text-neutral-400 hover:text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
-                        <X size={20} />
+                        <X size={20} aria-hidden="true" />
                     </button>
 
                     <div className="mb-8 pr-8">
-                        <h2 className="text-2xl md:text-3xl font-display font-bold text-neutral-950 mb-3 tracking-tight">
+                        <h2 id="owner-popup-title" className="text-2xl md:text-3xl font-display font-bold text-neutral-950 mb-3 tracking-tight">
                             Antes de falar com nosso time, conte rapidamente sobre seu imóvel
                         </h2>
-                        <p className="text-neutral-600 leading-relaxed text-[15px]">
+                        <p id="owner-popup-description" className="text-neutral-600 leading-relaxed text-[15px]">
                             Com essas informações, direcionamos você para o especialista certo e agilizamos seu atendimento.
                         </p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-8">
+                        {/* Honeypot — invisible to humans, irresistible to bots.
+                            Off-screen positioning beats display:none for fooling
+                            scripts that explicitly skip hidden fields. */}
+                        <div className={honeypotHiddenClass} aria-hidden="true">
+                            <label>
+                                Website (não preencher)
+                                <input
+                                    type="text"
+                                    name={HONEYPOT_FIELD}
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                    value={formData[HONEYPOT_FIELD]}
+                                    onChange={handleChange}
+                                />
+                            </label>
+                        </div>
                         {/* Required Fields Group */}
                         <div className="space-y-5">
                             <div className="flex items-center gap-3 border-b pb-2 mb-4">

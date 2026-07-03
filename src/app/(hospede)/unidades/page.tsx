@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import { ChevronDown, Heart, Search, SearchX } from "lucide-react";
 import { fetchListings, fetchListingCalendar } from "@/services/staysService";
 import PropertyMap from "@/components/ui/DynamicPropertyMap";
 
@@ -119,7 +121,7 @@ export default async function UnidadesPage({
                             className="px-6 py-3 bg-transparent w-full outline-none text-neutral-800 placeholder:text-neutral-500 font-medium"
                         />
                         <button type="submit" className="bg-primary hover:brightness-110 text-ink px-8 font-bold transition-all flex items-center gap-2 tracking-wide">
-                            <span className="material-symbols-outlined text-[18px]">search</span> Buscar
+                            <Search className="w-[18px] h-[18px]" aria-hidden="true" /> Buscar
                         </button>
                     </div>
 
@@ -147,7 +149,7 @@ export default async function UnidadesPage({
                                 <option value="3">3 Hóspedes</option>
                                 <option value="4">4+ Hóspedes</option>
                             </select>
-                            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-400 text-[20px]">expand_more</span>
+                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-400 w-5 h-5" aria-hidden="true" />
                         </div>
                     </div>
                 </form>
@@ -182,7 +184,7 @@ export default async function UnidadesPage({
 
                     {listings.length === 0 ? (
                         <div className="flex-1 flex flex-col items-center justify-center text-center py-20">
-                            <span className="material-symbols-outlined text-6xl text-neutral-300 mb-4">search_off</span>
+                            <SearchX className="w-16 h-16 text-neutral-300 mb-4" aria-hidden="true" />
                             <h3 className="text-xl font-bold text-neutral-700 mb-2">Nenhum resultado encontrado</h3>
                             <p className="text-neutral-500 mb-6">
                                 {hasDateFilter
@@ -199,17 +201,20 @@ export default async function UnidadesPage({
                                     {/* Image Container */}
                                     <div className="aspect-[4/3] w-full bg-neutral-100 overflow-hidden relative">
                                         {item._t_mainImageMeta?.url ? (
-                                            <img
+                                            <Image
                                                 src={item._t_mainImageMeta.url}
                                                 alt={item._mstitle.pt_BR}
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                fill
+                                                sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                                loading="lazy"
                                             />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-neutral-400 font-medium text-sm">Sem imagem</div>
                                         )}
                                         {/* Favoritar */}
                                         <div className="absolute top-3 right-3 bg-white/60 hover:bg-white backdrop-blur-md rounded-full p-2 text-neutral-700 hover:text-rose-500 shadow-sm transition-all duration-200 flex items-center justify-center z-10">
-                                            <span className="material-symbols-outlined text-[18px]">favorite</span>
+                                            <Heart className="w-[18px] h-[18px]" aria-hidden="true" />
                                         </div>
                                     </div>
 

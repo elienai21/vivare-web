@@ -8,8 +8,9 @@ import { Steps } from './Steps';
 import { SummaryStep } from './SummaryStep';
 import { GuestStep } from './GuestStep';
 import { PaymentStep } from './PaymentStep';
-import { initializeCheckout, updateGuestInfo, createHold, createPaymentIntent, getCheckout } from '@/lib/api-client';
+import { initializeCheckout, updateGuestInfo, createHold, createPaymentIntent, getCheckout, calculatePrice } from '@/lib/api-client';
 import { Loader2 } from 'lucide-react';
+import { trackEvent } from '@/lib/constants';
 
 interface CheckoutWizardProps {
     listing: ListingDetail;
@@ -42,6 +43,16 @@ export function CheckoutWizard({
     // Sensitive ephemeral state
     const [clientSecret, setClientSecret] = useState<string | null>(null);
     const [checkoutId, setCheckoutId] = useState<string | null>(null);
+    /**
+     * Session token devolvido pelo backend no `initialize`. Necessário em
+     * todas as chamadas subsequentes (header `X-Checkout-Session`). Vive
+     * em sessionStorage junto com o `checkoutId` — escopo por aba.
+     */
+    const [sessionToken, setSessionToken] = useState<string | null>(null);
+
+    // Quote state — refreshed when coupon applied/removed
+    const [currentQuote, setCurrentQuote] = useState<Quote | null>(initialQuote ?? null);
+    const [couponCode, setCouponCode] = useState<string | null>(null);
 
     const [isLoading, setIsLoading] = useState(true);
     const [isRecovering, setIsRecovering] = useState(false);
@@ -65,6 +76,7 @@ export function CheckoutWizard({
                 const savedRaw = sessionStorage.getItem(storageKey);
                 let savedId: string | null = null;
 
+                let savedToken: string | null = null;
                 if (savedRaw) {
                     const saved = JSON.parse(savedRaw);
                     const now = Date.now();
@@ -73,28 +85,31 @@ export function CheckoutWizard({
                     if (
                         saved.checkIn === checkIn &&
                         saved.checkOut === checkOut &&
-                        (now - saved.timestamp < SESSION_TTL_MS)
+                        (now - saved.timestamp < SESSION_TTL_MS) &&
+                        typeof saved.sessionToken === 'string'
                     ) {
                         savedId = saved.checkoutId;
+                        savedToken = saved.sessionToken;
                     } else {
                         // Invalid or stale, plain cleanup
                         sessionStorage.removeItem(storageKey);
                     }
                 }
 
-                if (!savedId) {
+                if (!savedId || !savedToken) {
                     // No valid saved session, start fresh at Step 1
                     setIsLoading(false);
                     return;
                 }
 
                 setCheckoutId(savedId);
+                setSessionToken(savedToken);
 
                 // Fetch latest state from backend (Source of Truth)
-                const checkout = await getCheckout(savedId);
+                const checkout = await getCheckout(savedId, savedToken);
 
                 // Derive Step and handle Redirects based on Backend State
-                await handleStateTransition(checkout);
+                await handleStateTransition(checkout, savedToken);
 
             } catch (err) {
                 console.error("Failed to restore checkout state:", err);
@@ -108,7 +123,7 @@ export function CheckoutWizard({
     }, [listing.id, checkIn, checkOut, router]);
 
     // Helper to transition UI based on CheckoutStateMachine
-    const handleStateTransition = async (checkout: Checkout) => {
+    const handleStateTransition = async (checkout: Checkout, token: string) => {
         // Terminal States -> Redirect
         if (checkout.state === 'PAID') {
             router.replace(`/reserva/confirmando?checkoutId=${checkout.checkoutId}`);
@@ -135,17 +150,12 @@ export function CheckoutWizard({
             // If we are already at payment creation, ensure we have the client secret
             if (checkout.state === 'PAYMENT_CREATED') {
                 // We don't have clientSecret in memory after refresh/re-load, so we recover it
-                await recoverPaymentSession(checkout.checkoutId);
+                await recoverPaymentSession(checkout.checkoutId, token);
                 // recoverPaymentSession handles its own loading state finalization
             } else {
                 // Just Hold created, waiting to likely create Payment Intent (user clicks next, but here we are restoring)
-                // If we are at Step 3 but only Hold Created, it might mean PI failed or wasn't created yet?
-                // Actually if we jump to Step 3, we expect PI to exist or be created.
-                // For simplicity, if HOLD exists, let's assume we are ready to pay -> create PI
-                // But normally the user clicks "Go to Payment" which does Hold -> PI.
-                // If they refreshed *between* Hold and PI (rare), they might be stuck?
                 // Auto-healing: Try to recover PI creates it if not exists.
-                await recoverPaymentSession(checkout.checkoutId);
+                await recoverPaymentSession(checkout.checkoutId, token);
             }
         } else if (['INITIATED'].includes(checkout.state)) {
             // Initiated means we have an ID, likely user was at Guest Step or just started.
@@ -157,7 +167,7 @@ export function CheckoutWizard({
         }
     };
 
-    const recoverPaymentSession = async (cId: string) => {
+    const recoverPaymentSession = async (cId: string, token: string) => {
         if (isRecovering) return;
 
         // Loop Guard
@@ -176,7 +186,7 @@ export function CheckoutWizard({
             // This ensures if PI exists, we get the same one (client_secret recovery).
             // If it doesn't exist (e.g. state was HOLD_CREATED), it creates one.
             const paymentKey = `pi:${cId}`;
-            const { clientSecret: secret } = await createPaymentIntent(cId, paymentKey);
+            const { clientSecret: secret } = await createPaymentIntent(cId, token, paymentKey);
             setClientSecret(secret);
         } catch (err: unknown) {
             console.error("Failed to recover payment session", err);
@@ -191,21 +201,74 @@ export function CheckoutWizard({
     // =========================================================================
     // 2. Storage Management (Minimal Non-PII)
     // =========================================================================
+    // sessionStorage = scope da aba. PII jamais persistida — apenas
+    // identificadores opacos (checkoutId UUID + sessionToken hex).
     useEffect(() => {
-        if (checkoutId) {
+        if (checkoutId && sessionToken) {
             const data = {
                 checkoutId,
+                sessionToken,
                 checkIn,
                 checkOut,
                 timestamp: Date.now()
             };
             sessionStorage.setItem(`${STORAGE_KEY_PREFIX}${listing.id}`, JSON.stringify(data));
         }
-    }, [checkoutId, listing.id, checkIn, checkOut]);
+    }, [checkoutId, sessionToken, listing.id, checkIn, checkOut]);
 
     // =========================================================================
     // 3. User Actions
     // =========================================================================
+
+    const totalGuests = guests.adults + guests.children;
+
+    const handleApplyCoupon = async (code: string): Promise<{ ok: boolean; error?: string }> => {
+        const normalized = code.trim().toUpperCase();
+        if (!normalized) return { ok: false, error: 'Digite um código.' };
+        try {
+            const newQuote = await calculatePrice({
+                listingId: listing.id,
+                checkIn,
+                checkOut,
+                guests: totalGuests,
+                couponCode: normalized,
+            });
+            const applied = newQuote.breakdown?.appliedCouponCode || normalized;
+            const discount = newQuote.breakdown?.discountAmount ?? 0;
+            // Stays may silently ignore an invalid coupon and return the same total.
+            // If there's no breakdown.appliedCouponCode AND no discount, treat as invalid.
+            if (!newQuote.breakdown?.appliedCouponCode && discount <= 0) {
+                trackEvent('coupon_invalid', { code: normalized });
+                return { ok: false, error: 'Cupom inválido ou não aplicável.' };
+            }
+            setCurrentQuote(newQuote);
+            setCouponCode(applied);
+            trackEvent('coupon_applied', { code: applied });
+            return { ok: true };
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : 'Não foi possível validar o cupom.';
+            trackEvent('coupon_invalid', { code: normalized });
+            return { ok: false, error: msg };
+        }
+    };
+
+    const handleRemoveCoupon = async () => {
+        const previous = couponCode;
+        setCouponCode(null);
+        try {
+            const baseQuote = await calculatePrice({
+                listingId: listing.id,
+                checkIn,
+                checkOut,
+                guests: totalGuests,
+            });
+            setCurrentQuote(baseQuote);
+        } catch {
+            // Fall back to initialQuote if recalculation fails
+            setCurrentQuote(initialQuote ?? null);
+        }
+        if (previous) trackEvent('coupon_removed', { code: previous });
+    };
 
     const handleGuestSubmit = async (info: GuestInfo) => {
         if (isLoading) return;
@@ -215,35 +278,63 @@ export function CheckoutWizard({
         try {
             setGuestInfo(info);
 
-            // 1. Initialize Checkout (or use existing)
+            // 1. Initialize Checkout (or use existing). Captura também o
+            //    sessionToken retornado — necessário em todas as chamadas
+            //    subsequentes desse checkout.
             let cId = checkoutId;
-            if (!cId) {
+            let token = sessionToken;
+            if (!cId || !token) {
                 const checkout = await initializeCheckout({
                     listingId: listing.id,
                     checkIn,
                     checkOut,
-                    guests: guests
+                    guests: guests,
+                    ...(couponCode ? { couponCode } : {}),
                 });
                 cId = checkout.checkoutId;
+                token = checkout.sessionToken;
                 setCheckoutId(cId);
+                setSessionToken(token);
+
+                // Funnel: a real checkout was created on the backend with
+                // guest info attached. Fire `begin_checkout` (GA4 standard,
+                // mapped to `InitiateCheckout` for Meta).
+                trackEvent('begin_checkout', {
+                    currency: currentQuote?.currency || 'BRL',
+                    value: currentQuote?.total ?? 0,
+                    items: [{
+                        item_id: listing.id,
+                        item_name: listing.name,
+                        quantity: 1,
+                    }],
+                    ...(couponCode ? { coupon: couponCode } : {}),
+                });
             }
 
             // 2. Update Guest Info (PII sent to backend only)
             // Even if ID existed, we update guest info as they might have changed it
-            await updateGuestInfo(cId, info);
+            await updateGuestInfo(cId, token, info);
 
             // 3. Create Hold
             // IDEMPOTENCY: Stable Key for Hold 'hold:<id>'
             const holdKey = `hold:${cId}`;
-            await createHold(cId, holdKey);
+            await createHold(cId, token, holdKey);
 
             // 4. Create Payment Intent
             // IDEMPOTENCY: Stable Key for PI 'pi:<id>'
             const paymentKey = `pi:${cId}`;
-            const { clientSecret: secret } = await createPaymentIntent(cId, paymentKey);
+            const { clientSecret: secret } = await createPaymentIntent(cId, token, paymentKey);
 
             setClientSecret(secret);
             setCurrentStep(3);
+
+            // Funnel: payment form is being shown to the user. Maps to
+            // GA4 `add_payment_info` and Meta `AddPaymentInfo`.
+            trackEvent('add_payment_info', {
+                currency: currentQuote?.currency || 'BRL',
+                value: currentQuote?.total ?? 0,
+                ...(couponCode ? { coupon: couponCode } : {}),
+            });
         } catch (err: unknown) {
             console.error('Checkout error:', err);
             const msg = err instanceof Error ? err.message : 'Não foi possível iniciar a reserva. Verifique sua conexão.';
@@ -312,6 +403,10 @@ export function CheckoutWizard({
                             checkIn={checkIn}
                             checkOut={checkOut}
                             guests={guests}
+                            quote={currentQuote}
+                            appliedCouponCode={couponCode}
+                            onApplyCoupon={handleApplyCoupon}
+                            onRemoveCoupon={handleRemoveCoupon}
                             onContinue={() => setCurrentStep(2)}
                         />
                     )}
@@ -329,6 +424,11 @@ export function CheckoutWizard({
                         <PaymentStep
                             clientSecret={clientSecret}
                             onBack={() => setCurrentStep(2)}
+                            purchaseValue={currentQuote?.total}
+                            purchaseCurrency={currentQuote?.currency}
+                            listingId={listing.id}
+                            listingName={listing.name}
+                            couponCode={couponCode}
                         />
                     )}
                 </div>
@@ -372,14 +472,34 @@ export function CheckoutWizard({
                             </div>
                         </div>
 
-                        <div className="border-t border-neutral-200 dark:border-neutral-700 pt-4">
+                        <div className="border-t border-neutral-200 dark:border-neutral-700 pt-4 space-y-1.5 text-sm">
+                            {currentQuote?.breakdown?.discountAmount && currentQuote.breakdown.discountAmount > 0 && (
+                                <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
+                                    <span>
+                                        Desconto
+                                        {currentQuote.breakdown.appliedCouponCode && (
+                                            <span className="ml-1 font-mono uppercase text-xs">
+                                                ({currentQuote.breakdown.appliedCouponCode})
+                                            </span>
+                                        )}
+                                    </span>
+                                    <span>
+                                        -{currentQuote.breakdown.discountAmount.toLocaleString('pt-BR', {
+                                            style: 'currency',
+                                            currency: currentQuote.currency || 'BRL',
+                                        })}
+                                    </span>
+                                </div>
+                            )}
                             <div className="flex justify-between font-bold text-lg">
                                 <span>Total estimado</span>
-                                <span className="text-neutral-400 font-normal text-sm">
-                                    {/* Quote is recalculated at backend, but we display initial estimate here.
-                                        In a real app we might fetch updated quote with Checkout Intent. 
-                                    */}
-                                    {initialQuote ? `R$ ${initialQuote.total.toLocaleString('pt-BR')}` : '(Confirmado no passo 1)'}
+                                <span>
+                                    {currentQuote
+                                        ? currentQuote.total.toLocaleString('pt-BR', {
+                                              style: 'currency',
+                                              currency: currentQuote.currency || 'BRL',
+                                          })
+                                        : '(Confirmado no passo 1)'}
                                 </span>
                             </div>
                         </div>

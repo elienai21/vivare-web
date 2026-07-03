@@ -1,12 +1,31 @@
+'use client';
+
 import { useState } from 'react';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { stripePromise } from '@/lib/stripe';
+import { stripePromise, isStripeConfigured } from '@/lib/stripe';
 import { Button } from '@/components/ui/Button';
-import { Lock, Loader2 } from 'lucide-react';
+import { Lock, Loader2, AlertCircle } from 'lucide-react';
+import { trackEvent } from '@/lib/constants';
 // Usually webhook handles "booked", but we might want to confirm on client or just redirect.
 // Stripe confirmPayment -> return_url -> page handles success.
 
-function CheckoutForm({ onBack }: { onBack: () => void }) {
+interface CheckoutFormProps {
+    onBack: () => void;
+    purchaseValue?: number;
+    purchaseCurrency?: string;
+    listingId?: string;
+    listingName?: string;
+    couponCode?: string | null;
+}
+
+function CheckoutForm({
+    onBack,
+    purchaseValue,
+    purchaseCurrency,
+    listingId,
+    listingName,
+    couponCode,
+}: CheckoutFormProps) {
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -19,6 +38,27 @@ function CheckoutForm({ onBack }: { onBack: () => void }) {
 
         setIsProcessing(true);
         setErrorMessage(null);
+
+        // Fire `purchase` BEFORE confirmPayment redirects away. Stripe
+        // succeeds → browser navigates to return_url within the same
+        // promise resolution, and on slow networks the analytics beacon
+        // could be cancelled mid-flight. `sendBeacon`-style gtag is the
+        // safer pattern, but firing pre-redirect is the most reliable
+        // signal we have without server-side tracking.
+        // Note: this fires optimistically — actual booking confirmation
+        // happens via webhook on the backend. Refunds/failures should
+        // be reconciled separately if Pixel/GA accuracy matters.
+        trackEvent('purchase', {
+            currency: purchaseCurrency || 'BRL',
+            value: purchaseValue ?? 0,
+            transaction_id: undefined, // unknown until webhook; checkoutId is internal
+            items: listingId ? [{
+                item_id: listingId,
+                item_name: listingName || 'Reserva Vivare',
+                quantity: 1,
+            }] : undefined,
+            ...(couponCode ? { coupon: couponCode } : {}),
+        });
 
         const { error } = await stripe.confirmPayment({
             elements,
@@ -71,14 +111,44 @@ function CheckoutForm({ onBack }: { onBack: () => void }) {
     )
 }
 
-export function PaymentStep({ clientSecret, onBack }: {
+export function PaymentStep({
+    clientSecret,
+    onBack,
+    purchaseValue,
+    purchaseCurrency,
+    listingId,
+    listingName,
+    couponCode,
+}: {
     clientSecret: string | null;
     onBack: () => void;
+    purchaseValue?: number;
+    purchaseCurrency?: string;
+    listingId?: string;
+    listingName?: string;
+    couponCode?: string | null;
 }) {
+    if (!isStripeConfigured) {
+        // Quando a env `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` não está definida,
+        // não temos como inicializar o Stripe. Mostramos mensagem clara em
+        // vez de deixar o <Elements> renderizar vazio indefinidamente.
+        return (
+            <div className="flex flex-col items-center justify-center h-64 text-center px-6">
+                <AlertCircle className="w-10 h-10 text-amber-500 mb-4" aria-hidden="true" />
+                <h3 className="text-lg font-semibold mb-2">Pagamento indisponível</h3>
+                <p className="text-sm text-neutral-500 max-w-md">
+                    A integração de pagamento não está configurada nesse ambiente.
+                    Configure <code className="px-1.5 py-0.5 bg-neutral-100 rounded">NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY</code> e
+                    recarregue para continuar.
+                </p>
+            </div>
+        );
+    }
+
     if (!clientSecret) {
         return (
             <div className="flex flex-col items-center justify-center h-64">
-                <Loader2 className="w-8 h-8 animate-spin text-primary-500 mb-4" />
+                <Loader2 className="w-8 h-8 animate-spin text-primary-500 mb-4" aria-hidden="true" />
                 <p className="text-neutral-500">Preparando pagamento seguro...</p>
             </div>
         );
@@ -95,7 +165,14 @@ export function PaymentStep({ clientSecret, onBack }: {
                 }
             }
         }}>
-            <CheckoutForm onBack={onBack} />
+            <CheckoutForm
+                onBack={onBack}
+                purchaseValue={purchaseValue}
+                purchaseCurrency={purchaseCurrency}
+                listingId={listingId}
+                listingName={listingName}
+                couponCode={couponCode}
+            />
         </Elements>
     );
 }

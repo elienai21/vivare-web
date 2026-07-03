@@ -54,11 +54,6 @@
    VIVARE PREMIUM DESIGN SYSTEM
    ============================================ */
 
-/* Thin, modern icons */
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24 !important;
-}
-
 :root {
   /* ========== Typography ========== */
   /* --font-sans and --font-display are injected by next/font */
@@ -207,6 +202,11 @@ body::before {
   transform: translateY(0);
 }
 
+/* ── display font helper (used by /sobre and any editorial layout) ── */
+.display-text {
+  font-family: var(--font-display);
+}
+
 /* ── gold separator ── */
 .gold-line {
   display: block;
@@ -295,6 +295,36 @@ body::before {
 
 .hero-slide-3 {
   animation-delay: 16s, 0s !important;
+}
+
+/* Respect reduced-motion preferences: stop the perpetual crossfade and slow
+   zoom — show the first slide as a static image, freeze entrance animations.
+   Improves CPU/battery and meets WCAG 2.3.3. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide,
+  .hero-slide-1,
+  .hero-slide-2,
+  .hero-slide-3 {
+    animation: none !important;
+  }
+
+  .hero-slide-1 {
+    opacity: 1;
+  }
+
+  .hero-slide-2,
+  .hero-slide-3 {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 

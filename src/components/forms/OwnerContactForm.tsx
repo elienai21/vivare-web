@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { WHATSAPP_NUMBER, trackEvent } from "@/lib/constants";
+import {
+    HONEYPOT_FIELD,
+    checkSubmitRateLimit,
+    honeypotHiddenClass,
+    isHoneypotTriggered,
+} from "@/lib/anti-bot";
 
 export function OwnerContactForm() {
     const [formData, setFormData] = useState({
@@ -11,6 +19,8 @@ export function OwnerContactForm() {
         bairro: "",
         tipoImovel: "",
         jaAnunciado: "",
+        // Honeypot — kept empty by humans, filled by naive bots.
+        [HONEYPOT_FIELD]: "",
     });
     const [submitted, setSubmitted] = useState(false);
 
@@ -18,9 +28,37 @@ export function OwnerContactForm() {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Drop honeypot/rate-limited submissions silently — show the
+        // success state so bots can't probe their way through.
+        if (isHoneypotTriggered(formData) || !checkSubmitRateLimit("owner_contact").ok) {
+            setSubmitted(true);
+            return;
+        }
+
         trackEvent("owner_contact_form_submitted");
+
+        // Strip honeypot from the persisted payload.
+        const { [HONEYPOT_FIELD]: _hp, ...payload } = formData;
+        void _hp;
+
+        // Persist the lead BEFORE opening WhatsApp — if the popup is
+        // blocked or the user closes the WhatsApp tab, we still keep
+        // their info. Mirrors the schema used by OwnerPopup so the
+        // admin/leads dashboard sees both sources in one place.
+        try {
+            await addDoc(collection(db, "leads_proprietarios"), {
+                ...payload,
+                createdAt: serverTimestamp(),
+                source: "OwnerContactForm",
+            });
+        } catch (error) {
+            // Don't block the WhatsApp flow on Firestore failures —
+            // log and continue so the user always reaches a contact path.
+            console.error("Erro ao salvar lead (OwnerContactForm):", error);
+        }
 
         const message = encodeURIComponent(
             `Olá! Sou proprietário e preenchi o formulário no site da Vivare.\n\n` +
@@ -52,6 +90,20 @@ export function OwnerContactForm() {
     return (
         <div className="card p-8 shadow-xl bg-white border border-neutral-100">
             <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Honeypot — off-screen, hidden from real users. */}
+                <div className={honeypotHiddenClass} aria-hidden="true">
+                    <label>
+                        Website (não preencher)
+                        <input
+                            type="text"
+                            name={HONEYPOT_FIELD}
+                            tabIndex={-1}
+                            autoComplete="off"
+                            value={formData[HONEYPOT_FIELD]}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label htmlFor="owner-nome" className="block text-sm font-semibold mb-2">Nome Completo *</label>
