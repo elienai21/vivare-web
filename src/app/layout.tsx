@@ -117,12 +117,15 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${manrope.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
-        {/* Google Tag (gtag.js) — carrega o loader com a MEDIÇÃO principal (GA4).
-            O mesmo loader serve pra Google Ads: basta um `gtag('config', 'AW-...')`
-            adicional quando NEXT_PUBLIC_GOOGLE_ADS_ID estiver setado. Não
-            é necessário carregar o script duas vezes. */}
+        {/* Google Tag (gtag.js) — UM carregador só, múltiplos config.
+            O `id=` do carregador usa o Google Ads quando configurado,
+            porque o detector automático do Google Ads procura literalmente
+            por `gtag/js?id=AW-...` no HTML. Funcionalmente o ID do loader
+            é indiferente (qualquer um carrega a mesma lib gtag.js) — quem
+            ativa cada produto são os `gtag('config', ...)` abaixo. Assim o
+            detector do Ads passa E o GA4 continua funcionando via config. */}
         <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID || GA4_ID}`}
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
