@@ -117,26 +117,33 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${manrope.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
-        {/* Google Tag (gtag.js) — UM carregador só, múltiplos config.
-            O `id=` do carregador usa o Google Ads quando configurado,
-            porque o detector automático do Google Ads procura literalmente
-            por `gtag/js?id=AW-...` no HTML. Funcionalmente o ID do loader
-            é indiferente (qualquer um carrega a mesma lib gtag.js) — quem
-            ativa cada produto são os `gtag('config', ...)` abaixo. Assim o
-            detector do Ads passa E o GA4 continua funcionando via config. */}
-        <Script
+        {/* Google Tag (gtag.js) — script NATIVO (não next/script).
+            Motivo: `next/script strategy="afterInteractive"` renderiza só
+            um <link preload as="script"> no HTML inicial e injeta o
+            <script> executável via JS depois da hidratação. O detector
+            automático do Google Ads faz um fetch estático do HTML (sem
+            rodar JS) e procura o <script async src="...gtag/js?id=AW-...">
+            literal — que não existe no HTML com next/script. Usando o
+            script nativo, ele aparece no HTML servido (SSR) exatamente no
+            formato que o Google espera, e ainda carrega mais cedo.
+            O `id=` do carregador usa o Google Ads quando configurado
+            (detector procura por ele); GA4 segue via gtag('config'). */}
+        {/* eslint-disable-next-line @next/next/next-script-for-ga */}
+        <script
+          async
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID || GA4_ID}`}
-          strategy="afterInteractive"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA4_ID}');
-            ${GOOGLE_ADS_ID ? `gtag('config', '${GOOGLE_ADS_ID}');` : ''}
-          `}
-        </Script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA4_ID}');
+              ${GOOGLE_ADS_ID ? `gtag('config', '${GOOGLE_ADS_ID}');` : ''}
+            `,
+          }}
+        />
         {/* Meta Pixel — only loads when NEXT_PUBLIC_META_PIXEL_ID is set.
             Set the env var in Vercel (Production + Preview) to activate
             without redeploying app code. fbq becomes a no-op when the
