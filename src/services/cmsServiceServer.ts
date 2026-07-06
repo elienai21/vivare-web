@@ -119,26 +119,53 @@ export interface BlogPost {
     updatedBy?: string;
 }
 
-/** Lista posts publicados (ordenados por data desc). */
+/**
+ * Lista posts publicados (ordenados por data desc).
+ *
+ * HURDLE: a versão anterior usava `orderBy("publishedAt", "desc")` na
+ * query do Firestore. Isso (a) EXCLUI silenciosamente qualquer doc onde
+ * `publishedAt` seja null/ausente — mesmo com `status: "published"` — e
+ * (b) exige um índice composto (status + publishedAt) que, se ausente,
+ * faz a query lançar erro → catch → lista vazia → "Nenhum artigo".
+ * Resultado: posts publicados sumiam da página pública.
+ *
+ * Correção: filtra só por `status` (where simples, sem índice composto)
+ * e ordena em memória. Robusto a `publishedAt` ausente.
+ */
 export async function listPublishedPostsServer(max: number = 20): Promise<BlogPost[]> {
     try {
-        const { collection, getDocs, query, where, orderBy, limit: firestoreLimit } = await import('firebase/firestore');
+        const { collection, getDocs, query, where, limit: firestoreLimit } = await import('firebase/firestore');
         const db = await getServerDb();
         const q = query(
             collection(db, BLOG_COL),
             where("status", "==", "published"),
-            orderBy("publishedAt", "desc"),
-            firestoreLimit(max),
+            // Buscamos uma folga (max * 3) pra ordenar em memória sem
+            // arriscar cortar posts recentes por ordem arbitrária do Firestore.
+            firestoreLimit(Math.max(max * 3, 60)),
         );
         const snap = await withTimeout(getDocs(q), FETCH_TIMEOUT);
-        return snap.docs.map(d => ({ id: d.id, ...d.data() } as BlogPost));
+        const posts = snap.docs.map(d => ({ id: d.id, ...d.data() } as BlogPost));
+        // Ordena por publishedAt; cai pra createdAt/updatedAt quando ausente.
+        posts.sort((a, b) => {
+            const da = a.publishedAt ?? a.createdAt ?? a.updatedAt ?? 0;
+            const db_ = b.publishedAt ?? b.createdAt ?? b.updatedAt ?? 0;
+            return db_ - da;
+        });
+        return posts.slice(0, max);
     } catch (err) {
         console.error("[Blog-Server] Erro ao listar posts:", err);
         return [];
     }
 }
 
-/** Busca um post pelo slug. */
+/**
+ * Busca um post pelo slug.
+ *
+ * Filtra só por `slug` no Firestore (índice simples, sempre existe) e
+ * confere `status === 'published'` em memória — mesmo motivo do HURDLE
+ * em `listPublishedPostsServer`: o `where` composto (slug + status)
+ * exigiria índice e podia falhar silenciosamente.
+ */
 export async function getPostBySlugServer(slug: string): Promise<BlogPost | null> {
     try {
         const { collection, getDocs, query, where, limit: firestoreLimit } = await import('firebase/firestore');
@@ -146,13 +173,13 @@ export async function getPostBySlugServer(slug: string): Promise<BlogPost | null
         const q = query(
             collection(db, BLOG_COL),
             where("slug", "==", slug),
-            where("status", "==", "published"),
-            firestoreLimit(1),
+            firestoreLimit(5),
         );
         const snap = await withTimeout(getDocs(q), FETCH_TIMEOUT);
         if (snap.empty) return null;
-        const d = snap.docs[0];
-        return { id: d.id, ...d.data() } as BlogPost;
+        const posts = snap.docs.map(d => ({ id: d.id, ...d.data() } as BlogPost));
+        const published = posts.find(p => p.status === 'published');
+        return published ?? null;
     } catch (err) {
         console.error(`[Blog-Server] Erro ao buscar post "${slug}":`, err);
         return null;
