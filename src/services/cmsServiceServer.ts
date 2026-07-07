@@ -1,22 +1,20 @@
 /**
- * CMS Service (Server-Side) — para uso em Server Components e Server
- * Actions (sem `"use client"`).
+ * CMS Service (Server-Side) — para Server Components / Server Actions.
  *
- * Usa o Firebase **Web SDK** para leituras públicas (pages, blog). É
- * leitura pública, não precisa de credenciais Admin.
+ * Usa a **API REST do Firestore** (HTTP) em vez do Web SDK (gRPC).
  *
- * Fix do gRPC: `initializeFirestore(app, { experimentalAutoDetectLongPolling })`
- * — o transporte gRPC padrão do Web SDK reclama de "GRPC error has no
- * .code" / "Could not reach Cloud Firestore backend" em contexto SSR
- * (Node.js/Vercel), porque depende de sockets HTTP/2 long-lived que são
- * frágeis nesse ambiente. O auto-detect mantém gRPC no browser e cai
- * pra HTTP long-polling em Node — sem ruído nem perda de perf.
+ * HURDLE (crítico): o Firebase Web SDK NÃO funciona confiável em
+ * contexto server-side (Vercel Functions / Node.js). O transporte gRPC
+ * falha ao conectar ("Could not reach Cloud Firestore backend"), o SDK
+ * entra em modo offline e retorna cache vazio (0 docs) SEM lançar erro.
+ * Sintoma: página pública /blog e / mostravam vazio enquanto o admin
+ * (que roda no browser, onde o Web SDK funciona) mostrava os dados.
+ * `experimentalAutoDetectLongPolling` não resolveu em produção.
  *
- * IMPORTANTE (histórico — HURDLE): NÃO reintroduzir preferência por
- * Admin SDK aqui. Uma refatoração anterior fez isso e quebrou o blog em
- * produção — quando as credenciais Admin não estão setadas (ou estão
- * parciais), o Admin SDK lançava erro, caía no catch e retornava lista
- * vazia ("Nenhum artigo publicado"). Leitura pública = Web SDK.
+ * A REST API é HTTP puro — funciona igual no browser e no servidor,
+ * sem gRPC. Usa a API key pública (`NEXT_PUBLIC_FIREBASE_API_KEY`) e
+ * respeita as Security Rules (leitura pública quando as regras permitem).
+ * Não precisa de credenciais Admin.
  */
 
 import type { CmsPage } from "@/types/cms";
@@ -26,75 +24,99 @@ const DRAFTS_COL = "pages_drafts";
 const BLOG_COL = "blog_posts";
 const FETCH_TIMEOUT = 8000;
 
-/** Wrapper com timeout pra falhar rápido se o backend trava. */
-function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+function projectId(): string {
+    return process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "";
+}
+function apiKey(): string {
+    return process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "";
+}
+function restBase(): string {
+    return `https://firestore.googleapis.com/v1/projects/${projectId()}/databases/(default)/documents`;
+}
+
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
     return Promise.race([
-        promise,
-        new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error(`Timeout after ${ms}ms`)), ms)
-        ),
+        p,
+        new Promise<never>((_, reject) => setTimeout(() => reject(new Error(`Timeout after ${ms}ms`)), ms)),
     ]);
 }
 
-/**
- * Inicializa (uma vez) e devolve a instância Firestore do Web SDK com
- * auto-detect de long-polling — robusto em SSR.
- */
-async function getServerDb() {
-    const { initializeApp, getApps, getApp } = await import('firebase/app');
-    const { getFirestore, initializeFirestore } = await import('firebase/firestore');
+// ── Firestore REST value parsing ────────────────────────────────────
+// A REST API devolve campos "tipados": { stringValue }, { integerValue },
+// { timestampValue }, { arrayValue }, { mapValue }, etc. Convertemos pra
+// valores JS planos.
 
-    const firebaseConfig = {
-        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-    };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function parseValue(v: any): unknown {
+    if (v == null) return null;
+    if (v.stringValue !== undefined) return v.stringValue;
+    if (v.integerValue !== undefined) return Number(v.integerValue);
+    if (v.doubleValue !== undefined) return v.doubleValue;
+    if (v.booleanValue !== undefined) return v.booleanValue;
+    if (v.timestampValue !== undefined) return v.timestampValue;
+    if (v.nullValue !== undefined) return null;
+    if (v.arrayValue !== undefined) return (v.arrayValue.values || []).map(parseValue);
+    if (v.mapValue !== undefined) return parseFields(v.mapValue.fields || {});
+    return null;
+}
 
-    const isNewApp = getApps().length === 0;
-    const app = isNewApp ? initializeApp(firebaseConfig) : getApp();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function parseFields(fields: Record<string, any>): Record<string, unknown> {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(fields)) out[k] = parseValue(v);
+    return out;
+}
 
-    if (isNewApp) {
-        // initializeFirestore só pode rodar UMA vez por app, antes do
-        // primeiro getFirestore. Se já foi inicializado em outro lugar
-        // (lib/firebase.ts no client via SSR), recupera a instância.
-        try {
-            return initializeFirestore(app, {
-                experimentalAutoDetectLongPolling: true,
-            });
-        } catch {
-            return getFirestore(app);
-        }
-    }
-    return getFirestore(app);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function parseDoc(doc: any): Record<string, unknown> {
+    const id = String(doc.name || "").split("/").pop() || "";
+    return { id, ...parseFields(doc.fields || {}) };
+}
+
+/** GET de um documento específico. Retorna null se não existir (404). */
+async function restGetDoc(collection: string, docId: string): Promise<Record<string, unknown> | null> {
+    const url = `${restBase()}/${collection}/${encodeURIComponent(docId)}?key=${apiKey()}`;
+    const res = await withTimeout(fetch(url, { cache: "no-store" }), FETCH_TIMEOUT);
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`Firestore REST GET ${collection}/${docId} -> ${res.status}`);
+    const data = await res.json();
+    if (!data.fields) return null;
+    return parseDoc(data);
+}
+
+/** Lista todos os docs de uma collection (paginado, até `max`). */
+async function restListCollection(collection: string, max = 300): Promise<Array<Record<string, unknown>>> {
+    const out: Array<Record<string, unknown>> = [];
+    let pageToken: string | undefined;
+    do {
+        const params = new URLSearchParams({ key: apiKey(), pageSize: "100" });
+        if (pageToken) params.set("pageToken", pageToken);
+        const url = `${restBase()}/${collection}?${params.toString()}`;
+        const res = await withTimeout(fetch(url, { cache: "no-store" }), FETCH_TIMEOUT);
+        if (!res.ok) throw new Error(`Firestore REST LIST ${collection} -> ${res.status}`);
+        const data = await res.json();
+        for (const doc of data.documents || []) out.push(parseDoc(doc));
+        pageToken = data.nextPageToken;
+    } while (pageToken && out.length < max);
+    return out;
 }
 
 /* ────────── CMS Pages ────────── */
 
-/** Busca a versão PUBLICADA de uma página (Server Component safe). */
 export async function getPublishedPageServer(pageId: string): Promise<CmsPage | null> {
     try {
-        const { doc, getDoc } = await import('firebase/firestore');
-        const db = await getServerDb();
-        const snap = await withTimeout(getDoc(doc(db, PUBLISHED_COL, pageId)), FETCH_TIMEOUT);
-        if (!snap.exists()) return null;
-        return { id: snap.id, ...snap.data() } as CmsPage;
+        const doc = await restGetDoc(PUBLISHED_COL, pageId);
+        return doc ? (doc as unknown as CmsPage) : null;
     } catch (err) {
         console.error(`[CMS-Server] Erro ao buscar "${pageId}":`, err);
         return null;
     }
 }
 
-/** Busca a versão RASCUNHO de uma página (para preview). */
 export async function getDraftPageServer(pageId: string): Promise<CmsPage | null> {
     try {
-        const { doc, getDoc } = await import('firebase/firestore');
-        const db = await getServerDb();
-        const snap = await withTimeout(getDoc(doc(db, DRAFTS_COL, pageId)), FETCH_TIMEOUT);
-        if (!snap.exists()) return null;
-        return { id: snap.id, ...snap.data() } as CmsPage;
+        const doc = await restGetDoc(DRAFTS_COL, pageId);
+        return doc ? (doc as unknown as CmsPage) : null;
     } catch (err) {
         console.error(`[CMS-Server] Erro ao buscar rascunho "${pageId}":`, err);
         return null;
@@ -119,67 +141,31 @@ export interface BlogPost {
     updatedBy?: string;
 }
 
-/**
- * Lista posts publicados (ordenados por data desc).
- *
- * HURDLE: a versão anterior usava `orderBy("publishedAt", "desc")` na
- * query do Firestore. Isso (a) EXCLUI silenciosamente qualquer doc onde
- * `publishedAt` seja null/ausente — mesmo com `status: "published"` — e
- * (b) exige um índice composto (status + publishedAt) que, se ausente,
- * faz a query lançar erro → catch → lista vazia → "Nenhum artigo".
- * Resultado: posts publicados sumiam da página pública.
- *
- * Correção: filtra só por `status` (where simples, sem índice composto)
- * e ordena em memória. Robusto a `publishedAt` ausente.
- */
+/** Lista posts publicados (ordenados por data desc). Filtra e ordena em JS. */
 export async function listPublishedPostsServer(max: number = 20): Promise<BlogPost[]> {
     try {
-        const { collection, getDocs, query, where, limit: firestoreLimit } = await import('firebase/firestore');
-        const db = await getServerDb();
-        const q = query(
-            collection(db, BLOG_COL),
-            where("status", "==", "published"),
-            // Buscamos uma folga (max * 3) pra ordenar em memória sem
-            // arriscar cortar posts recentes por ordem arbitrária do Firestore.
-            firestoreLimit(Math.max(max * 3, 60)),
-        );
-        const snap = await withTimeout(getDocs(q), FETCH_TIMEOUT);
-        const posts = snap.docs.map(d => ({ id: d.id, ...d.data() } as BlogPost));
-        // Ordena por publishedAt; cai pra createdAt/updatedAt quando ausente.
-        posts.sort((a, b) => {
+        const all = await restListCollection(BLOG_COL);
+        const published = (all as unknown as BlogPost[]).filter(p => p.status === 'published');
+        published.sort((a, b) => {
             const da = a.publishedAt ?? a.createdAt ?? a.updatedAt ?? 0;
-            const db_ = b.publishedAt ?? b.createdAt ?? b.updatedAt ?? 0;
-            return db_ - da;
+            const db = b.publishedAt ?? b.createdAt ?? b.updatedAt ?? 0;
+            return db - da;
         });
-        return posts.slice(0, max);
+        return published.slice(0, max);
     } catch (err) {
         console.error("[Blog-Server] Erro ao listar posts:", err);
         return [];
     }
 }
 
-/**
- * Busca um post pelo slug.
- *
- * Filtra só por `slug` no Firestore (índice simples, sempre existe) e
- * confere `status === 'published'` em memória — mesmo motivo do HURDLE
- * em `listPublishedPostsServer`: o `where` composto (slug + status)
- * exigiria índice e podia falhar silenciosamente.
- */
+/** Busca um post publicado pelo slug. */
 export async function getPostBySlugServer(slug: string): Promise<BlogPost | null> {
     try {
-        const { collection, getDocs, query, where, limit: firestoreLimit } = await import('firebase/firestore');
-        const db = await getServerDb();
-        const q = query(
-            collection(db, BLOG_COL),
-            where("slug", "==", slug),
-            firestoreLimit(5),
+        const all = await restListCollection(BLOG_COL);
+        const post = (all as unknown as BlogPost[]).find(
+            p => p.slug === slug && p.status === 'published',
         );
-        const snap = await withTimeout(getDocs(q), FETCH_TIMEOUT);
-        if (snap.empty) return null;
-        const posts = snap.docs.map(d => ({ id: d.id, ...d.data() } as BlogPost));
-        const published = posts.find(p => p.status === 'published');
-        return published ?? null;
+        return post ?? null;
     } catch (err) {
         console.error(`[Blog-Server] Erro ao buscar post "${slug}":`, err);
         return null;
