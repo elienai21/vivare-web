@@ -103,9 +103,11 @@ export default function PropertyMap({ listings, singleView }: PropertyMapProps) 
             const map = L.map(mapRef.current).setView([lat, lng], zoom);
             mapInstanceRef.current = map;
 
-            // Tile layer (CARTO Voyager)
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>',
+            // Tile layer (OpenStreetMap). A CARTO passou a exigir chave de API
+            // e estampa "API KEY REQUIRED" nos tiles sem ela. O OSM é gratuito
+            // e sem chave; a atribuição é obrigatória pela licença ODbL.
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 19,
             }).addTo(map);
 
