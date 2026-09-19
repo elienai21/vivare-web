@@ -25,6 +25,24 @@ export const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID || 'G-NS503CK9EC';
 export const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || '';
 
 /**
+ * Google Tag Manager Container ID. Setar `NEXT_PUBLIC_GTM_ID` na Vercel
+ * (formato `GTM-XXXXXXX`) pra injetar o container em todas as páginas.
+ * Sem isso, o GTM não é carregado e nada muda no site.
+ *
+ * O GTM roda EM PARALELO ao gtag.js direto (GA4 + Ads acima). Motivo: o
+ * detector automático do Google Ads precisa do `<script src=gtag/js?id=AW-...>`
+ * literal no HTML. Pra não duplicar dados, NÃO crie no GTM uma tag de
+ * configuração do GA4 (`G-NS503CK9EC`) nem do Ads (`AW-...`) — esses já
+ * são disparados pelo código. Use o GTM pra tags adicionais (Ads
+ * conversion labels, remarketing, Hotjar, Clarity, etc.).
+ *
+ * Todos os `trackEvent(...)` do site entram no `dataLayer` no formato
+ * gtag e o GTM os reconhece como Custom Events com o mesmo nome
+ * (ex.: `purchase`, `begin_checkout`, `owner_popup_submitted`).
+ */
+export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || '';
+
+/**
  * Meta (Facebook) Pixel ID. Set NEXT_PUBLIC_META_PIXEL_ID in your env to
  * enable Pixel tracking. When unset, all Pixel calls become no-ops and
  * the GA4 path is unaffected.

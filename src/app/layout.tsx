@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Cormorant_Garamond } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE, META_PIXEL_ID, GA4_ID, GOOGLE_ADS_ID } from "@/lib/constants";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE, META_PIXEL_ID, GA4_ID, GOOGLE_ADS_ID, GTM_ID } from "@/lib/constants";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -128,7 +128,6 @@ export default function RootLayout({
             formato que o Google espera, e ainda carrega mais cedo.
             O `id=` do carregador usa o Google Ads quando configurado
             (detector procura por ele); GA4 segue via gtag('config'). */}
-        {/* eslint-disable-next-line @next/next/next-script-for-ga */}
         <script
           async
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID || GA4_ID}`}
@@ -144,6 +143,24 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* Google Tag Manager — só carrega quando NEXT_PUBLIC_GTM_ID está
+            setado. Script nativo (mesmo motivo do gtag acima) e depois do
+            init do dataLayer, pra que o container já enxergue os pushes
+            do gtag. O <noscript> correspondente fica no topo do <body>. */}
+        {GTM_ID && (
+          /* eslint-disable-next-line @next/next/next-script-for-ga */
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','${GTM_ID}');
+              `,
+            }}
+          />
+        )}
         {/* Meta Pixel — only loads when NEXT_PUBLIC_META_PIXEL_ID is set.
             Set the env var in Vercel (Production + Preview) to activate
             without redeploying app code. fbq becomes a no-op when the
@@ -179,6 +196,19 @@ export default function RootLayout({
         )}
       </head>
       <body>
+        {/* Google Tag Manager (noscript) — fallback pra JS desabilitado.
+            O Google pede que fique logo após a abertura do <body>. */}
+        {GTM_ID && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+              title="Google Tag Manager"
+            />
+          </noscript>
+        )}
         {/* Skip-to-content link — visible only when keyboard-focused. Lets
             screen-reader & keyboard users bypass the sticky header on every
             page. WCAG 2.4.1 (Bypass Blocks). */}
