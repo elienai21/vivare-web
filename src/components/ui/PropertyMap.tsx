@@ -60,6 +60,22 @@ interface PropertyMapProps {
 }
 
 /**
+ * Nome curto pra etiqueta do pino: pega o título público até o primeiro
+ * separador (" - ", " | ", " • ", ":" etc.) e limita o tamanho. Não usa
+ * `internalName` porque ele expõe número do apartamento e prédio.
+ */
+function shortName(title: string): string {
+    // Separadores comuns nos títulos: " - ", " – ", " | ", " • ", " · ", ":", ",", " / ", " c/ "
+    const head = title.split(/\s*[|•·–—:,]\s*|\s+[-/]\s+|\s+c\/\s+/i)[0].trim();
+    const MAX = 22;
+    if (head.length <= MAX) return head;
+    // Corta na última palavra inteira que cabe, pra não partir palavra ao meio.
+    const cut = head.slice(0, MAX);
+    const lastSpace = cut.lastIndexOf(' ');
+    return `${(lastSpace > 8 ? cut.slice(0, lastSpace) : cut).trimEnd()}…`;
+}
+
+/**
  * Mapa que usa Leaflet diretamente (sem react-leaflet) para evitar
  * problemas de SSR e import dinâmico com Next.js.
  */
@@ -129,31 +145,74 @@ export default function PropertyMap({ listings, singleView }: PropertyMapProps) 
                 });
             };
 
-            // Marcadores dos imóveis
+            // Marcadores dos imóveis. Unidades no mesmo prédio têm a mesma
+            // coordenada; agrupamos por posição pra não empilhar pinos e
+            // etiquetas (antes só o pino de cima era clicável).
+            type Unit = { id: string; title: string; region: string };
+            const groups = new Map<string, { lat: number; lng: number; units: Unit[] }>();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             listings.forEach((listing: any) => {
                 const mLat = listing.latLng?._f_lat || listing.address?.lat;
                 const mLng = listing.latLng?._f_lng || listing.address?.lng;
                 if (!mLat || !mLng) return;
 
-                const title = listing._mstitle?.pt_BR || 'Unidade Vivare';
-                const region = listing.address?.region || listing.address?.city || '';
+                // 4 casas decimais ≈ 11 m: absorve variações de cadastro do mesmo prédio.
+                const key = `${Number(mLat).toFixed(4)},${Number(mLng).toFixed(4)}`;
+                const unit: Unit = {
+                    id: listing.id,
+                    title: listing._mstitle?.pt_BR || 'Unidade Vivare',
+                    region: listing.address?.region || listing.address?.city || '',
+                };
+                const group = groups.get(key);
+                if (group) group.units.push(unit);
+                else groups.set(key, { lat: mLat, lng: mLng, units: [unit] });
+            });
 
+            groups.forEach(({ lat: mLat, lng: mLng, units }) => {
                 const icon = singleView
                     ? makeEmojiIcon('🏠', '#b89a5c', 36)
                     : new L.Icon.Default();
 
-                L.marker([mLat, mLng], { icon })
-                    .addTo(map)
-                    .bindPopup(`
-                        <div style="font-family:system-ui;font-size:13px;width:180px">
-                            <a href="/unidades/${listing.id}" target="_blank" style="font-weight:bold;color:#1a1a1a;text-decoration:none">
-                                ${title}
+                const first = units[0];
+                const label = units.length > 1
+                    ? `${shortName(first.title)} +${units.length - 1}`
+                    : shortName(first.title);
+
+                const popupHtml = `
+                    <div style="font-family:system-ui;font-size:13px;width:200px">
+                        ${units.map((u) => `
+                            <a href="/unidades/${u.id}" target="_blank" style="display:block;font-weight:bold;color:#1a1a1a;text-decoration:none;margin-top:6px">
+                                ${u.title}
                             </a>
-                            <div style="color:#888;font-size:11px;margin-top:2px">${region}</div>
-                        </div>
-                    `);
+                        `).join('')}
+                        <div style="color:#888;font-size:11px;margin-top:4px">${first.region}</div>
+                    </div>
+                `;
+
+                const marker = L.marker([mLat, mLng], { icon })
+                    .addTo(map)
+                    .bindPopup(popupHtml);
+
+                // Etiqueta fixa acima do pino com o nome curto da unidade.
+                // No singleView o pino é o ícone de casa, sem etiqueta.
+                if (!singleView) {
+                    marker.bindTooltip(label, {
+                        permanent: true,
+                        direction: 'top',
+                        offset: [-15, -12],
+                        className: 'vivare-map-label',
+                    });
+                }
             });
+
+            // Etiquetas só a partir do zoom de bairro: no zoom de cidade
+            // elas se sobrepõem e viram ruído. Toggle por classe no container.
+            const LABEL_MIN_ZOOM = 13;
+            const syncLabels = () => {
+                map.getContainer().classList.toggle('labels-hidden', map.getZoom() < LABEL_MIN_ZOOM);
+            };
+            syncLabels();
+            map.on('zoomend', syncLabels);
 
             // Marcadores dos POIs
             nearbyPois.forEach((poi) => {
