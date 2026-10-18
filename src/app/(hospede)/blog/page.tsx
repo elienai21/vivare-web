@@ -31,7 +31,7 @@ export default async function BlogIndexPage() {
     const posts = await listPublishedPostsServer(20);
 
     return (
-        <main className="min-h-screen pt-32 pb-20 bg-background-light dark:bg-background-dark">
+        <main className="min-h-screen pt-10 md:pt-14 pb-20 bg-background-light dark:bg-background-dark">
             <div className="mx-auto max-w-7xl px-6 lg:px-10">
                 <div className="text-center md:text-left mb-16">
                     <span className="text-xs font-bold uppercase tracking-[.3em] text-primary">Journal</span>
