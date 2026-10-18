@@ -34,7 +34,7 @@ const FALLBACK_HTML = `
 <section>
     <h2 class="font-display text-xl font-medium text-ink dark:text-parchment mb-4">3. Finalidade do Tratamento</h2>
     <p>Utilizamos seus dados pessoais para as seguintes finalidades:</p>
-    <ul class="list-disc list-inside mt-3 space-y-2 ml-4">
+    <ul class="list-disc list-outside mt-3 space-y-2 pl-5">
         <li><strong>Execução de contrato:</strong> processar reservas, gerenciar check-in/check-out, enviar confirmações;</li>
         <li><strong>Comunicação:</strong> responder solicitações, enviar informações sobre sua estadia ou proposta de gestão;</li>
         <li><strong>Marketing (com consentimento):</strong> enviar newsletters, promoções e novidades;</li>
@@ -46,7 +46,7 @@ const FALLBACK_HTML = `
 <section>
     <h2 class="font-display text-xl font-medium text-ink dark:text-parchment mb-4">4. Base Legal (LGPD Art. 7º)</h2>
     <p>O tratamento dos seus dados pessoais é realizado com base nas seguintes hipóteses legais:</p>
-    <ul class="list-disc list-inside mt-3 space-y-2 ml-4">
+    <ul class="list-disc list-outside mt-3 space-y-2 pl-5">
         <li><strong>Consentimento</strong> (Art. 7º, I) — para envio de comunicações de marketing;</li>
         <li><strong>Execução de contrato</strong> (Art. 7º, V) — para processar reservas e serviços;</li>
         <li><strong>Interesse legítimo</strong> (Art. 7º, IX) — para melhoria dos serviços e segurança;</li>
@@ -56,7 +56,7 @@ const FALLBACK_HTML = `
 <section>
     <h2 class="font-display text-xl font-medium text-ink dark:text-parchment mb-4">5. Compartilhamento de Dados</h2>
     <p>Seus dados pessoais podem ser compartilhados com:</p>
-    <ul class="list-disc list-inside mt-3 space-y-2 ml-4">
+    <ul class="list-disc list-outside mt-3 space-y-2 pl-5">
         <li><strong>Plataformas de reserva:</strong> Airbnb, Booking.com, Stays.net — para efetivação das reservas;</li>
         <li><strong>Processadores de pagamento:</strong> Stripe — para processamento seguro de pagamentos;</li>
         <li><strong>Prestadores de serviço:</strong> equipes de limpeza e manutenção — apenas dados operacionais necessários;</li>
@@ -72,7 +72,7 @@ const FALLBACK_HTML = `
 <section>
     <h2 class="font-display text-xl font-medium text-ink dark:text-parchment mb-4">7. Seus Direitos (LGPD Art. 18)</h2>
     <p>Como titular dos dados, você tem os seguintes direitos:</p>
-    <ul class="list-disc list-inside mt-3 space-y-2 ml-4">
+    <ul class="list-disc list-outside mt-3 space-y-2 pl-5">
         <li><strong>Confirmação e acesso:</strong> saber se tratamos seus dados e obter uma cópia;</li>
         <li><strong>Correção:</strong> solicitar a atualização de dados incompletos ou desatualizados;</li>
         <li><strong>Anonimização ou eliminação:</strong> solicitar a exclusão de dados desnecessários;</li>
@@ -80,7 +80,7 @@ const FALLBACK_HTML = `
         <li><strong>Revogação do consentimento:</strong> retirar seu consentimento a qualquer momento;</li>
         <li><strong>Oposição:</strong> opor-se ao tratamento realizado com base em interesse legítimo.</li>
     </ul>
-    <p class="mt-3">Para exercer qualquer um desses direitos, entre em contato através do e-mail <a href="mailto:contato@vivarestay.com" class="text-primary hover:underline">contato@vivarestay.com</a>.</p>
+    <p class="mt-3">Para exercer qualquer um desses direitos, entre em contato através do e-mail <a href="mailto:contato@vivarestay.com" class="font-semibold text-primary-deep dark:text-primary-light underline underline-offset-4">contato@vivarestay.com</a>.</p>
 </section>
 <section>
     <h2 class="font-display text-xl font-medium text-ink dark:text-parchment mb-4">8. Armazenamento e Segurança</h2>
@@ -98,8 +98,8 @@ const FALLBACK_HTML = `
     <h2 class="font-display text-xl font-medium text-ink dark:text-parchment mb-4">Contato do Encarregado (DPO)</h2>
     <p>Para questões relacionadas à proteção de dados pessoais:</p>
     <ul class="mt-3 space-y-2">
-        <li><strong>E-mail:</strong> <a href="mailto:contato@vivarestay.com" class="text-primary hover:underline">contato@vivarestay.com</a></li>
-        <li><strong>WhatsApp:</strong> <a href="https://wa.me/5511985067840" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">+55 (11) 98506-7840</a></li>
+        <li><strong>E-mail:</strong> <a href="mailto:contato@vivarestay.com" class="font-semibold text-primary-deep dark:text-primary-light underline underline-offset-4">contato@vivarestay.com</a></li>
+        <li><strong>WhatsApp:</strong> <a href="https://wa.me/5511985067840" target="_blank" rel="noopener noreferrer" class="font-semibold text-primary-deep dark:text-primary-light underline underline-offset-4">+55 (11) 98506-7840</a></li>
         <li><strong>Endereço:</strong> Rua Rondinha, 180, Chácara Inglesa, São Paulo — SP</li>
     </ul>
 </section>
@@ -111,15 +111,15 @@ export default async function PrivacidadePage() {
     const bodyHtml = page?.content?.bodyHtml || FALLBACK_HTML;
 
     return (
-        <main className="min-h-screen pt-32 pb-20 bg-background-light dark:bg-background-dark">
+        <main className="min-h-screen pt-10 md:pt-14 pb-20 bg-background-light dark:bg-background-dark">
             <div className="mx-auto max-w-3xl px-6 lg:px-10">
-                <span className="text-xs font-bold uppercase tracking-[.3em] text-primary">Legal</span>
+                <span className="text-xs font-bold uppercase tracking-[.3em] text-primary-deep dark:text-primary-light">Legal</span>
                 <h1 className="font-display text-4xl md:text-5xl font-light text-ink dark:text-parchment mt-2 mb-4">{title}</h1>
                 <span className="gold-line"></span>
-                <p className="text-sm text-muted mb-12">Última atualização: Março de 2026 · Em conformidade com a LGPD</p>
+                <p className="text-sm text-secondary-text mb-12">Última atualização: Março de 2026 · Em conformidade com a LGPD</p>
 
                 <div
-                    className="space-y-10 text-sm leading-relaxed text-ink/80 dark:text-parchment/80"
+                    className="space-y-10 text-base leading-[1.7] max-w-[68ch] text-ink/80 dark:text-parchment/80"
                     dangerouslySetInnerHTML={{ __html: bodyHtml }}
                 />
             </div>

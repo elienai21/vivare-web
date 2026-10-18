@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-18T00:00:00.000Z",
+  "title": "Design System: Vivare Stay",
+  "extensions": {
+    "colorMeta": {
+      "gold": { "role": "primary", "displayName": "Ouro Envelhecido", "canonical": "#b89a5c", "tonalRamp": ["#2a2212", "#4a3b1e", "#6b562c", "#8c713e", "#b89a5c", "#cbb27e", "#ddcaa5", "#efe4cf"] },
+      "gold-light": { "role": "primary", "displayName": "Ouro Claro", "canonical": "#d4b87a", "tonalRamp": ["#2e2612", "#52431f", "#78622e", "#a0833f", "#d4b87a", "#dec894", "#e8d9b3", "#f3ead4"] },
+      "gold-veil": { "role": "primary", "displayName": "Véu Dourado", "canonical": "rgba(184, 154, 92, 0.12)", "tonalRamp": ["rgba(184,154,92,0.04)", "rgba(184,154,92,0.08)", "rgba(184,154,92,0.12)", "rgba(184,154,92,0.2)", "rgba(184,154,92,0.3)", "rgba(184,154,92,0.45)", "rgba(184,154,92,0.65)", "rgba(184,154,92,0.85)"] },
+      "ink": { "role": "neutral", "displayName": "Tinta", "canonical": "#0f0e0c", "tonalRamp": ["#0f0e0c", "#161410", "#24201a", "#3a342b", "#564e41", "#7a7060", "#a79d8d", "#d6cfc2"] },
+      "ink-card": { "role": "neutral", "displayName": "Tinta de Card", "canonical": "#161410", "tonalRamp": ["#0f0e0c", "#161410", "#201c16", "#2d281f", "#403829", "#5a4f3a", "#7f7154", "#ab9c7e"] },
+      "parchment": { "role": "neutral", "displayName": "Pergaminho", "canonical": "#f7f8fa", "tonalRamp": ["#1b1c1f", "#34363b", "#4f5259", "#6b6f78", "#8a8e97", "#b4b8bf", "#dadce1", "#f7f8fa"] },
+      "paper": { "role": "neutral", "displayName": "Papel", "canonical": "#ffffff", "tonalRamp": ["#1a1a1a", "#333333", "#4d4d4d", "#737373", "#999999", "#bfbfbf", "#e6e6e6", "#ffffff"] },
+      "warm-mid": { "role": "neutral", "displayName": "Cinza Morno", "canonical": "#e2e4e8", "tonalRamp": ["#1d1e21", "#35373c", "#4e5158", "#6a6e76", "#8b8f98", "#b1b5bd", "#cfd2d8", "#e2e4e8"] },
+      "muted": { "role": "neutral", "displayName": "Mudo", "canonical": "#7a7060", "tonalRamp": ["#1f1c17", "#35302a", "#4c453c", "#63594d", "#7a7060", "#978d7c", "#b5ac9d", "#d4cec3"] },
+      "success": { "role": "semantic", "displayName": "Sucesso", "canonical": "hsl(152, 69%, 42%)", "tonalRamp": ["hsl(152,69%,10%)", "hsl(152,69%,18%)", "hsl(152,69%,26%)", "hsl(152,69%,34%)", "hsl(152,69%,42%)", "hsl(152,69%,58%)", "hsl(152,69%,78%)", "hsl(152,69%,95%)"] },
+      "warning": { "role": "semantic", "displayName": "Aviso", "canonical": "hsl(38, 92%, 50%)", "tonalRamp": ["hsl(38,92%,12%)", "hsl(38,92%,22%)", "hsl(38,92%,32%)", "hsl(38,92%,42%)", "hsl(38,92%,50%)", "hsl(38,92%,64%)", "hsl(38,92%,80%)", "hsl(38,92%,95%)"] },
+      "error": { "role": "semantic", "displayName": "Erro", "canonical": "hsl(0, 72%, 51%)", "tonalRamp": ["hsl(0,72%,12%)", "hsl(0,72%,22%)", "hsl(0,72%,32%)", "hsl(0,72%,42%)", "hsl(0,72%,51%)", "hsl(0,72%,64%)", "hsl(0,72%,80%)", "hsl(0,72%,95%)"] },
+      "info": { "role": "semantic", "displayName": "Info", "canonical": "hsl(210, 100%, 50%)", "tonalRamp": ["hsl(210,100%,12%)", "hsl(210,100%,22%)", "hsl(210,100%,32%)", "hsl(210,100%,42%)", "hsl(210,100%,50%)", "hsl(210,100%,64%)", "hsl(210,100%,80%)", "hsl(210,100%,95%)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Título do hero e aberturas de página; branco sobre foto ou tinta sobre pergaminho." },
+      "headline": { "displayName": "Headline", "purpose": "Títulos de seção da home, páginas institucionais e artigos." },
+      "title": { "displayName": "Title", "purpose": "Nome da unidade no card, títulos de bloco em formulários e FAQ." },
+      "body": { "displayName": "Body", "purpose": "Parágrafos e descrições; ~65 caracteres por linha em páginas editoriais." },
+      "label": { "displayName": "Label", "purpose": "Navegação, botões, rótulos de campo e títulos de coluna do rodapé; caixa alta espaçada." }
+    },
+    "shadows": [
+      { "name": "rest", "value": "0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06)", "purpose": "Card e botão em repouso." },
+      { "name": "hover", "value": "0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06)", "purpose": "Card ao passar o mouse." },
+      { "name": "gold-lift", "value": "0 24px 48px -8px rgba(184, 154, 92, 0.18)", "purpose": "Cards de destaque com levantar de 6 px; a sombra carrega a cor da marca." },
+      { "name": "panel", "value": "0 25px 50px -12px rgb(0 0 0 / 0.15)", "purpose": "Painel de busca sobre a foto do hero e modais." }
+    ],
+    "motion": [
+      { "name": "fast", "value": "150ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Hover de botão e link." },
+      { "name": "base", "value": "250ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Sombra e deslocamento de card." },
+      { "name": "slow", "value": "400ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Painéis e menus." },
+      { "name": "spring", "value": "500ms cubic-bezier(0.34, 1.56, 0.64, 1)", "purpose": "Entrada de elementos de destaque; usar com parcimônia." },
+      { "name": "image-zoom", "value": "500ms ease-out", "purpose": "Zoom de 5% na foto do card no hover." },
+      { "name": "hero-crossfade", "value": "24s infinite", "purpose": "Troca das três fotos do hero; desligado com prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão primário",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "CTA do cabeçalho e das páginas institucionais: tinta com texto ouro claro, reto, caixa alta espaçada.",
+      "html": "<button class=\"ds-btn-primary\">Reservar</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; padding: 0.625rem 1.5rem; background: #0f0e0c; color: #d4b87a; font-family: Manrope, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border: 0; border-radius: 0; cursor: pointer; transition: background 150ms cubic-bezier(0.4,0,0.2,1), color 150ms cubic-bezier(0.4,0,0.2,1), transform 150ms; } .ds-btn-primary:hover { background: #b89a5c; color: #0f0e0c; } .ds-btn-primary:focus-visible { outline: 2px solid #b89a5c; outline-offset: 2px; } .ds-btn-primary:active { transform: scale(0.98); }"
+    },
+    {
+      "name": "Botão outline (WhatsApp)",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Ação secundária do cabeçalho: borda e texto em ouro, preenche no hover.",
+      "html": "<button class=\"ds-btn-outline\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7.9 20A9 9 0 1 0 4 16.1L2 22Z\"/></svg>WhatsApp</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; padding: 0.625rem 1.5rem; background: transparent; color: #b89a5c; border: 1px solid #b89a5c; border-radius: 0; font-family: Manrope, system-ui, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 150ms, color 150ms; } .ds-btn-outline:hover { background: #b89a5c; color: #0f0e0c; } .ds-btn-outline:focus-visible { outline: 2px solid #b89a5c; outline-offset: 2px; }"
+    },
+    {
+      "name": "Botão de busca",
+      "kind": "button",
+      "refersTo": "button-search",
+      "description": "Ação principal do funil: ouro cheio, 60 px de altura, raio 1,5 rem, lupa à esquerda.",
+      "html": "<button class=\"ds-btn-search\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg>Buscar</button>",
+      "css": ".ds-btn-search { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 60px; padding: 0 2rem; background: #b89a5c; color: #0f0e0c; border: 0; border-radius: 1.5rem; font-family: Manrope, system-ui, sans-serif; font-size: 0.9375rem; font-weight: 700; cursor: pointer; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); transition: background 150ms, transform 150ms, box-shadow 250ms; } .ds-btn-search:hover { background: #d4b87a; box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.15); } .ds-btn-search:focus-visible { outline: 2px solid #0f0e0c; outline-offset: 2px; } .ds-btn-search:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Card de unidade",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Foto 4:3 com preço sobre gradiente, nome em Cormorant, bairro em Mudo, três metadados; flutua no hover.",
+      "html": "<a class=\"ds-card\" href=\"#\"><div class=\"ds-card-media\"><div class=\"ds-card-price\"><strong>R$ 420</strong><span>/noite</span></div></div><div class=\"ds-card-body\"><h3>Unique 22º Estúdio</h3><p class=\"ds-card-loc\">Consolação, São Paulo</p><p class=\"ds-card-meta\"><span>1 quarto</span><span>1 banheiro</span><span>4 hóspedes</span></p></div></a>",
+      "css": ".ds-card { display: block; max-width: 340px; background: #ffffff; border: 1px solid #e2e4e8; border-radius: 1rem; overflow: hidden; text-decoration: none; color: #0f0e0c; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06); transition: transform 250ms cubic-bezier(0.4,0,0.2,1), box-shadow 250ms cubic-bezier(0.4,0,0.2,1); } .ds-card:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.06); } .ds-card:focus-visible { outline: 2px solid #b89a5c; outline-offset: 2px; } .ds-card-media { position: relative; aspect-ratio: 4 / 3; background: linear-gradient(135deg, #b8a98a, #6e6252); } .ds-card-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6), transparent 55%); } .ds-card-price { position: absolute; right: 1rem; bottom: 1rem; z-index: 1; color: #fff; text-align: right; text-shadow: 0 1px 3px rgba(0,0,0,0.4); } .ds-card-price strong { display: block; font-family: Manrope, system-ui, sans-serif; font-size: 1.25rem; font-weight: 700; } .ds-card-price span { font-size: 0.75rem; opacity: 0.8; } .ds-card-body { padding: 1.25rem; } .ds-card-body h3 { margin: 0 0 0.375rem; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.125rem; font-weight: 600; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-card-loc { margin: 0 0 1rem; font-family: Manrope, system-ui, sans-serif; font-size: 0.875rem; color: #7a7060; } .ds-card-meta { display: flex; gap: 1rem; margin: 0; font-family: Manrope, system-ui, sans-serif; font-size: 0.875rem; color: #564e41; }"
+    },
+    {
+      "name": "Campo de formulário",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo de contato e simulação: pergaminho, borda morna, raio 0,75 rem, 16 px para não dar zoom no iOS.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Nome completo</span><input class=\"ds-input\" type=\"text\" placeholder=\"Seu nome\"></label>",
+      "css": ".ds-field { display: block; max-width: 340px; font-family: Manrope, system-ui, sans-serif; } .ds-field-label { display: block; margin: 0 0 0.375rem 0.75rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #7a7060; } .ds-input { width: 100%; padding: 0.75rem; font: inherit; font-size: 1rem; color: #0f0e0c; background: #f7f8fa; border: 1px solid #e2e4e8; border-radius: 0.75rem; transition: background 150ms, border-color 150ms, box-shadow 150ms; } .ds-input::placeholder { color: #a79d8d; } .ds-input:focus { outline: none; background: #ffffff; border-color: #b89a5c; box-shadow: 0 0 0 2px rgba(184, 154, 92, 0.35); } .ds-input:disabled { opacity: 0.5; cursor: not-allowed; }"
+    },
+    {
+      "name": "Navegação",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Links do cabeçalho em rótulo de 12 px em caixa alta espaçada; hover em ouro; item atual em ouro.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Principal\"><a href=\"#\">Acomodações</a><a href=\"#\">Blog</a><a href=\"#\">Quem Somos</a><a href=\"#\" aria-current=\"page\">Proprietários</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 2.5rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(184, 154, 92, 0.2); font-family: Manrope, system-ui, sans-serif; } .ds-nav a { color: #0f0e0c; text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 0; transition: color 150ms; } .ds-nav a:hover, .ds-nav a[aria-current='page'] { color: #b89a5c; } .ds-nav a:focus-visible { outline: 2px solid #b89a5c; outline-offset: 4px; }"
+    },
+    {
+      "name": "Fio dourado",
+      "kind": "custom",
+      "refersTo": "gold-line",
+      "description": "Marca de parágrafo sob títulos de seção e divisor em gradiente; a assinatura gráfica mais repetida.",
+      "html": "<div class=\"ds-gold-demo\"><h2>Como assumimos o seu imóvel</h2><span class=\"ds-gold-line\"></span><p>Um processo simples e transparente.</p><div class=\"ds-gold-divider\"></div></div>",
+      "css": ".ds-gold-demo { max-width: 420px; font-family: Manrope, system-ui, sans-serif; color: #0f0e0c; } .ds-gold-demo h2 { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.875rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; } .ds-gold-line { display: block; width: 2.5rem; height: 1px; background: #b89a5c; margin: 1rem 0 1.5rem; } .ds-gold-demo p { margin: 0 0 2rem; color: #7a7060; } .ds-gold-divider { height: 1px; background: linear-gradient(to right, transparent, #b89a5c 40%, #b89a5c 60%, transparent); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "O Hotel Boutique Discreto",
+    "overview": "A Vivare se apresenta como um hotel boutique que não precisa gritar. O dourado envelhecido (#b89a5c) é acabamento, não parede: aparece em fios de 1 px, em letras pequenas em caixa alta, no texto de um botão escuro, na borda de um card no tema noturno. O que ocupa a tela é a fotografia dos apartamentos e, sobre ela, uma serifa editorial (Cormorant Garamond) com peso e tamanho para parecer um título de revista de arquitetura. O texto corrido é um sans humanista (Manrope) levemente apertado, legível no celular com uma mão. Um grão de ruído quase imperceptível cobre a página inteira e tira o aspecto de tela plástica.\n\nHá dois mundos tonais, e os dois são a mesma casa: \"tinta\" (#0f0e0c) para o tema escuro e para o rodapé em qualquer tema, \"pergaminho\" (#f7f8fa) para o tema claro. Em ambos, os cards flutuam de leve sobre o fundo, com sombra ambiente discreta que cresce ao passar o mouse. A densidade é de hospitalidade, não de ferramenta: respiro generoso entre seções, poucos elementos por tela, uma ação principal por vez.\n\nDireção confirmada para refinamentos: flutuação suave na profundidade e componentes táteis e confiantes. Botões cheios e com altura de toque, dourado como cor de ação no funil de busca e reserva, cards com presença. A contenção fica na tipografia, no espaço e na raridade do dourado como superfície.",
+    "keyCharacteristics": [
+      "Dourado envelhecido como detalhe de acabamento, raramente como fundo largo.",
+      "Serifa Cormorant em títulos grandes; Manrope em tudo o que se lê de perto.",
+      "Rótulos em caixa alta espaçada (0,1 em a 0,25 em) como assinatura tipográfica.",
+      "Fotografia da unidade manda; a interface recua com vidro fosco e sobreposições escuras.",
+      "Dois temas (claro e escuro) com os mesmos tokens de marca.",
+      "Grão global sutil, linhas douradas de 1 px como separadores."
+    ],
+    "rules": [
+      { "name": "The Gold Trim Rule", "body": "O dourado cobre no máximo um décimo de qualquer tela. Ele aparece em linhas, letras, ícones e no botão de ação; quando vira fundo, é de um botão, nunca de uma seção.", "section": "colors" },
+      { "name": "The Two Inks Rule", "body": "Texto sobre tinta usa Ouro Claro ou Pergaminho; texto sobre pergaminho usa Tinta ou Mudo. O Ouro base (#b89a5c) como texto corrido só é permitido em rótulos de 12 px ou mais, em peso 600 ou mais, e nunca para parágrafos.", "section": "colors" },
+      { "name": "The Serif Signs, Sans Informs Rule", "body": "Cormorant só em títulos e números de prova. Qualquer texto que o hóspede precise ler para agir (campo, botão, erro, preço com centavos) é Manrope.", "section": "typography" },
+      { "name": "The Spaced Caps Rule", "body": "Rótulos em caixa alta sempre têm espaçamento de 0,1 em ou mais e nunca passam de 13 px. Caixa alta sem espaçamento não existe no sistema.", "section": "typography" },
+      { "name": "The Soft Float Rule", "body": "Toda superfície interativa tem uma sombra de repouso e uma de hover. A diferença entre as duas é o feedback; nenhuma delas é dura o bastante para desenhar uma linha.", "section": "elevation" },
+      { "name": "The Dark Border Rule", "body": "No tema escuro, a separação de superfícies vem da borda rgba(184, 154, 92, 0.2) e do passo tonal entre Tinta e Tinta de Card, não de sombra.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do deixar a fotografia da unidade ocupar o maior espaço da tela e colocar o texto sobre ela só com gradiente escuro de base ou vidro fosco.",
+      "Do usar Ouro Claro (#d4b87a) para qualquer texto dourado sobre Tinta; o Ouro base não passa em contraste ali.",
+      "Do manter botões de ação do funil com 44 px ou mais de altura e raio arredondado; manter os do cabeçalho retos.",
+      "Do dar a toda superfície interativa uma sombra de repouso e uma de hover (Soft Float Rule).",
+      "Do usar rótulos em caixa alta com espaçamento de 0,1 em ou mais e tamanho de 12 px a 13 px.",
+      "Do respeitar prefers-reduced-motion: o crossfade do hero vira imagem estática e as entradas por rolagem somem."
+    ],
+    "donts": [
+      "Don't usar o dourado como fundo de seção ou de blocos largos; ele é acabamento.",
+      "Don't usar Cormorant em texto de ação, campo, erro ou preço com centavos.",
+      "Don't introduzir uma terceira cor de destaque (azul, verde, laranja) fora dos estados semânticos de formulário.",
+      "Don't misturar cantos retos e arredondados dentro do mesmo grupo de botões.",
+      "Don't usar sombras duras ou bordas acima de 1 px para separar superfícies.",
+      "Don't colocar texto Mudo (#7a7060) sobre Tinta; no escuro o texto auxiliar é Cinza Morno."
+    ]
+  }
+}

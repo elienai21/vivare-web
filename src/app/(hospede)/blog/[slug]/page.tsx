@@ -2,7 +2,8 @@ import type { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPostBySlugServer } from "@/services/cmsServiceServer";
+import { getPostBySlugServer, listPublishedPostsServer } from "@/services/cmsServiceServer";
+import { WHATSAPP_URL } from "@/lib/constants";
 import { CalendarIcon, ClockIcon, UserIcon, ArrowLeftIcon } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
@@ -60,6 +61,12 @@ export default async function BlogPostPage({ params }: Props) {
 
     const isoDate = new Date(post.publishedAt || post.updatedAt).toISOString();
 
+    // Posts relacionados: prioriza quem compartilha tag; completa com os mais recentes.
+    const allPosts = await listPublishedPostsServer(12).catch(() => [] as typeof post[]);
+    const others = allPosts.filter((p) => p.slug !== post.slug);
+    const sameTag = others.filter((p) => (p.tags ?? []).some((t) => (post.tags ?? []).includes(t)));
+    const related = [...sameTag, ...others.filter((p) => !sameTag.includes(p))].slice(0, 3);
+
     const blogPostingJsonLd = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
@@ -83,7 +90,7 @@ export default async function BlogPostPage({ params }: Props) {
     };
 
     return (
-        <main className="min-h-screen pt-32 pb-20 bg-background-light dark:bg-background-dark">
+        <main className="min-h-screen pt-10 md:pt-14 pb-20 bg-background-light dark:bg-background-dark">
             <article className="mx-auto max-w-3xl px-6 lg:px-8">
 
                 {/* Botão Voltar */}
@@ -97,14 +104,14 @@ export default async function BlogPostPage({ params }: Props) {
                     {post.tags && post.tags.length > 0 && (
                         <div className="flex gap-2 flex-wrap mb-6">
                             {post.tags.map(tag => (
-                                <span key={tag} className="px-3 py-1 bg-primary/10 text-primary text-[10px] uppercase tracking-wider font-bold rounded-full">
+                                <span key={tag} className="px-3 py-1 bg-primary-dim text-foreground text-xs uppercase tracking-[0.1em] font-semibold rounded-full">
                                     {tag}
                                 </span>
                             ))}
                         </div>
                     )}
 
-                    <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-light text-ink dark:text-parchment leading-tight mb-8">
+                    <h1 className="font-display text-4xl md:text-5xl font-semibold text-ink dark:text-parchment leading-tight mb-8 text-balance">
                         {post.title}
                     </h1>
 
@@ -130,7 +137,7 @@ export default async function BlogPostPage({ params }: Props) {
 
                 {/* Cover Image */}
                 {post.coverImage && (
-                    <figure className="mb-16 -mx-6 lg:-mx-16 aspect-[21/9] relative rounded-none lg:rounded-2xl overflow-hidden shadow-lg">
+                    <figure className="mb-16 -mx-6 lg:-mx-16 aspect-[21/9] relative rounded-none lg:rounded-2xl overflow-hidden">
                         <Image
                             src={post.coverImage}
                             alt={`Capa do artigo: ${post.title}`}
@@ -144,22 +151,47 @@ export default async function BlogPostPage({ params }: Props) {
 
                 {/* Resumo (Opcional - destacado) */}
                 {post.excerpt && (
-                    <div className="text-xl md:text-2xl font-display font-light text-neutral-600 dark:text-neutral-400 mb-12 leading-relaxed border-l-4 border-primary pl-6 py-2">
+                    <div className="text-lg md:text-xl text-foreground/90 mb-12 leading-relaxed border-l border-primary pl-6 py-1 max-w-[65ch]">
                         {post.excerpt}
                     </div>
                 )}
 
                 {/* Conteúdo Rico HTML */}
                 <div
-                    className="prose prose-lg dark:prose-invert prose-headings:font-display prose-headings:font-medium prose-a:text-primary hover:prose-a:text-primary-600 prose-img:rounded-xl max-w-none text-ink/80 dark:text-parchment/80 leading-loose"
+                    className="prose prose-lg dark:prose-invert prose-headings:font-display prose-headings:font-semibold prose-headings:text-balance prose-img:rounded-xl max-w-[65ch] mx-auto text-foreground leading-relaxed prose-p:text-[1.0625rem] prose-p:leading-[1.7]"
                     dangerouslySetInnerHTML={{ __html: post.content }}
                 />
 
-                {/* Tag Footer & Share (placeholder) */}
-                <footer className="mt-16 pt-8 border-t border-neutral-200 dark:border-neutral-800">
-                    <p className="text-sm text-neutral-500 font-medium uppercase tracking-widest text-center">
-                        Gostou do conteúdo? Compartilhe e não deixe de se inscrever na nossa newsletter.
-                    </p>
+                {/* Fecho: continuar lendo + caminho de volta ao funil */}
+                <footer className="mt-16 pt-10 border-t border-card-border">
+                    {related.length > 0 && (
+                        <section aria-labelledby="continue-lendo" className="mb-12">
+                            <h2 id="continue-lendo" className="font-display text-2xl font-bold mb-6">Continue lendo</h2>
+                            <ul className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                {related.map((r) => (
+                                    <li key={r.id}>
+                                        <Link href={`/blog/${r.slug}`} className="group block">
+                                            {r.coverImage && (
+                                                <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-warm-mid dark:bg-ink-card mb-3">
+                                                    <Image src={r.coverImage} alt="" fill sizes="(max-width: 640px) 100vw, 33vw" className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" />
+                                                </div>
+                                            )}
+                                            <h3 className="font-display text-lg font-semibold leading-snug line-clamp-3 group-hover:text-primary-deep dark:group-hover:text-primary-light transition-colors">{r.title}</h3>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+                    <div className="rounded-2xl bg-ink text-parchment p-8 md:p-10">
+                        <p className="text-xs font-bold uppercase tracking-[.25em] text-primary-light">Hospede-se com a Vivare</p>
+                        <h2 className="mt-2 font-display text-2xl md:text-3xl font-bold text-balance">Apartamentos de alto padrão em São Paulo, Santos e Guarujá.</h2>
+                        <p className="mt-3 text-warm-mid max-w-prose">Check-in digital, sem caução e sem fiador. Reservar direto custa menos do que nas plataformas.</p>
+                        <div className="mt-6 flex flex-wrap gap-3">
+                            <Link href="/unidades" className="inline-flex min-h-12 items-center bg-primary px-6 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:bg-primary-light">Ver acomodações</Link>
+                            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center border border-primary/60 px-6 text-xs font-semibold uppercase tracking-widest text-parchment transition-colors hover:bg-white/5">Falar no WhatsApp</a>
+                        </div>
+                    </div>
                 </footer>
             </article>
 

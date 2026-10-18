@@ -199,7 +199,7 @@ export function SimulacaoForm() {
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-accent w-full py-4 text-lg mt-4">Ver Resultado Imediato</button>
+                    <button type="submit" className="btn btn-accent w-full py-4 text-lg mt-4">Ver a faixa de faturamento</button>
                     <button type="button" onClick={() => setStep(1)} className="btn btn-secondary w-full py-3 mt-2">Voltar</button>
                 </form>
             )}
@@ -209,8 +209,8 @@ export function SimulacaoForm() {
                     <div className="w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                         <span className="text-2xl">&#10003;</span>
                     </div>
-                    <h2 className="text-2xl font-bold">Relatório Gerado!</h2>
-                    <p className="text-neutral-600 mb-6">Com base nas características informadas, a estimativa conservadora de faturamento mensal bruto é de:</p>
+                    <h2 className="font-display text-2xl font-bold">Faixa indicativa de faturamento</h2>
+                    <p className="text-neutral-600 mb-6">Com base no tipo e na metragem informados, usando a tarifa média por m² da nossa carteira, a referência de faturamento mensal bruto é de:</p>
 
                     <div className="bg-primary-50 border border-primary-200 rounded-xl p-8 mb-6">
                         <p className="text-sm text-primary-600 font-bold uppercase tracking-wider mb-2">Estimativa Mensal</p>
@@ -220,7 +220,7 @@ export function SimulacaoForm() {
                     </div>
 
                     <p className="text-sm text-neutral-500 mb-8">
-                        *O valor apresentado é uma estimativa bruta e não garante resultados. Para uma avaliação completa e proposta formal da nossa taxa de gestão (Success Fee), agende uma reunião.
+                        Este número é uma referência bruta, antes de taxas e sazonalidade, e não garante resultado. A avaliação completa do seu imóvel e a proposta com a taxa de gestão são feitas na reunião.
                     </p>
 
                     <a href={getMeetingLink()} target="_blank" rel="noopener noreferrer" className="btn btn-primary w-full py-4 text-lg">
