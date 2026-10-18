@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { ConfirmacaoClient } from "./ConfirmacaoClient";
 
 export const metadata: Metadata = {
     title: "Reserva Confirmada",
@@ -8,12 +10,18 @@ export const metadata: Metadata = {
     robots: { index: false, follow: false },
 };
 
+/**
+ * Fim da jornada de reserva. Lê o estado real do checkout (PAID aguardando a
+ * Stays, BOOKED confirmado) e mostra código, datas, valor e próximos passos.
+ * Antes dizia "Confirmada!" para qualquer visita à URL.
+ */
 export default function ConfirmacaoReservaPage() {
     return (
-        <main className="min-h-screen pt-24 pb-12 text-center">
+        <main className="min-h-screen pt-10 md:pt-14 pb-20">
             <div className="container mx-auto px-4">
-                <h1 className="text-4xl font-bold mb-4 text-success">Reserva Confirmada!</h1>
-                <p className="text-neutral-600">Obrigado por escolher a Vivare.</p>
+                <Suspense fallback={<p className="py-20 text-center text-secondary-text">Carregando…</p>}>
+                    <ConfirmacaoClient />
+                </Suspense>
             </div>
         </main>
     );

@@ -135,7 +135,7 @@ export default async function ReservaPage({
 
     if (!stays) {
         return (
-            <main className="min-h-screen pt-24 pb-12">
+            <main className="min-h-screen pt-8 md:pt-12 pb-12">
                 <div className="container mx-auto px-4 max-w-2xl text-center">
                     <h1 className="text-3xl font-display font-bold mb-4">
                         Acomodação não encontrada
@@ -158,7 +158,7 @@ export default async function ReservaPage({
     const listing = mapStaysToListingDetail(stays);
 
     return (
-        <main className="min-h-screen pt-24 pb-12">
+        <main className="min-h-screen pt-8 md:pt-12 pb-12">
             <CheckoutWizard
                 listing={listing}
                 checkIn={checkIn}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Quote, Guests, GuestInfo, ListingDetail, Checkout } from '@/types';
 import { Steps } from './Steps';
@@ -125,12 +126,10 @@ export function CheckoutWizard({
     // Helper to transition UI based on CheckoutStateMachine
     const handleStateTransition = async (checkout: Checkout, token: string) => {
         // Terminal States -> Redirect
-        if (checkout.state === 'PAID') {
-            router.replace(`/reserva/confirmando?checkoutId=${checkout.checkoutId}`);
-            return;
-        }
-        if (checkout.state === 'BOOKED') {
-            router.replace(`/reserva/confirmada?checkoutId=${checkout.checkoutId}`);
+        // Uma única página de confirmação lê o estado real (PAID aguardando a
+        // Stays, BOOKED confirmado) e mostra o que corresponde.
+        if (checkout.state === 'PAID' || checkout.state === 'BOOKED') {
+            router.replace(`/reserva/confirmacao?checkoutId=${checkout.checkoutId}`);
             return;
         }
         // Failure/Expiry States -> Reset
@@ -429,13 +428,15 @@ export function CheckoutWizard({
                             listingId={listing.id}
                             listingName={listing.name}
                             couponCode={couponCode}
+                            checkoutId={checkoutId ?? undefined}
                         />
                     )}
                 </div>
 
-                {/* Sidebar Summary (Right) */}
-                <div className="hidden lg:block lg:col-span-1">
-                    <div className="bg-neutral-50 dark:bg-neutral-900 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 sticky top-24">
+                {/* Resumo da reserva: primeiro no celular (o hóspede vê o que está
+                    comprando antes dos passos), coluna lateral fixa no desktop. */}
+                <div className="order-first lg:order-none lg:col-span-1">
+                    <div className="bg-card text-foreground p-5 lg:p-6 rounded-2xl border border-card-border lg:sticky lg:top-[calc(var(--header-h)+1rem)]">
                         <div className="flex gap-4 mb-6">
                             {listing.thumbnail && (
                                 <div className="relative w-20 h-20 flex-shrink-0">
@@ -491,17 +492,20 @@ export function CheckoutWizard({
                                     </span>
                                 </div>
                             )}
-                            <div className="flex justify-between font-bold text-lg">
-                                <span>Total estimado</span>
-                                <span>
+                            <div className="flex justify-between items-baseline font-bold text-lg tabular-nums">
+                                <span>Total</span>
+                                <span aria-live="polite">
                                     {currentQuote
                                         ? currentQuote.total.toLocaleString('pt-BR', {
                                               style: 'currency',
                                               currency: currentQuote.currency || 'BRL',
                                           })
-                                        : '(Confirmado no passo 1)'}
+                                        : <span className="text-sm font-medium text-secondary-text">calculando…</span>}
                                 </span>
                             </div>
+                            <p className="pt-2 text-xs text-secondary-text">
+                                Sem taxa de plataforma. Cancelamento conforme a <Link href="/politica-de-cancelamento" className="underline underline-offset-4 decoration-primary hover:text-foreground">política</Link>.
+                            </p>
                         </div>
                     </div>
                 </div>
