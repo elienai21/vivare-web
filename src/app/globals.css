@@ -1,525 +1,518 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
-@layer utilities {
-  .hero-slide {
-    animation: heroCrossfade 24s infinite;
-  }
-
-  .hero-slide-1 {
-    animation-delay: 0s;
-  }
-
-  .hero-slide-2 {
-    animation-delay: 8s;
-  }
-
-  .hero-slide-3 {
-    animation-delay: 16s;
-  }
-
-  @keyframes heroCrossfade {
-    0% {
-      opacity: 0;
-      z-index: 0;
-      transform: scale(1.05);
-    }
-
-    5% {
-      opacity: 1;
-      z-index: 10;
-      transform: scale(1.04);
-    }
-
-    30% {
-      opacity: 1;
-      z-index: 10;
-      transform: scale(1.01);
-    }
-
-    35% {
-      opacity: 0;
-      z-index: 0;
-      transform: scale(1);
-    }
-
-    100% {
-      opacity: 0;
-      z-index: 0;
-      transform: scale(1);
-    }
-  }
-}
+/* Tema escuro por classe (next-themes, attribute="class") E por preferência do
+   sistema. O site segue o sistema (defaultTheme="system"); a classe que o
+   next-themes injeta espelha a preferência, então os dois caminhos concordam. */
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ============================================
-   VIVARE PREMIUM DESIGN SYSTEM
+   VIVARE — TOKENS
+   Fonte da verdade visual: DESIGN.md
    ============================================ */
 
 :root {
-  /* ========== Typography ========== */
-  /* --font-sans and --font-display are injected by next/font */
+  /* ---- Marca: Ouro Envelhecido ---- */
+  --color-primary: #b89a5c;        /* Ouro: fios, ícones, fundos de botão */
+  --color-primary-light: #d4b87a;  /* Ouro Claro: texto dourado sobre tinta */
+  --color-primary-deep: #7a6536;   /* Ouro Profundo: texto dourado sobre claro e sobre o véu (≥4,5:1) */
+  --color-primary-dim: rgba(184, 154, 92, 0.12); /* Véu Dourado */
 
-  /* ========== Colors - VIVARE Ouro Envelhecido ========== */
-  --color-primary: #b89a5c;
-  --color-primary-light: #d4b87a;
-  --color-primary-dim: rgba(184, 154, 92, 0.12);
-  --color-background-light: #f7f8fa;
-  --color-background-dark: #0f0e0c;
+  /* ---- Neutros ---- */
   --color-ink: #0f0e0c;
+  --color-ink-card: #161410;
   --color-parchment: #f7f8fa;
+  --color-paper: #ffffff;
   --color-warm-mid: #e2e4e8;
-  --color-muted: #7a7060;
+  --color-muted: #7a7060;          /* só sobre pergaminho/papel */
+  --color-background-light: var(--color-parchment);
+  --color-background-dark: var(--color-ink);
 
-  /* Semantic Colors */
-  --color-success: hsl(152, 69%, 42%);
+  /* ---- Semânticas ---- */
+  --color-success: hsl(152, 69%, 36%);
   --color-success-light: hsl(152, 69%, 95%);
-  --color-warning: hsl(38, 92%, 50%);
+  --color-warning: hsl(38, 92%, 40%);
   --color-warning-light: hsl(38, 92%, 95%);
-  --color-error: hsl(0, 72%, 51%);
+  --color-error: hsl(0, 72%, 45%);
   --color-error-light: hsl(0, 72%, 95%);
-  --color-info: hsl(210, 100%, 50%);
+  --color-info: hsl(210, 100%, 40%);
   --color-info-light: hsl(210, 100%, 95%);
 
-  /* ========== Background & Foreground ========== */
-  --background: var(--color-background-light);
+  /* ---- Superfície (muda com o tema) ---- */
+  --background: var(--color-parchment);
   --foreground: var(--color-ink);
-  --card-background: #ffffff;
+  --card-background: var(--color-paper);
   --card-border: var(--color-warm-mid);
+  --text-secondary: var(--color-muted);
+  --header-h: 72px;
 
-  /* ========== Spacing Scale (8px base) ========== */
-  --space-0: 0;
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-20: 5rem;
-  --space-24: 6rem;
+  /* ---- Espaço (base 8 px) ---- */
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+  --space-12: 3rem; --space-16: 4rem; --space-20: 5rem; --space-24: 6rem;
 
-  /* ========== Shadows - Subtle Elevation ========== */
+  /* ---- Sombras (flutuação suave) ---- */
   --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.03);
   --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.06);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.15);
+  --shadow-gold: 0 24px 48px -8px rgba(184, 154, 92, 0.18);
 
-  /* ========== Border Radius ========== */
-  --radius-none: 0;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-full: 9999px;
+  /* ---- Raios ---- */
+  --radius-none: 0; --radius-sm: 0.25rem; --radius-md: 0.5rem; --radius-lg: 0.75rem;
+  --radius-xl: 1rem; --radius-2xl: 1.5rem; --radius-full: 9999px;
 
-  /* ========== Transitions ========== */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* ---- Movimento ---- */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+  --transition-fast: 150ms var(--ease-standard);
+  --transition-base: 250ms var(--ease-standard);
+  --transition-slow: 400ms var(--ease-standard);
 }
 
-/* ========== Dark Mode (Toggle Support) ========== */
-:is(.dark, [data-theme='dark']) :root {
-  --background: var(--color-background-dark);
+@media (min-width: 768px) {
+  :root { --header-h: 96px; }
+}
+
+/* Tema escuro: pela classe do next-themes (espelha o sistema) e, sem JS,
+   pela preferência do sistema. Mesmos valores nos dois caminhos. */
+.dark,
+[data-theme='dark'] {
+  --background: var(--color-ink);
   --foreground: var(--color-parchment);
-  --card-background: #161410;
+  --card-background: var(--color-ink-card);
   --card-border: rgba(184, 154, 92, 0.2);
+  --text-secondary: var(--color-warm-mid);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --background: var(--color-background-dark);
+  :root:not(.light):not([data-theme='light']) {
+    --background: var(--color-ink);
     --foreground: var(--color-parchment);
-    --card-background: #161410;
+    --card-background: var(--color-ink-card);
     --card-border: rgba(184, 154, 92, 0.2);
-  }
-}
-
-/* ========== Tailwind Theme Extension ========== */
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-body: var(--font-body);
-  --font-display: var(--font-display);
-
-  /* Mapping the exact colors for usage */
-  --color-primary: var(--color-primary);
-  --color-primary-light: var(--color-primary-light);
-  --color-primary-dim: var(--color-primary-dim);
-  --color-background-light: var(--color-background-light);
-  --color-background-dark: var(--color-background-dark);
-  --color-ink: var(--color-ink);
-  --color-parchment: var(--color-parchment);
-  --color-warm-mid: var(--color-warm-mid);
-  --color-muted: var(--color-muted);
-}
-
-@layer base {
-  body {
-    @apply bg-background-light dark:bg-background-dark text-ink dark:text-parchment antialiased font-body;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-bold tracking-tight font-display;
+    --text-secondary: var(--color-warm-mid);
   }
 }
 
 /* ============================================
-   VIVARE PREMIUM OVERLAYS & EFFECTS
+   PRÉVIA: PALETA PROPOSTA (comparação, não é a oficial)
+   Ativada por <html data-palette="v2">, via o seletor PaletteToggle
+   (só aparece em desenvolvimento ou com ?comparar=1). Sem o atributo,
+   nada muda. Para adotar: copiar estes valores para o :root acima e
+   apagar este bloco e o PaletteToggle.
+   ============================================ */
+:root[data-palette='v2'] {
+  /* Neutros claros quentes (antes cinza-azulados, matiz 220°) */
+  --color-parchment: #f7f4ee;   /* Linho: fundo do tema claro */
+  --color-paper: #fdfbf7;       /* Papel: cards */
+  --color-warm-mid: #e6dfd2;    /* Areia: bordas no claro, texto auxiliar no escuro */
+  --color-muted: #6f6555;       /* Texto secundário no claro: 5,2:1 (antes 4,6:1) */
+
+  /* Degraus do escuro: card e elevado se separam do fundo */
+  --color-ink-card: #1d1a15;
+  --color-ink-raised: #26221c;
+
+  /* Status sóbrios e quentes, todos ≥ 5:1 como texto sobre papel */
+  --color-success: #3d7a57;
+  --color-success-light: #e9f2ec;
+  --color-error: #a8432f;
+  --color-error-light: #f7e9e5;
+  --color-warning: #8f5f12;
+  --color-warning-light: #f6eddc;
+  --color-info: #3b6584;
+  --color-info-light: #e7eef3;
+}
+:root[data-palette='v2'].dark .bg-card,
+:root[data-palette='v2'].dark .card {
+  /* No escuro, superfícies interativas (widget, menus) sobem um degrau */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* ============================================
+   TAILWIND THEME
+   Além dos tokens da marca, mapeia a escala legada (primary-50…900,
+   accent-*, tokens shadcn) para cores reais. Antes, essas classes não
+   geravam CSS no Tailwind 4 e botões/títulos sumiam em silêncio.
+   ============================================ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card-background);
+  --color-card-border: var(--card-border);
+  --color-secondary-text: var(--text-secondary);
+  --font-body: var(--font-body);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+
+  --color-primary: var(--color-primary);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-deep: var(--color-primary-deep);
+  --color-primary-dim: var(--color-primary-dim);
+  --color-background-light: var(--color-background-light);
+  --color-background-dark: var(--color-background-dark);
+  --color-ink: var(--color-ink);
+  --color-ink-card: var(--color-ink-card);
+  --color-parchment: var(--color-parchment);
+  --color-paper: var(--color-paper);
+  --color-warm-mid: var(--color-warm-mid);
+  --color-muted: var(--color-muted);
+
+  --color-success: var(--color-success);
+  --color-success-light: var(--color-success-light);
+  --color-warning: var(--color-warning);
+  --color-warning-light: var(--color-warning-light);
+  --color-error: var(--color-error);
+  --color-error-light: var(--color-error-light);
+  --color-info: var(--color-info);
+  --color-info-light: var(--color-info-light);
+
+  /* Escala legada → marca */
+  --color-primary-50: #f6f1e6;
+  --color-primary-100: #eee5d0;
+  --color-primary-200: #e2d1ae;
+  --color-primary-300: #d4b87a;
+  --color-primary-400: #c6a96a;
+  --color-primary-500: #b89a5c;
+  --color-primary-600: #7a6536;
+  --color-primary-700: #6b5a32;
+  --color-primary-800: #2a2212;
+  --color-primary-900: #161410;
+  --color-primary-foreground: #0f0e0c;
+  --color-accent-50: #f6f1e6;
+  --color-accent-400: #d4b87a;
+  --color-accent-500: #b89a5c;
+  --color-accent-600: #7a6536;
+  --color-accent-900: #0f0e0c;
+  --color-accent: #f1ebdd;
+  --color-accent-foreground: #0f0e0c;
+  --color-secondary: #e2e4e8;
+  --color-secondary-foreground: #0f0e0c;
+  --color-destructive: var(--color-error);
+  --color-destructive-foreground: #ffffff;
+  --color-ring: #b89a5c;
+  --color-input: #e2e4e8;
+  --color-ring-offset-background: var(--background);
+
+  --shadow-gold: var(--shadow-gold);
+  --ease-out-expo: var(--ease-out);
+}
+
+/* ============================================
+   BASE
+   ============================================ */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    /* smooth só para âncoras; o Next desliga durante a navegação quando o
+       <html> tem data-scroll-behavior="smooth" (ver layout.tsx) */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display), Georgia, serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  /* Controles: sem seleção de texto ao segurar, sem atraso de toque */
+  button, [role="button"], a.btn, .btn, summary {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: rgba(184, 154, 92, 0.35);
+    color: var(--color-ink);
+  }
+  .dark ::selection {
+    color: var(--color-parchment);
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(122, 112, 96, 0.45); border-radius: var(--radius-full); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+
+  /* Texto rico vindo do CMS / Stays (plugin typography) herda os tokens */
+  .prose {
+    --tw-prose-body: var(--foreground);
+    --tw-prose-headings: var(--foreground);
+    --tw-prose-links: var(--color-primary-deep);
+    --tw-prose-bold: var(--foreground);
+    --tw-prose-bullets: var(--color-primary);
+    --tw-prose-quotes: var(--foreground);
+    --tw-prose-quote-borders: var(--color-primary);
+    --tw-prose-hr: var(--card-border);
+    --tw-prose-counters: var(--color-primary-deep);
+  }
+  .dark .prose { --tw-prose-links: var(--color-primary-light); }
+}
+
+/* ============================================
+   COMPONENTES (em camada: utilitários do JSX vencem)
+   ============================================ */
+@layer components {
+  .display-text { font-family: var(--font-display); }
+
+  .gold-line {
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    background: var(--color-primary);
+    margin: 1rem 0 1.5rem;
+  }
+
+  .gold-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-primary) 40%, var(--color-primary) 60%, transparent);
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .dark .glass {
+    background: rgba(15, 14, 12, 0.72);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .card {
+    background: var(--card-background);
+    color: var(--foreground);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .card-lift {
+    transition: transform 350ms var(--ease-out), box-shadow 350ms var(--ease-out);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-lg);
+    transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-size: 0.9375rem;
+    line-height: 1.25;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Primário: tinta com texto ouro claro (reto nos CTAs institucionais) */
+  .btn-primary { background: var(--color-ink); color: var(--color-primary-light); }
+  .dark .btn-primary { background: var(--color-parchment); color: var(--color-ink); }
+
+  /* Secundário: contorno */
+  .btn-secondary { background: transparent; color: var(--foreground); border-color: var(--card-border); }
+
+  /* Ação do funil: ouro cheio, texto tinta (antes apontava para token inexistente) */
+  .btn-accent { background: var(--color-primary); color: var(--color-ink); }
+
+  .focus-ring:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: var(--card-border);
+    border-radius: var(--radius-md);
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Calendário de reserva (react-datepicker): toque de 44 px, fonte e cores da marca */
+  .react-datepicker {
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 1rem;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-xl);
+    background: var(--card-background);
+    color: var(--foreground);
+    box-shadow: var(--shadow-xl);
+  }
+  .react-datepicker__header {
+    background: var(--card-background);
+    border-bottom: 1px solid var(--card-border);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding-top: 0.75rem;
+  }
+  .react-datepicker__current-month,
+  .react-datepicker__day-name,
+  .react-datepicker__day { color: var(--foreground); }
+  .react-datepicker__current-month { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; }
+  .react-datepicker__day,
+  .react-datepicker__day-name {
+    width: 2.75rem;
+    line-height: 2.75rem;
+    margin: 0.125rem;
+    border-radius: var(--radius-full);
+  }
+  .react-datepicker__day-name { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); }
+  .react-datepicker__day--selected,
+  .react-datepicker__day--range-start,
+  .react-datepicker__day--range-end,
+  .react-datepicker__day--keyboard-selected {
+    background: var(--color-primary) !important;
+    color: var(--color-ink) !important;
+    font-weight: 700;
+  }
+  .react-datepicker__day--in-range,
+  .react-datepicker__day--in-selecting-range { background: var(--color-primary-dim) !important; color: var(--foreground) !important; }
+  .react-datepicker__day--disabled { color: var(--text-secondary); opacity: 0.4; text-decoration: line-through; }
+  .react-datepicker__navigation { top: 0.9rem; }
+  .react-datepicker__triangle { display: none; }
+  .react-datepicker-popper { z-index: 60; }
+}
+
+/* Hover só onde existe ponteiro: no toque, nada fica "grudado" */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { box-shadow: var(--shadow-lg); }
+  .card-interactive:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+  .card-lift:hover { transform: translateY(-6px); box-shadow: var(--shadow-gold); }
+  .btn-primary:hover { background: var(--color-primary); color: var(--color-ink); }
+  .btn-secondary:hover { background: var(--color-primary-dim); border-color: var(--color-primary); }
+  .btn-accent:hover { background: var(--color-primary-light); }
+  .react-datepicker__day:hover { background: var(--color-primary-dim); }
+}
+
+/* ============================================
+   MOVIMENTO
    ============================================ */
 
-/* ── grain overlay global ── */
+/* Revelação por rolagem só com CSS (animação ligada à rolagem).
+   Nenhum JavaScript toca nos blocos, então não há diferença de hidratação.
+   Navegadores sem suporte (Firefox, Safari antigo) simplesmente mostram o
+   conteúdo parado; nada fica escondido. */
+@keyframes revealIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: revealIn linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes slowZoom {
+  from { transform: scale(1.06); }
+  to { transform: scale(1); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Crossfade do hero: 5 slides, 7 s cada, ciclo de 35 s, um só keyframe.
+   Cada slide fica visível 7 s e some em 0,8 s enquanto o próximo já está
+   por baixo; os atrasos negativos escalonam os slides sem tela vazia. */
+@keyframes heroCrossfade {
+  0%     { opacity: 1; }
+  20%    { opacity: 1; }
+  22.3%  { opacity: 0; }
+  97.7%  { opacity: 0; }
+  100%   { opacity: 1; }
+}
+.hero-slide {
+  animation: heroCrossfade 35s linear infinite both;
+  will-change: opacity;
+}
+.hero-slide-1 { animation-delay: 0s; }
+.hero-slide-2 { animation-delay: -28s; }
+.hero-slide-3 { animation-delay: -21s; }
+.hero-slide-4 { animation-delay: -14s; }
+.hero-slide-5 { animation-delay: -7s; }
+.hero-slide-1 > img { animation: slowZoom 14s var(--ease-out) both; }
+
+/* Entradas do hero: curva de saída rápida, atrasos curtos */
+.hero-enter { opacity: 0; animation: fadeUp 500ms var(--ease-out) forwards; }
+.hero-enter-1 { animation-delay: 0ms; }
+.hero-enter-2 { animation-delay: 80ms; }
+.hero-enter-3 { animation-delay: 160ms; }
+.hero-enter-4 { animation-delay: 240ms; }
+
+/* Menos movimento: o conteúdo continua, o deslocamento some. Spinners e
+   transições de cor curtas continuam, porque são feedback, não ornamento. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide, .hero-slide > img { animation: none !important; }
+  .hero-slide-1 { opacity: 1; }
+  .hero-slide:not(.hero-slide-1) { display: none; }
+  .hero-enter { animation: none; opacity: 1; }
+  .card-lift, .card-interactive { transition: none; }
+  .card-lift:hover, .card-interactive:hover { transform: none; }
+  .skeleton::after { animation: none; opacity: 0.6; }
+  html { scroll-behavior: auto; }
+  .animate-in, .animate-out { animation-duration: 1ms !important; }
+}
+
+/* ============================================
+   UTILITÁRIOS ESPECÍFICOS
+   ============================================ */
+
+/* Grão global sutil sobre o fundo e atrás do conteúdo (z-index -1).
+   Não usar regra em `body > *`: CSS fora de camada vence o `fixed` do
+   Tailwind e quebrava o botão do WhatsApp, o menu do celular e o popup. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 9998;
+  z-index: -1;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
   opacity: .5;
 }
 
-/* ── scroll reveal ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity .75s ease, transform .75s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── display font helper (used by /sobre and any editorial layout) ── */
-.display-text {
-  font-family: var(--font-display);
-}
-
-/* ── gold separator ── */
-.gold-line {
-  display: block;
-  width: 2.5rem;
-  height: 1px;
-  background: var(--color-primary);
-  margin: 1rem 0 1.5rem;
-}
-
-/* ── hover card lift ── */
-.card-lift {
-  transition: transform .35s ease, box-shadow .35s ease;
-}
-
-.card-lift:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 48px -8px rgba(184, 154, 92, .18);
-}
-
-/* ── section divider gold gradient ── */
-.gold-divider {
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--color-primary) 40%, var(--color-primary) 60%, transparent);
-}
-
-@keyframes slowZoom {
-  from {
-    transform: scale(1.07);
-  }
-
-  to {
-    transform: scale(1.0);
-  }
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(22px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes heroCrossfade {
-  0% {
-    opacity: 1;
-    z-index: 10;
-  }
-
-  25% {
-    opacity: 1;
-    z-index: 10;
-  }
-
-  33.33% {
-    opacity: 0;
-    z-index: 0;
-  }
-
-  91.66% {
-    opacity: 0;
-    z-index: 0;
-  }
-
-  100% {
-    opacity: 1;
-    z-index: 10;
-  }
-}
-
-.hero-slide {
-  opacity: 0;
-}
-
-.hero-slide-1 {
-  animation-delay: 0s, 0s !important;
-}
-
-.hero-slide-2 {
-  animation-delay: 8s, 0s !important;
-}
-
-.hero-slide-3 {
-  animation-delay: 16s, 0s !important;
-}
-
-/* Respect reduced-motion preferences: stop the perpetual crossfade and slow
-   zoom — show the first slide as a static image, freeze entrance animations.
-   Improves CPU/battery and meets WCAG 2.3.3. */
-@media (prefers-reduced-motion: reduce) {
-  .hero-slide,
-  .hero-slide-1,
-  .hero-slide-2,
-  .hero-slide-3 {
-    animation: none !important;
-  }
-
-  .hero-slide-1 {
-    opacity: 1;
-  }
-
-  .hero-slide-2,
-  .hero-slide-3 {
-    display: none;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-
-/* ============================================
-   BASE STYLES
-   ============================================ */
-
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--background);
-  color: var(--foreground);
-  line-height: 1.6;
-  letter-spacing: -0.01em;
-}
-
-/* Display headings */
-h1,
-h2,
-h3 {
-  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-/* ============================================
-   PREMIUM UTILITY CLASSES
-   ============================================ */
-
-/* Glass Effect */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-@media (prefers-color-scheme: dark) {
-  .glass {
-    background: rgba(10, 10, 10, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-}
-
-/* Gradient Text */
-.gradient-text {
-  background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-500));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Premium Card */
-.card {
-  background: var(--card-background);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-base), transform var(--transition-base);
-}
-
-.card:hover {
-  box-shadow: var(--shadow-lg);
-}
-
-.card-interactive:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-xl);
-}
-
-/* Button Base */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-lg);
-  transition: all var(--transition-fast);
-  cursor: pointer;
-  border: none;
-  font-size: 0.9375rem;
-  line-height: 1.25;
-}
-
-.btn-primary {
-  background: #1a1a1a;
-  color: #ffffff;
-}
-
-.btn-primary:hover {
-  background: #2d2d2d;
-  box-shadow: 0 4px 14px rgb(0 0 0 / 0.2);
-}
-
-.btn-primary:active {
-  transform: scale(0.98);
-}
-
-.btn-secondary {
-  background: var(--color-neutral-100);
-  color: var(--color-neutral-900);
-  border: 1px solid var(--color-neutral-200);
-}
-
-.btn-secondary:hover {
-  background: var(--color-neutral-200);
-}
-
-.btn-accent {
-  background: var(--color-accent-500);
-  color: white;
-}
-
-.btn-accent:hover {
-  background: var(--color-accent-600);
-  box-shadow: 0 4px 14px rgb(245 158 11 / 0.25);
-}
-
-/* Focus States */
-.focus-ring {
-  outline: none;
-}
-
-.focus-ring:focus-visible {
-  outline: 2px solid var(--color-primary-500);
-  outline-offset: 2px;
-}
-
-/* ============================================
-   SKELETON LOADING
-   ============================================ */
-
-.skeleton {
-  position: relative;
-  overflow: hidden;
-  background: var(--color-neutral-200);
-  border-radius: var(--radius-md);
-}
-
-.skeleton::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(90deg,
-      transparent,
-      rgba(255, 255, 255, 0.4),
-      transparent);
-  animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-/* ============================================
-   SCROLLBAR STYLING
-   ============================================ */
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-neutral-300);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-neutral-400);
-}
-
-/* ============================================
-   SELECTION STYLING
-   ============================================ */
-
-::selection {
-  background: var(--color-primary-200);
-  color: var(--color-primary-900);
-}
 /* Etiqueta fixa acima dos pinos do mapa de unidades (PropertyMap) */
 .leaflet-tooltip.vivare-map-label {
   font-family: var(--font-body), system-ui, sans-serif;
