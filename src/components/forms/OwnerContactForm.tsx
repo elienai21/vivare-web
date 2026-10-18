@@ -22,6 +22,7 @@ export function OwnerContactForm() {
         // Honeypot — kept empty by humans, filled by naive bots.
         [HONEYPOT_FIELD]: "",
     });
+    const [whatsAppUrl, setWhatsAppUrl] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -44,22 +45,6 @@ export function OwnerContactForm() {
         const { [HONEYPOT_FIELD]: _hp, ...payload } = formData;
         void _hp;
 
-        // Persist the lead BEFORE opening WhatsApp — if the popup is
-        // blocked or the user closes the WhatsApp tab, we still keep
-        // their info. Mirrors the schema used by OwnerPopup so the
-        // admin/leads dashboard sees both sources in one place.
-        try {
-            await addDoc(collection(db, "leads_proprietarios"), {
-                ...payload,
-                createdAt: serverTimestamp(),
-                source: "OwnerContactForm",
-            });
-        } catch (error) {
-            // Don't block the WhatsApp flow on Firestore failures —
-            // log and continue so the user always reaches a contact path.
-            console.error("Erro ao salvar lead (OwnerContactForm):", error);
-        }
-
         const message = encodeURIComponent(
             `Olá! Sou proprietário e preenchi o formulário no site da Vivare.\n\n` +
             `*Nome:* ${formData.nome}\n` +
@@ -69,8 +54,25 @@ export function OwnerContactForm() {
             `*Tipo de Imóvel:* ${formData.tipoImovel}\n` +
             `*Já anunciado:* ${formData.jaAnunciado}`
         );
+        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+        setWhatsAppUrl(waUrl);
 
-        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+        // Abre o WhatsApp DENTRO do gesto do usuário (antes de qualquer await):
+        // depois de um await o iOS Safari bloqueia a nova aba. O estado de
+        // sucesso mantém um link grande para reabrir, caso o bloqueio aconteça.
+        window.open(waUrl, "_blank", "noopener");
+
+        // Persiste o lead em paralelo; falha no Firestore não bloqueia o contato.
+        try {
+            await addDoc(collection(db, "leads_proprietarios"), {
+                ...payload,
+                createdAt: serverTimestamp(),
+                source: "OwnerContactForm",
+            });
+        } catch (error) {
+            console.error("Erro ao salvar lead (OwnerContactForm):", error);
+        }
+
         setSubmitted(true);
     };
 
@@ -80,9 +82,12 @@ export function OwnerContactForm() {
                 <div className="w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl">&#10003;</span>
                 </div>
-                <h3 className="text-2xl font-bold mb-2">Solicitação Enviada!</h3>
-                <p className="text-neutral-600 mb-6">Continue a conversa pelo WhatsApp para agilizar seu atendimento. Nossa equipe responderá em até 24h úteis.</p>
-                <button onClick={() => setSubmitted(false)} className="btn btn-secondary">Enviar outra solicitação</button>
+                <h3 className="font-display text-2xl font-bold mb-2">Solicitação enviada</h3>
+                <p className="text-secondary-text mb-6">Continue a conversa no WhatsApp para agilizar o atendimento. Nossa equipe responde em até 24h úteis.</p>
+                {whatsAppUrl && (
+                    <a href={whatsAppUrl} target="_blank" rel="noopener noreferrer" className="btn btn-accent w-full mb-3">Abrir conversa no WhatsApp</a>
+                )}
+                <button type="button" onClick={() => setSubmitted(false)} className="btn btn-secondary w-full">Enviar outra solicitação</button>
             </div>
         );
     }
