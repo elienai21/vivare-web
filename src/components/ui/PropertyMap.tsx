@@ -116,7 +116,13 @@ export default function PropertyMap({ listings, singleView }: PropertyMapProps) 
             const zoom = singleView ? 14 : 11;
 
             // Cria o mapa
-            const map = L.map(mapRef.current).setView([lat, lng], zoom);
+            // No toque, arrastar com um dedo rola a página em vez de mover o mapa
+            // (o hóspede "ficava preso" no mapa antes de chegar ao widget de reserva).
+            // Pinça e dois dedos continuam funcionando.
+            const map = L.map(mapRef.current, {
+                dragging: !L.Browser.mobile,
+                scrollWheelZoom: !singleView,
+            }).setView([lat, lng], zoom);
             mapInstanceRef.current = map;
 
             // Tile layer (OpenStreetMap). A CARTO passou a exigir chave de API
