@@ -10,6 +10,11 @@ export const metadata: Metadata = {
     robots: { index: false, follow: false },
 };
 
+// Sempre dinâmica: depende do checkoutId da URL e do token na sessão do
+// navegador. Pré-renderizar no build também inicializava o Firebase do
+// cliente e quebrava o deploy de Preview, que não tem essas variáveis.
+export const dynamic = "force-dynamic";
+
 /**
  * Fim da jornada de reserva. Lê o estado real do checkout (PAID aguardando a
  * Stays, BOOKED confirmado) e mostra código, datas, valor e próximos passos.
