@@ -80,7 +80,7 @@ export function FloatingWhatsApp() {
                 "bottom-[max(1rem,env(safe-area-inset-bottom))] md:bottom-6 md:right-6",
                 "bg-ink text-primary-light shadow-lg dark:bg-parchment dark:text-ink",
                 "transition-[transform,opacity,background-color,color] duration-300 ease-out",
-                "hover:bg-primary hover:text-ink active:scale-95",
+                "hover:bg-primary-light hover:text-ink active:scale-95",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
                 "animate-in fade-in slide-in-from-bottom-4 duration-300",
                 hidden ? "pointer-events-none translate-y-20 opacity-0" : "translate-y-0 opacity-100",

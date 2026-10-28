@@ -37,7 +37,7 @@ export function EmptyState({
                 )}
             </div>
 
-            <h3 className="font-display font-semibold text-lg text-neutral-900 mb-2">
+            <h3 className="font-display font-medium text-lg text-neutral-900 mb-2">
                 {title}
             </h3>
 

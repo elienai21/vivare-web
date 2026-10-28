@@ -34,7 +34,7 @@ export default async function BlogIndexPage() {
         <main className="min-h-screen pt-10 md:pt-14 pb-20 bg-background-light dark:bg-background-dark">
             <div className="mx-auto max-w-7xl px-6 lg:px-10">
                 <div className="text-center md:text-left mb-16">
-                    <span className="text-xs font-bold uppercase tracking-[.3em] text-primary">Journal</span>
+                    <span className="chapeu">Journal</span>
                     <h1 className="font-display text-4xl md:text-6xl font-light text-ink dark:text-parchment mt-2 mb-4">Blog Vivare</h1>
                     <span className="gold-line md:mx-0"></span>
                     <p className="text-neutral-600 dark:text-neutral-400 mt-6 max-w-2xl text-lg">
@@ -44,7 +44,7 @@ export default async function BlogIndexPage() {
 
                 {posts.length === 0 ? (
                     <div className="py-20 text-center">
-                        <p className="text-xl text-neutral-500 font-light">Nenhum artigo publicado no momento.</p>
+                        <p className="text-xl text-neutral-500">Nenhum artigo publicado no momento.</p>
                         <p className="text-neutral-400 mt-2">Volte em breve para novidades.</p>
                     </div>
                 ) : (

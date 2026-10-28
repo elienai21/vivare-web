@@ -1,43 +1,51 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-18T00:00:00.000Z",
+  "generatedAt": "2026-10-28T00:00:00.000Z",
   "title": "Design System: Vivare Stay",
   "extensions": {
     "colorMeta": {
-      "gold": { "role": "primary", "displayName": "Ouro Envelhecido", "canonical": "#b89a5c", "tonalRamp": ["#2a2212", "#4a3b1e", "#6b562c", "#8c713e", "#b89a5c", "#cbb27e", "#ddcaa5", "#efe4cf"] },
-      "gold-light": { "role": "primary", "displayName": "Ouro Claro", "canonical": "#d4b87a", "tonalRamp": ["#2e2612", "#52431f", "#78622e", "#a0833f", "#d4b87a", "#dec894", "#e8d9b3", "#f3ead4"] },
-      "gold-veil": { "role": "primary", "displayName": "Véu Dourado", "canonical": "rgba(184, 154, 92, 0.12)", "tonalRamp": ["rgba(184,154,92,0.04)", "rgba(184,154,92,0.08)", "rgba(184,154,92,0.12)", "rgba(184,154,92,0.2)", "rgba(184,154,92,0.3)", "rgba(184,154,92,0.45)", "rgba(184,154,92,0.65)", "rgba(184,154,92,0.85)"] },
-      "ink": { "role": "neutral", "displayName": "Tinta", "canonical": "#0f0e0c", "tonalRamp": ["#0f0e0c", "#161410", "#24201a", "#3a342b", "#564e41", "#7a7060", "#a79d8d", "#d6cfc2"] },
-      "ink-card": { "role": "neutral", "displayName": "Tinta de Card", "canonical": "#161410", "tonalRamp": ["#0f0e0c", "#161410", "#201c16", "#2d281f", "#403829", "#5a4f3a", "#7f7154", "#ab9c7e"] },
-      "parchment": { "role": "neutral", "displayName": "Pergaminho", "canonical": "#f7f8fa", "tonalRamp": ["#1b1c1f", "#34363b", "#4f5259", "#6b6f78", "#8a8e97", "#b4b8bf", "#dadce1", "#f7f8fa"] },
-      "paper": { "role": "neutral", "displayName": "Papel", "canonical": "#ffffff", "tonalRamp": ["#1a1a1a", "#333333", "#4d4d4d", "#737373", "#999999", "#bfbfbf", "#e6e6e6", "#ffffff"] },
-      "warm-mid": { "role": "neutral", "displayName": "Cinza Morno", "canonical": "#e2e4e8", "tonalRamp": ["#1d1e21", "#35373c", "#4e5158", "#6a6e76", "#8b8f98", "#b1b5bd", "#cfd2d8", "#e2e4e8"] },
-      "muted": { "role": "neutral", "displayName": "Mudo", "canonical": "#7a7060", "tonalRamp": ["#1f1c17", "#35302a", "#4c453c", "#63594d", "#7a7060", "#978d7c", "#b5ac9d", "#d4cec3"] },
-      "success": { "role": "semantic", "displayName": "Sucesso", "canonical": "hsl(152, 69%, 42%)", "tonalRamp": ["hsl(152,69%,10%)", "hsl(152,69%,18%)", "hsl(152,69%,26%)", "hsl(152,69%,34%)", "hsl(152,69%,42%)", "hsl(152,69%,58%)", "hsl(152,69%,78%)", "hsl(152,69%,95%)"] },
-      "warning": { "role": "semantic", "displayName": "Aviso", "canonical": "hsl(38, 92%, 50%)", "tonalRamp": ["hsl(38,92%,12%)", "hsl(38,92%,22%)", "hsl(38,92%,32%)", "hsl(38,92%,42%)", "hsl(38,92%,50%)", "hsl(38,92%,64%)", "hsl(38,92%,80%)", "hsl(38,92%,95%)"] },
-      "error": { "role": "semantic", "displayName": "Erro", "canonical": "hsl(0, 72%, 51%)", "tonalRamp": ["hsl(0,72%,12%)", "hsl(0,72%,22%)", "hsl(0,72%,32%)", "hsl(0,72%,42%)", "hsl(0,72%,51%)", "hsl(0,72%,64%)", "hsl(0,72%,80%)", "hsl(0,72%,95%)"] },
-      "info": { "role": "semantic", "displayName": "Info", "canonical": "hsl(210, 100%, 50%)", "tonalRamp": ["hsl(210,100%,12%)", "hsl(210,100%,22%)", "hsl(210,100%,32%)", "hsl(210,100%,42%)", "hsl(210,100%,50%)", "hsl(210,100%,64%)", "hsl(210,100%,80%)", "hsl(210,100%,95%)"] }
+      "bronze": { "role": "primary", "displayName": "Bronze", "canonical": "#a26e35", "tonalRamp": ["#4f3418", "#6f4a22", "#8a5c2a", "#a26e35", "#c08a4c", "#d8a767", "#ead6b8", "#f4ebdd"] },
+      "bronze-light": { "role": "primary", "displayName": "Bronze Claro", "canonical": "#d8a767", "tonalRamp": ["#6f4a22", "#8a5c2a", "#a26e35", "#c08a4c", "#d8a767", "#e4bb83", "#ead6b8", "#faf5ec"] },
+      "bronze-deep": { "role": "primary", "displayName": "Bronze Profundo", "canonical": "#8a5c2a", "tonalRamp": ["#3a2712", "#4f3418", "#6f4a22", "#8a5c2a", "#a26e35", "#c08a4c", "#ead6b8", "#faf5ec"] },
+      "bronze-glow": { "role": "primary", "displayName": "Brilho Bronze", "canonical": "#e4bb83", "tonalRamp": ["#8a5c2a", "#a26e35", "#c08a4c", "#d8a767", "#e4bb83", "#ead6b8", "#f4ebdd", "#faf5ec"] },
+      "bronze-wash": { "role": "primary", "displayName": "Fundo Bronze", "canonical": "#f4ebdd", "tonalRamp": ["#8a5c2a", "#a26e35", "#c08a4c", "#d8a767", "#ead6b8", "#f4ebdd", "#faf5ec", "#fdfaf5"] },
+      "ink": { "role": "neutral", "displayName": "Tinta", "canonical": "#16241d", "tonalRamp": ["#0e1813", "#16241d", "#22362b", "#2b4236", "#3b4741", "#56615b", "#9aa49e", "#c6cbc4"] },
+      "green": { "role": "neutral", "displayName": "Verde", "canonical": "#22362b", "tonalRamp": ["#0e1813", "#16241d", "#22362b", "#2b4236", "#3b4741", "#56615b", "#9aa49e", "#c6cbc4"] },
+      "green-raised": { "role": "neutral", "displayName": "Verde Elevado", "canonical": "#2b4236", "tonalRamp": ["#16241d", "#22362b", "#2b4236", "#3b4741", "#56615b", "#68736c", "#9aa49e", "#c6cbc4"] },
+      "sage": { "role": "neutral", "displayName": "Verde Claro", "canonical": "#e6ece7", "tonalRamp": ["#3b4741", "#56615b", "#68736c", "#9aa49e", "#c6cbc4", "#dbe3dd", "#e6ece7", "#f3f6f3"] },
+      "paper": { "role": "neutral", "displayName": "Papel", "canonical": "#faf8f4", "tonalRamp": ["#3b4741", "#56615b", "#68736c", "#9aa49e", "#c6cbc4", "#e6e1d8", "#f4f2ed", "#faf8f4"] },
+      "white": { "role": "neutral", "displayName": "Branco", "canonical": "#ffffff", "tonalRamp": ["#56615b", "#68736c", "#9aa49e", "#c6cbc4", "#e6e1d8", "#f4f2ed", "#faf8f4", "#ffffff"] },
+      "line": { "role": "neutral", "displayName": "Linha", "canonical": "#ded7ca", "tonalRamp": ["#3b4741", "#56615b", "#68736c", "#9aa49e", "#c6cbc4", "#ded7ca", "#e6e1d8", "#f4f2ed"] },
+      "text": { "role": "neutral", "displayName": "Texto", "canonical": "#1e2622", "tonalRamp": ["#0e1813", "#1e2622", "#3b4741", "#56615b", "#68736c", "#9aa49e", "#c6cbc4", "#e6e1d8"] },
+      "muted": { "role": "neutral", "displayName": "Suave", "canonical": "#5c6761", "tonalRamp": ["#16241d", "#22362b", "#3b4741", "#5c6761", "#68736c", "#9aa49e", "#c6cbc4", "#e6e1d8"] },
+      "on-ink-muted": { "role": "neutral", "displayName": "Suave no escuro", "canonical": "#b9c5bd", "tonalRamp": ["#3b4741", "#56615b", "#68736c", "#9aa49e", "#b9c5bd", "#c6cbc4", "#e6ece7", "#f3f6f3"] },
+      "success": { "role": "semantic", "displayName": "Sucesso", "canonical": "#2f6b4a", "tonalRamp": ["#122a1d", "#1b3f2c", "#25553b", "#2f6b4a", "#4d8a68", "#86b39a", "#c3dccd", "#e2efe7"] },
+      "warning": { "role": "semantic", "displayName": "Aviso", "canonical": "#8f5f12", "tonalRamp": ["#3a2607", "#56390b", "#734c0e", "#8f5f12", "#b07f32", "#cfa96a", "#e8d3ad", "#f6eddc"] },
+      "error": { "role": "semantic", "displayName": "Erro", "canonical": "#9b3b2e", "tonalRamp": ["#3e1812", "#5d231b", "#7c2f25", "#9b3b2e", "#b65e51", "#d0918a", "#e9c6c0", "#f7e9e5"] },
+      "info": { "role": "semantic", "displayName": "Info", "canonical": "#3a5170", "tonalRamp": ["#17202d", "#233043", "#2e415a", "#3a5170", "#5a7190", "#8c9fb7", "#bfcad8", "#dce3ec"] }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Título do hero e aberturas de página; branco sobre foto ou tinta sobre pergaminho." },
-      "headline": { "displayName": "Headline", "purpose": "Títulos de seção da home, páginas institucionais e artigos." },
-      "title": { "displayName": "Title", "purpose": "Nome da unidade no card, títulos de bloco em formulários e FAQ." },
-      "body": { "displayName": "Body", "purpose": "Parágrafos e descrições; ~65 caracteres por linha em páginas editoriais." },
-      "label": { "displayName": "Label", "purpose": "Navegação, botões, rótulos de campo e títulos de coluna do rodapé; caixa alta espaçada." }
+      "display": { "displayName": "Display", "purpose": "Título do hero e aberturas de página em Jost 400; branco sobre foto ou tinta sobre papel; uma palavra pode vir em bronze com <em>, sem itálico." },
+      "headline": { "displayName": "Headline", "purpose": "Títulos de seção, páginas institucionais e artigos em Jost 400." },
+      "title": { "displayName": "Title", "purpose": "Nome da unidade, título de pilar, card e bloco de formulário em Jost 500." },
+      "numeral": { "displayName": "Numeral", "purpose": "Números de etapa (01, 02), percentuais e provas em Jost 300, bronze, 3 rem ou mais; classe .numeral." },
+      "eyebrow": { "displayName": "Chapéu", "purpose": "Rótulo acima do título de seção em Jost 500, caixa alta com 0,22 em, traço de 22 px antes; Bronze Profundo no claro, Bronze Claro no escuro; classe .chapeu." },
+      "body": { "displayName": "Body", "purpose": "Parágrafos em Source Sans 3 400, nunca 300; ~65 caracteres por linha em páginas editoriais." },
+      "label": { "displayName": "Label", "purpose": "Navegação, botões e rótulos de campo em Source Sans 3 600; caixa alta espaçada." }
     },
     "shadows": [
-      { "name": "rest", "value": "0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06)", "purpose": "Card e botão em repouso." },
-      { "name": "hover", "value": "0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06)", "purpose": "Card ao passar o mouse." },
-      { "name": "gold-lift", "value": "0 24px 48px -8px rgba(184, 154, 92, 0.18)", "purpose": "Cards de destaque com levantar de 6 px; a sombra carrega a cor da marca." },
-      { "name": "panel", "value": "0 25px 50px -12px rgb(0 0 0 / 0.15)", "purpose": "Painel de busca sobre a foto do hero e modais." }
+      { "name": "rest", "value": "0 1px 3px 0 rgb(20 36 29 / 0.06), 0 1px 2px -1px rgb(20 36 29 / 0.05)", "purpose": "Card e botão em repouso." },
+      { "name": "hover", "value": "0 10px 15px -3px rgb(20 36 29 / 0.08), 0 4px 6px -4px rgb(20 36 29 / 0.05)", "purpose": "Card ao passar o mouse." },
+      { "name": "lift", "value": "0 24px 48px -8px rgba(22, 36, 29, 0.16)", "purpose": "Cards de destaque com levantar de 6 px (.card-lift); sombra tingida de tinta verde." },
+      { "name": "panel", "value": "0 24px 48px -12px rgb(20 36 29 / 0.18)", "purpose": "Painel de busca sobre a foto do hero e modais." }
     ],
     "motion": [
       { "name": "fast", "value": "150ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Hover de botão e link." },
       { "name": "base", "value": "250ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Sombra e deslocamento de card." },
       { "name": "slow", "value": "400ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Painéis e menus." },
-      { "name": "spring", "value": "500ms cubic-bezier(0.34, 1.56, 0.64, 1)", "purpose": "Entrada de elementos de destaque; usar com parcimônia." },
-      { "name": "image-zoom", "value": "500ms ease-out", "purpose": "Zoom de 5% na foto do card no hover." },
-      { "name": "hero-crossfade", "value": "24s infinite", "purpose": "Troca das três fotos do hero; desligado com prefers-reduced-motion." }
+      { "name": "card-lift", "value": "350ms cubic-bezier(0.23, 1, 0.32, 1)", "purpose": "Levantar de 6 px dos cards de destaque." },
+      { "name": "hero-enter", "value": "500ms cubic-bezier(0.23, 1, 0.32, 1)", "purpose": "Entrada do texto do hero, escalonada em 80 ms; desligada com prefers-reduced-motion." },
+      { "name": "hero-crossfade", "value": "35s linear infinite", "purpose": "Troca das cinco fotos do hero, 7 s cada; desligado com prefers-reduced-motion." }
     ],
     "breakpoints": [
       { "name": "sm", "value": "640px" },
@@ -51,93 +59,110 @@
       "name": "Botão primário",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "CTA do cabeçalho e das páginas institucionais: tinta com texto ouro claro, reto, caixa alta espaçada.",
+      "description": "Reservar e enviar formulário: tinta verde com texto Bronze Claro, reto, caixa alta espaçada; hover em Verde.",
       "html": "<button class=\"ds-btn-primary\">Reservar</button>",
-      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; padding: 0.625rem 1.5rem; background: #0f0e0c; color: #d4b87a; font-family: Manrope, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border: 0; border-radius: 0; cursor: pointer; transition: background 150ms cubic-bezier(0.4,0,0.2,1), color 150ms cubic-bezier(0.4,0,0.2,1), transform 150ms; } .ds-btn-primary:hover { background: #b89a5c; color: #0f0e0c; } .ds-btn-primary:focus-visible { outline: 2px solid #b89a5c; outline-offset: 2px; } .ds-btn-primary:active { transform: scale(0.98); }"
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; padding: 0.625rem 1.5rem; background: #16241d; color: #d8a767; font-family: 'Source Sans 3', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; border: 0; border-radius: 0; cursor: pointer; transition: background 150ms cubic-bezier(0.4,0,0.2,1), color 150ms cubic-bezier(0.4,0,0.2,1), transform 150ms; } .ds-btn-primary:hover { background: #22362b; color: #d8a767; } .ds-btn-primary:focus-visible { outline: 2px solid #a26e35; outline-offset: 2px; } .ds-btn-primary:active { transform: scale(0.98); }"
+    },
+    {
+      "name": "Botão de ação",
+      "kind": "button",
+      "refersTo": "button-accent",
+      "description": "Ação do funil e CTA de proprietário: Bronze Claro com texto Tinta (7,4:1), raio 0,375 rem; hover em Brilho Bronze.",
+      "html": "<button class=\"ds-btn-accent\">Quero anunciar meu imóvel</button>",
+      "css": ".ds-btn-accent { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; padding: 0.75rem 1.5rem; background: #d8a767; color: #16241d; font-family: 'Source Sans 3', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid transparent; border-radius: 0.375rem; cursor: pointer; transition: background 150ms cubic-bezier(0.4,0,0.2,1), transform 150ms; } .ds-btn-accent:hover { background: #e4bb83; } .ds-btn-accent:focus-visible { outline: 2px solid #a26e35; outline-offset: 2px; } .ds-btn-accent:active { transform: scale(0.98); }"
     },
     {
       "name": "Botão outline (WhatsApp)",
       "kind": "button",
       "refersTo": "button-outline",
-      "description": "Ação secundária do cabeçalho: borda e texto em ouro, preenche no hover.",
+      "description": "Ação secundária do cabeçalho: borda de 1 px em Bronze, texto Bronze Profundo; no hover ganha Fundo Bronze.",
       "html": "<button class=\"ds-btn-outline\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7.9 20A9 9 0 1 0 4 16.1L2 22Z\"/></svg>WhatsApp</button>",
-      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; padding: 0.625rem 1.5rem; background: transparent; color: #b89a5c; border: 1px solid #b89a5c; border-radius: 0; font-family: Manrope, system-ui, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 150ms, color 150ms; } .ds-btn-outline:hover { background: #b89a5c; color: #0f0e0c; } .ds-btn-outline:focus-visible { outline: 2px solid #b89a5c; outline-offset: 2px; }"
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; padding: 0.625rem 1.5rem; background: transparent; color: #8a5c2a; border: 1px solid #a26e35; border-radius: 0; font-family: 'Source Sans 3', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 150ms, color 150ms; } .ds-btn-outline:hover { background: #f4ebdd; } .ds-btn-outline:focus-visible { outline: 2px solid #a26e35; outline-offset: 2px; }"
     },
     {
       "name": "Botão de busca",
       "kind": "button",
       "refersTo": "button-search",
-      "description": "Ação principal do funil: ouro cheio, 60 px de altura, raio 1,5 rem, lupa à esquerda.",
+      "description": "Ação principal do funil: Bronze Claro cheio com texto Tinta, 60 px de altura, raio 0,75 rem, lupa à esquerda.",
       "html": "<button class=\"ds-btn-search\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg>Buscar</button>",
-      "css": ".ds-btn-search { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 60px; padding: 0 2rem; background: #b89a5c; color: #0f0e0c; border: 0; border-radius: 1.5rem; font-family: Manrope, system-ui, sans-serif; font-size: 0.9375rem; font-weight: 700; cursor: pointer; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); transition: background 150ms, transform 150ms, box-shadow 250ms; } .ds-btn-search:hover { background: #d4b87a; box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.15); } .ds-btn-search:focus-visible { outline: 2px solid #0f0e0c; outline-offset: 2px; } .ds-btn-search:active { transform: scale(0.97); }"
+      "css": ".ds-btn-search { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 60px; padding: 0 2rem; background: #d8a767; color: #16241d; border: 0; border-radius: 0.75rem; font-family: 'Source Sans 3', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 0.9375rem; font-weight: 600; cursor: pointer; box-shadow: 0 10px 15px -3px rgb(20 36 29 / 0.08), 0 4px 6px -4px rgb(20 36 29 / 0.05); transition: background 150ms, transform 150ms, box-shadow 250ms; } .ds-btn-search:hover { background: #e4bb83; box-shadow: 0 24px 48px -12px rgb(20 36 29 / 0.18); } .ds-btn-search:focus-visible { outline: 2px solid #16241d; outline-offset: 2px; } .ds-btn-search:active { transform: scale(0.98); }"
     },
     {
       "name": "Card de unidade",
       "kind": "card",
       "refersTo": "card",
-      "description": "Foto 4:3 com preço sobre gradiente, nome em Cormorant, bairro em Mudo, três metadados; flutua no hover.",
+      "description": "Foto 4:3 com preço sobre gradiente, nome em Jost 500, bairro em Suave, três metadados; borda em Linha, raio 0,75 rem, flutua no hover.",
       "html": "<a class=\"ds-card\" href=\"#\"><div class=\"ds-card-media\"><div class=\"ds-card-price\"><strong>R$ 420</strong><span>/noite</span></div></div><div class=\"ds-card-body\"><h3>Unique 22º Estúdio</h3><p class=\"ds-card-loc\">Consolação, São Paulo</p><p class=\"ds-card-meta\"><span>1 quarto</span><span>1 banheiro</span><span>4 hóspedes</span></p></div></a>",
-      "css": ".ds-card { display: block; max-width: 340px; background: #ffffff; border: 1px solid #e2e4e8; border-radius: 1rem; overflow: hidden; text-decoration: none; color: #0f0e0c; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06); transition: transform 250ms cubic-bezier(0.4,0,0.2,1), box-shadow 250ms cubic-bezier(0.4,0,0.2,1); } .ds-card:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.06); } .ds-card:focus-visible { outline: 2px solid #b89a5c; outline-offset: 2px; } .ds-card-media { position: relative; aspect-ratio: 4 / 3; background: linear-gradient(135deg, #b8a98a, #6e6252); } .ds-card-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6), transparent 55%); } .ds-card-price { position: absolute; right: 1rem; bottom: 1rem; z-index: 1; color: #fff; text-align: right; text-shadow: 0 1px 3px rgba(0,0,0,0.4); } .ds-card-price strong { display: block; font-family: Manrope, system-ui, sans-serif; font-size: 1.25rem; font-weight: 700; } .ds-card-price span { font-size: 0.75rem; opacity: 0.8; } .ds-card-body { padding: 1.25rem; } .ds-card-body h3 { margin: 0 0 0.375rem; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.125rem; font-weight: 600; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-card-loc { margin: 0 0 1rem; font-family: Manrope, system-ui, sans-serif; font-size: 0.875rem; color: #7a7060; } .ds-card-meta { display: flex; gap: 1rem; margin: 0; font-family: Manrope, system-ui, sans-serif; font-size: 0.875rem; color: #564e41; }"
+      "css": ".ds-card { display: block; max-width: 340px; background: #ffffff; border: 1px solid #ded7ca; border-radius: 0.75rem; overflow: hidden; text-decoration: none; color: #1e2622; box-shadow: 0 1px 3px 0 rgb(20 36 29 / 0.06), 0 1px 2px -1px rgb(20 36 29 / 0.05); transition: transform 250ms cubic-bezier(0.4,0,0.2,1), box-shadow 250ms cubic-bezier(0.4,0,0.2,1); } .ds-card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -6px rgb(20 36 29 / 0.12); } .ds-card:focus-visible { outline: 2px solid #a26e35; outline-offset: 2px; } .ds-card-media { position: relative; aspect-ratio: 4 / 3; background: linear-gradient(135deg, #b9c5bd, #56615b); } .ds-card-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,24,19,0.6), transparent 55%); } .ds-card-price { position: absolute; right: 1rem; bottom: 1rem; z-index: 1; color: #fff; text-align: right; text-shadow: 0 1px 3px rgba(0,0,0,0.4); } .ds-card-price strong { display: block; font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif; font-size: 1.25rem; font-weight: 700; } .ds-card-price span { font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif; font-size: 0.75rem; opacity: 0.85; } .ds-card-body { padding: 1.25rem; } .ds-card-body h3 { margin: 0 0 0.375rem; font-family: Jost, Futura, 'Century Gothic', sans-serif; font-size: 1.25rem; font-weight: 500; line-height: 1.2; color: #16241d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-card-loc { margin: 0 0 1rem; font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif; font-size: 0.875rem; color: #5c6761; } .ds-card-meta { display: flex; gap: 1rem; margin: 0; font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif; font-size: 0.8125rem; color: #5c6761; }"
     },
     {
       "name": "Campo de formulário",
       "kind": "input",
       "refersTo": "input",
-      "description": "Campo de contato e simulação: pergaminho, borda morna, raio 0,75 rem, 16 px para não dar zoom no iOS.",
+      "description": "Campo de contato e simulação: fundo Papel, borda em Linha, raio 0,75 rem, 16 px para não dar zoom no iOS; foco em Branco com anel Bronze.",
       "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Nome completo</span><input class=\"ds-input\" type=\"text\" placeholder=\"Seu nome\"></label>",
-      "css": ".ds-field { display: block; max-width: 340px; font-family: Manrope, system-ui, sans-serif; } .ds-field-label { display: block; margin: 0 0 0.375rem 0.75rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #7a7060; } .ds-input { width: 100%; padding: 0.75rem; font: inherit; font-size: 1rem; color: #0f0e0c; background: #f7f8fa; border: 1px solid #e2e4e8; border-radius: 0.75rem; transition: background 150ms, border-color 150ms, box-shadow 150ms; } .ds-input::placeholder { color: #a79d8d; } .ds-input:focus { outline: none; background: #ffffff; border-color: #b89a5c; box-shadow: 0 0 0 2px rgba(184, 154, 92, 0.35); } .ds-input:disabled { opacity: 0.5; cursor: not-allowed; }"
+      "css": ".ds-field { display: block; max-width: 340px; font-family: 'Source Sans 3', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; } .ds-field-label { display: block; margin: 0 0 0.375rem 0.75rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #5c6761; } .ds-input { width: 100%; box-sizing: border-box; padding: 0.75rem; font: inherit; font-size: 1rem; color: #1e2622; background: #faf8f4; border: 1px solid #ded7ca; border-radius: 0.75rem; transition: background 150ms, border-color 150ms, box-shadow 150ms; } .ds-input::placeholder { color: #68736c; } .ds-input:focus { outline: none; background: #ffffff; border-color: #a26e35; box-shadow: 0 0 0 2px rgba(162, 110, 53, 0.35); } .ds-input:disabled { opacity: 0.5; cursor: not-allowed; }"
     },
     {
       "name": "Navegação",
       "kind": "nav",
       "refersTo": "nav-link",
-      "description": "Links do cabeçalho em rótulo de 12 px em caixa alta espaçada; hover em ouro; item atual em ouro.",
+      "description": "Links do cabeçalho em Label de 12 px em caixa alta espaçada; link em Tinta, hover e página atual em Bronze Profundo.",
       "html": "<nav class=\"ds-nav\" aria-label=\"Principal\"><a href=\"#\">Acomodações</a><a href=\"#\">Blog</a><a href=\"#\">Quem Somos</a><a href=\"#\" aria-current=\"page\">Proprietários</a></nav>",
-      "css": ".ds-nav { display: flex; gap: 2.5rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(184, 154, 92, 0.2); font-family: Manrope, system-ui, sans-serif; } .ds-nav a { color: #0f0e0c; text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 0; transition: color 150ms; } .ds-nav a:hover, .ds-nav a[aria-current='page'] { color: #b89a5c; } .ds-nav a:focus-visible { outline: 2px solid #b89a5c; outline-offset: 4px; }"
+      "css": ".ds-nav { display: flex; gap: 2.5rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid #ded7ca; font-family: 'Source Sans 3', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; } .ds-nav a { color: #16241d; text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 0; transition: color 150ms; } .ds-nav a:hover, .ds-nav a[aria-current='page'] { color: #8a5c2a; } .ds-nav a:focus-visible { outline: 2px solid #a26e35; outline-offset: 4px; }"
     },
     {
-      "name": "Fio dourado",
+      "name": "Chapéu e fio",
       "kind": "custom",
-      "refersTo": "gold-line",
-      "description": "Marca de parágrafo sob títulos de seção e divisor em gradiente; a assinatura gráfica mais repetida.",
-      "html": "<div class=\"ds-gold-demo\"><h2>Como assumimos o seu imóvel</h2><span class=\"ds-gold-line\"></span><p>Um processo simples e transparente.</p><div class=\"ds-gold-divider\"></div></div>",
-      "css": ".ds-gold-demo { max-width: 420px; font-family: Manrope, system-ui, sans-serif; color: #0f0e0c; } .ds-gold-demo h2 { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.875rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; } .ds-gold-line { display: block; width: 2.5rem; height: 1px; background: #b89a5c; margin: 1rem 0 1.5rem; } .ds-gold-demo p { margin: 0 0 2rem; color: #7a7060; } .ds-gold-divider { height: 1px; background: linear-gradient(to right, transparent, #b89a5c 40%, #b89a5c 60%, transparent); }"
+      "refersTo": "chapeu",
+      "description": "Chapéu (traço de 22 px e caixa alta com 0,22 em) acima do título, destaque de palavra em bronze sem itálico e fio de 22 x 1,5 px (.gold-line); a assinatura gráfica da apresentação.",
+      "html": "<div class=\"ds-chapeu-demo\"><span class=\"ds-chapeu\">Para proprietários</span><h2>Seu imóvel, <em>bem cuidado</em></h2><span class=\"ds-gold-line\"></span><p>Um processo simples e transparente.</p></div>",
+      "css": ".ds-chapeu-demo { max-width: 460px; font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif; color: #1e2622; } .ds-chapeu { display: inline-flex; align-items: center; gap: 0.625rem; font-family: Jost, Futura, 'Century Gothic', sans-serif; font-size: 0.75rem; font-weight: 500; line-height: 1.3; letter-spacing: 0.22em; text-transform: uppercase; color: #8a5c2a; } .ds-chapeu::before { content: ''; flex: none; width: 22px; height: 1.5px; background: currentColor; } .ds-chapeu-demo h2 { margin: 0.75rem 0 0; font-family: Jost, Futura, 'Century Gothic', sans-serif; font-size: 2.25rem; font-weight: 400; letter-spacing: -0.005em; line-height: 1.12; color: #16241d; } .ds-chapeu-demo h2 em { font-style: normal; color: #a26e35; } .ds-gold-line { display: block; width: 22px; height: 1.5px; background: #a26e35; margin: 1rem 0 1.5rem; } .ds-chapeu-demo p { margin: 0; color: #5c6761; line-height: 1.55; }"
+    },
+    {
+      "name": "Pilar",
+      "kind": "custom",
+      "refersTo": "pilar",
+      "description": "Etapa numerada: fio de 2 px em Bronze no topo, número em .numeral (Jost 300, bronze), título em Title e texto em Suave; sem card em volta.",
+      "html": "<div class=\"ds-pilar\"><span class=\"ds-numeral\">01</span><h3>Vistoria e fotos</h3><p>Avaliamos o imóvel e produzimos o anúncio.</p></div>",
+      "css": ".ds-pilar { max-width: 260px; padding-top: 1.25rem; border-top: 2px solid #a26e35; font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif; } .ds-numeral { display: block; font-family: Jost, Futura, 'Century Gothic', sans-serif; font-size: 3rem; font-weight: 300; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: #a26e35; } .ds-pilar h3 { margin: 1rem 0 0.5rem; font-family: Jost, Futura, 'Century Gothic', sans-serif; font-size: 1.25rem; font-weight: 500; line-height: 1.2; color: #16241d; } .ds-pilar p { margin: 0; font-size: 1rem; line-height: 1.55; color: #5c6761; }"
     }
   ],
   "narrative": {
     "northStar": "O Hotel Boutique Discreto",
-    "overview": "A Vivare se apresenta como um hotel boutique que não precisa gritar. O dourado envelhecido (#b89a5c) é acabamento, não parede: aparece em fios de 1 px, em letras pequenas em caixa alta, no texto de um botão escuro, na borda de um card no tema noturno. O que ocupa a tela é a fotografia dos apartamentos e, sobre ela, uma serifa editorial (Cormorant Garamond) com peso e tamanho para parecer um título de revista de arquitetura. O texto corrido é um sans humanista (Manrope) levemente apertado, legível no celular com uma mão. Um grão de ruído quase imperceptível cobre a página inteira e tira o aspecto de tela plástica.\n\nHá dois mundos tonais, e os dois são a mesma casa: \"tinta\" (#0f0e0c) para o tema escuro e para o rodapé em qualquer tema, \"pergaminho\" (#f7f8fa) para o tema claro. Em ambos, os cards flutuam de leve sobre o fundo, com sombra ambiente discreta que cresce ao passar o mouse. A densidade é de hospitalidade, não de ferramenta: respiro generoso entre seções, poucos elementos por tela, uma ação principal por vez.\n\nDireção confirmada para refinamentos: flutuação suave na profundidade e componentes táteis e confiantes. Botões cheios e com altura de toque, dourado como cor de ação no funil de busca e reserva, cards com presença. A contenção fica na tipografia, no espaço e na raridade do dourado como superfície.",
+    "overview": "A identidade é a mesma da apresentação comercial ao proprietário (outubro de 2026): o site e o material de venda são a mesma casa. O bronze do logo (#a26e35) é acabamento, não parede. Ele aparece no traço antes do chapéu, no destaque de uma palavra do título, nos números grandes e leves, no fio de 2 px em cima de um pilar, no visto de uma lista. A tinta não é preta: é um verde quase preto (#16241d), usado no rodapé, nos blocos de destaque e no tema escuro. O claro é papel quente (#faf8f4), não cinza.\n\nOs títulos são em Jost, uma geométrica da mesma família do logotipo VIVARE, em peso leve (400 nos grandes, 500 nos pequenos). O texto corrido é Source Sans 3, legível no celular com uma mão. Não há serifa nem itálico: o destaque de uma palavra no título é bronze, em pé. Um grão de ruído quase imperceptível cobre a página e tira o aspecto de tela plástica.\n\nDireção confirmada para refinamentos: flutuação suave na profundidade e componentes táteis e confiantes. Botões cheios e com altura de toque, Bronze Claro como cor de ação, cards com presença. A contenção fica na tipografia, no espaço e na raridade do bronze como superfície.",
     "keyCharacteristics": [
-      "Dourado envelhecido como detalhe de acabamento, raramente como fundo largo.",
-      "Serifa Cormorant em títulos grandes; Manrope em tudo o que se lê de perto.",
-      "Rótulos em caixa alta espaçada (0,1 em a 0,25 em) como assinatura tipográfica.",
+      "Bronze do logo como acabamento: traços, números, destaques, ícones; superfície só em botão e faixa estreita.",
+      "Tinta verde quase preta e papel quente como os dois neutros opostos.",
+      "Jost leve nos títulos; Source Sans 3 em tudo o que se lê de perto.",
+      "Chapéu em caixa alta muito espaçada (0,22 em) com um traço de 22 px antes, como na apresentação.",
       "Fotografia da unidade manda; a interface recua com vidro fosco e sobreposições escuras.",
-      "Dois temas (claro e escuro) com os mesmos tokens de marca.",
-      "Grão global sutil, linhas douradas de 1 px como separadores."
+      "Dois temas (claro e escuro) com os mesmos tokens de marca."
     ],
     "rules": [
-      { "name": "The Gold Trim Rule", "body": "O dourado cobre no máximo um décimo de qualquer tela. Ele aparece em linhas, letras, ícones e no botão de ação; quando vira fundo, é de um botão, nunca de uma seção.", "section": "colors" },
-      { "name": "The Two Inks Rule", "body": "Texto sobre tinta usa Ouro Claro ou Pergaminho; texto sobre pergaminho usa Tinta ou Mudo. O Ouro base (#b89a5c) como texto corrido só é permitido em rótulos de 12 px ou mais, em peso 600 ou mais, e nunca para parágrafos.", "section": "colors" },
-      { "name": "The Serif Signs, Sans Informs Rule", "body": "Cormorant só em títulos e números de prova. Qualquer texto que o hóspede precise ler para agir (campo, botão, erro, preço com centavos) é Manrope.", "section": "typography" },
-      { "name": "The Spaced Caps Rule", "body": "Rótulos em caixa alta sempre têm espaçamento de 0,1 em ou mais e nunca passam de 13 px. Caixa alta sem espaçamento não existe no sistema.", "section": "typography" },
-      { "name": "The Soft Float Rule", "body": "Toda superfície interativa tem uma sombra de repouso e uma de hover. A diferença entre as duas é o feedback; nenhuma delas é dura o bastante para desenhar uma linha.", "section": "elevation" },
-      { "name": "The Dark Border Rule", "body": "No tema escuro, a separação de superfícies vem da borda rgba(184, 154, 92, 0.2) e do passo tonal entre Tinta e Tinta de Card, não de sombra.", "section": "elevation" }
+      { "name": "The Bronze Trim Rule", "body": "O bronze cobre no máximo um décimo de qualquer tela. Quando vira superfície, é de um botão, de um selo ou de uma faixa estreita, sempre em Bronze Claro com texto Tinta.", "section": "colors" },
+      { "name": "The Three Bronzes Rule", "body": "Bronze Claro sobre tinta, Bronze Profundo para texto pequeno sobre claro, Bronze para tudo que é grande ou não é texto. Texto tinta nunca vai sobre o Bronze base (3,7:1).", "section": "colors" },
+      { "name": "The Geometric Signs, Humanist Informs Rule", "body": "Jost só em títulos, números e chapéus. Texto que o hóspede precisa ler para agir (campo, botão, erro, preço com centavos) é Source Sans 3.", "section": "typography" },
+      { "name": "The Upright Rule", "body": "Não há itálico. Ênfase em título é cor (bronze); ênfase em texto é peso.", "section": "typography" },
+      { "name": "The Spaced Caps Rule", "body": "Caixa alta sempre com espaçamento de 0,1 em ou mais e no máximo 13 px.", "section": "typography" },
+      { "name": "The Soft Float Rule", "body": "Toda superfície interativa tem uma sombra de repouso e uma de hover, tingidas de tinta verde. Nenhuma é dura o bastante para desenhar uma linha.", "section": "elevation" },
+      { "name": "The Dark Border Rule", "body": "No tema escuro, a separação vem da borda rgba(216, 167, 103, 0.25) e do passo tonal entre Tinta, Verde e Verde Elevado, não de sombra.", "section": "elevation" }
     ],
     "dos": [
-      "Do deixar a fotografia da unidade ocupar o maior espaço da tela e colocar o texto sobre ela só com gradiente escuro de base ou vidro fosco.",
-      "Do usar Ouro Claro (#d4b87a) para qualquer texto dourado sobre Tinta; o Ouro base não passa em contraste ali.",
-      "Do manter botões de ação do funil com 44 px ou mais de altura e raio arredondado; manter os do cabeçalho retos.",
-      "Do dar a toda superfície interativa uma sombra de repouso e uma de hover (Soft Float Rule).",
-      "Do usar rótulos em caixa alta com espaçamento de 0,1 em ou mais e tamanho de 12 px a 13 px.",
-      "Do respeitar prefers-reduced-motion: o crossfade do hero vira imagem estática e as entradas por rolagem somem."
+      "Do deixar a fotografia da unidade ocupar o maior espaço da tela.",
+      "Do usar Bronze Claro para texto bronze sobre Tinta e Bronze Profundo para texto bronze pequeno sobre claro.",
+      "Do destacar uma palavra do título com <em> em bronze, sem itálico.",
+      "Do abrir seções com o chapéu e numerar etapas com pilares.",
+      "Do manter botões com 44 px ou mais de altura.",
+      "Do respeitar prefers-reduced-motion."
     ],
     "donts": [
-      "Don't usar o dourado como fundo de seção ou de blocos largos; ele é acabamento.",
-      "Don't usar Cormorant em texto de ação, campo, erro ou preço com centavos.",
-      "Don't introduzir uma terceira cor de destaque (azul, verde, laranja) fora dos estados semânticos de formulário.",
-      "Don't misturar cantos retos e arredondados dentro do mesmo grupo de botões.",
-      "Don't usar sombras duras ou bordas acima de 1 px para separar superfícies.",
-      "Don't colocar texto Mudo (#7a7060) sobre Tinta; no escuro o texto auxiliar é Cinza Morno."
+      "Don't usar serifa ou itálico.",
+      "Don't pôr texto Tinta sobre o Bronze base; use Bronze Claro.",
+      "Don't usar o bronze como fundo de seção inteira.",
+      "Don't usar preto puro ou cinza azulado; os escuros são verdes e os cinzas são tingidos de verde.",
+      "Don't usar Source Sans 3 em peso 300.",
+      "Don't introduzir uma terceira cor de destaque fora dos estados semânticos."
     ]
   }
 }

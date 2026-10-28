@@ -114,7 +114,7 @@ export default async function TermosPage() {
     return (
         <main className="min-h-screen pt-10 md:pt-14 pb-20 bg-background-light dark:bg-background-dark">
             <div className="mx-auto max-w-3xl px-6 lg:px-10">
-                <span className="text-xs font-bold uppercase tracking-[.3em] text-primary-deep dark:text-primary-light">Legal</span>
+                <span className="chapeu">Legal</span>
                 <h1 className="font-display text-4xl md:text-5xl font-light text-ink dark:text-parchment mt-2 mb-4">{title}</h1>
                 <span className="gold-line"></span>
                 <p className="text-sm text-secondary-text mb-12">Última atualização: Março de 2026</p>

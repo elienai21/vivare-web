@@ -52,10 +52,10 @@ export async function FeaturedListings() {
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div className="max-w-2xl">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold text-neutral-900 dark:text-white mb-4">
+                        <h2 className="text-3xl md:text-4xl font-display font-normal text-neutral-900 dark:text-white mb-4">
                             Destaques Exclusivos
                         </h2>
-                        <p className="text-lg text-neutral-600 dark:text-neutral-400 font-light">
+                        <p className="text-lg text-neutral-600 dark:text-neutral-400">
                             Uma seleção das nossas propriedades mais desejadas, oferecendo o máximo em conforto e estilo.
                         </p>
                     </div>

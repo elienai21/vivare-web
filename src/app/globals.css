@@ -13,35 +13,40 @@
    ============================================ */
 
 :root {
-  /* ---- Marca: Ouro Envelhecido ---- */
-  --color-primary: #b89a5c;        /* Ouro: fios, ícones, fundos de botão */
-  --color-primary-light: #d4b87a;  /* Ouro Claro: texto dourado sobre tinta */
-  --color-primary-deep: #7a6536;   /* Ouro Profundo: texto dourado sobre claro e sobre o véu (≥4,5:1) */
-  --color-primary-dim: rgba(184, 154, 92, 0.12); /* Véu Dourado */
+  /* ---- Marca: Bronze (o dourado do logo) ----
+     Mesma identidade da apresentação comercial ao proprietário. */
+  --color-primary: #a26e35;        /* Bronze: fios, ícones, números grandes (texto ≥24 px) */
+  --color-primary-light: #d8a767;  /* Bronze Claro: texto sobre tinta (7,4:1) e fundo de botão */
+  --color-primary-deep: #8a5c2a;   /* Bronze Profundo: texto pequeno sobre claro (5,4:1) */
+  --color-primary-glow: #e4bb83;   /* Hover dos botões em bronze claro */
+  --color-primary-dim: #f4ebdd;    /* Fundo Bronze: faixas, ícones em círculo, dias no calendário */
 
-  /* ---- Neutros ---- */
-  --color-ink: #0f0e0c;
-  --color-ink-card: #161410;
-  --color-parchment: #f7f8fa;
-  --color-paper: #ffffff;
-  --color-warm-mid: #e2e4e8;
-  --color-muted: #7a7060;          /* só sobre pergaminho/papel */
+  /* ---- Neutros: tinta verde e papel quente ---- */
+  --color-ink: #16241d;            /* Tinta: verde quase preto, fundos escuros e títulos */
+  --color-ink-card: #22362b;       /* Verde: blocos escuros e cards no tema escuro */
+  --color-ink-raised: #2b4236;     /* Verde elevado: menus e widget no tema escuro */
+  --color-sage: #e6ece7;           /* Verde Claro: avisos e selos de segurança */
+  --color-parchment: #faf8f4;      /* Papel: fundo do tema claro */
+  --color-paper: #ffffff;          /* Branco: cards */
+  --color-warm-mid: #ded7ca;       /* Linha: bordas e divisórias */
+  --color-muted: #5c6761;          /* Suave: texto secundário sobre claro (5,5:1) */
+  --color-text: #1e2622;           /* Texto corrido */
   --color-background-light: var(--color-parchment);
   --color-background-dark: var(--color-ink);
 
   /* ---- Semânticas ---- */
-  --color-success: hsl(152, 69%, 36%);
-  --color-success-light: hsl(152, 69%, 95%);
-  --color-warning: hsl(38, 92%, 40%);
-  --color-warning-light: hsl(38, 92%, 95%);
-  --color-error: hsl(0, 72%, 45%);
-  --color-error-light: hsl(0, 72%, 95%);
-  --color-info: hsl(210, 100%, 40%);
-  --color-info-light: hsl(210, 100%, 95%);
+  --color-success: #2f6b4a;
+  --color-success-light: #e2efe7;
+  --color-warning: #8f5f12;
+  --color-warning-light: #f6eddc;
+  --color-error: #9b3b2e;          /* Negativo da apresentação */
+  --color-error-light: #f7e9e5;
+  --color-info: #3a5170;
+  --color-info-light: #dce3ec;
 
   /* ---- Superfície (muda com o tema) ---- */
   --background: var(--color-parchment);
-  --foreground: var(--color-ink);
+  --foreground: var(--color-text);
   --card-background: var(--color-paper);
   --card-border: var(--color-warm-mid);
   --text-secondary: var(--color-muted);
@@ -53,17 +58,18 @@
   --space-12: 3rem; --space-16: 4rem; --space-20: 5rem; --space-24: 6rem;
 
   /* ---- Sombras (flutuação suave) ---- */
-  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.03);
-  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.06);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.15);
-  --shadow-gold: 0 24px 48px -8px rgba(184, 154, 92, 0.18);
+  /* Sombras tingidas de tinta verde, como as folhas da apresentação */
+  --shadow-xs: 0 1px 2px 0 rgb(20 36 29 / 0.04);
+  --shadow-sm: 0 1px 3px 0 rgb(20 36 29 / 0.06), 0 1px 2px -1px rgb(20 36 29 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(20 36 29 / 0.07), 0 2px 4px -2px rgb(20 36 29 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(20 36 29 / 0.08), 0 4px 6px -4px rgb(20 36 29 / 0.05);
+  --shadow-xl: 0 12px 30px -6px rgb(20 36 29 / 0.12);
+  --shadow-2xl: 0 24px 48px -12px rgb(20 36 29 / 0.18);
+  --shadow-gold: 0 24px 48px -8px rgba(22, 36, 29, 0.16);
 
   /* ---- Raios ---- */
   --radius-none: 0; --radius-sm: 0.25rem; --radius-md: 0.5rem; --radius-lg: 0.75rem;
-  --radius-xl: 1rem; --radius-2xl: 1.5rem; --radius-full: 9999px;
+  --radius-xl: 0.75rem; --radius-2xl: 1rem; --radius-full: 9999px;
 
   /* ---- Movimento ---- */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -83,54 +89,20 @@
 .dark,
 [data-theme='dark'] {
   --background: var(--color-ink);
-  --foreground: var(--color-parchment);
+  --foreground: #f6f1e8;
   --card-background: var(--color-ink-card);
-  --card-border: rgba(184, 154, 92, 0.2);
-  --text-secondary: var(--color-warm-mid);
+  --card-border: rgba(216, 167, 103, 0.25);
+  --text-secondary: #b9c5bd;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light):not([data-theme='light']) {
     --background: var(--color-ink);
-    --foreground: var(--color-parchment);
+    --foreground: #f6f1e8;
     --card-background: var(--color-ink-card);
-    --card-border: rgba(184, 154, 92, 0.2);
-    --text-secondary: var(--color-warm-mid);
+    --card-border: rgba(216, 167, 103, 0.25);
+    --text-secondary: #b9c5bd;
   }
-}
-
-/* ============================================
-   PRÉVIA: PALETA PROPOSTA (comparação, não é a oficial)
-   Ativada por <html data-palette="v2">, via o seletor PaletteToggle
-   (só aparece em desenvolvimento ou com ?comparar=1). Sem o atributo,
-   nada muda. Para adotar: copiar estes valores para o :root acima e
-   apagar este bloco e o PaletteToggle.
-   ============================================ */
-:root[data-palette='v2'] {
-  /* Neutros claros quentes (antes cinza-azulados, matiz 220°) */
-  --color-parchment: #f7f4ee;   /* Linho: fundo do tema claro */
-  --color-paper: #fdfbf7;       /* Papel: cards */
-  --color-warm-mid: #e6dfd2;    /* Areia: bordas no claro, texto auxiliar no escuro */
-  --color-muted: #6f6555;       /* Texto secundário no claro: 5,2:1 (antes 4,6:1) */
-
-  /* Degraus do escuro: card e elevado se separam do fundo */
-  --color-ink-card: #1d1a15;
-  --color-ink-raised: #26221c;
-
-  /* Status sóbrios e quentes, todos ≥ 5:1 como texto sobre papel */
-  --color-success: #3d7a57;
-  --color-success-light: #e9f2ec;
-  --color-error: #a8432f;
-  --color-error-light: #f7e9e5;
-  --color-warning: #8f5f12;
-  --color-warning-light: #f6eddc;
-  --color-info: #3b6584;
-  --color-info-light: #e7eef3;
-}
-:root[data-palette='v2'].dark .bg-card,
-:root[data-palette='v2'].dark .card {
-  /* No escuro, superfícies interativas (widget, menus) sobem um degrau */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 /* ============================================
@@ -153,6 +125,7 @@
   --color-primary-light: var(--color-primary-light);
   --color-primary-deep: var(--color-primary-deep);
   --color-primary-dim: var(--color-primary-dim);
+  --color-primary-glow: var(--color-primary-glow);
   --color-background-light: var(--color-background-light);
   --color-background-dark: var(--color-background-dark);
   --color-ink: var(--color-ink);
@@ -161,6 +134,9 @@
   --color-paper: var(--color-paper);
   --color-warm-mid: var(--color-warm-mid);
   --color-muted: var(--color-muted);
+  --color-ink-raised: var(--color-ink-raised);
+  --color-sage: var(--color-sage);
+  --color-text: var(--color-text);
 
   --color-success: var(--color-success);
   --color-success-light: var(--color-success-light);
@@ -172,30 +148,44 @@
   --color-info-light: var(--color-info-light);
 
   /* Escala legada → marca */
-  --color-primary-50: #f6f1e6;
-  --color-primary-100: #eee5d0;
-  --color-primary-200: #e2d1ae;
-  --color-primary-300: #d4b87a;
-  --color-primary-400: #c6a96a;
-  --color-primary-500: #b89a5c;
-  --color-primary-600: #7a6536;
-  --color-primary-700: #6b5a32;
-  --color-primary-800: #2a2212;
-  --color-primary-900: #161410;
-  --color-primary-foreground: #0f0e0c;
-  --color-accent-50: #f6f1e6;
-  --color-accent-400: #d4b87a;
-  --color-accent-500: #b89a5c;
-  --color-accent-600: #7a6536;
-  --color-accent-900: #0f0e0c;
-  --color-accent: #f1ebdd;
-  --color-accent-foreground: #0f0e0c;
-  --color-secondary: #e2e4e8;
-  --color-secondary-foreground: #0f0e0c;
+  --color-primary-50: #faf5ec;
+  --color-primary-100: #f4ebdd;
+  --color-primary-200: #ead6b8;
+  --color-primary-300: #d8a767;
+  --color-primary-400: #c08a4c;
+  --color-primary-500: #a26e35;
+  --color-primary-600: #8a5c2a;
+  --color-primary-700: #6f4a22;
+  --color-primary-800: #22362b;
+  --color-primary-900: #16241d;
+  --color-primary-foreground: #ffffff;
+  --color-accent-50: #faf5ec;
+  --color-accent-400: #d8a767;
+  --color-accent-500: #a26e35;
+  --color-accent-600: #8a5c2a;
+  --color-accent-900: #16241d;
+  --color-accent: #f4ebdd;
+  --color-accent-foreground: #16241d;
+  --color-secondary: #f1ede5;
+  --color-secondary-foreground: #16241d;
   --color-destructive: var(--color-error);
   --color-destructive-foreground: #ffffff;
-  --color-ring: #b89a5c;
-  --color-input: #e2e4e8;
+  --color-ring: #a26e35;
+  --color-input: #ded7ca;
+
+  /* Cinzas do Tailwind tingidos de verde, como o "suave" da apresentação.
+     Mesma luminância da escala padrão nos tons de texto (400 a 900). */
+  --color-neutral-50: #faf8f4;
+  --color-neutral-100: #f4f2ed;
+  --color-neutral-200: #e6e1d8;
+  --color-neutral-300: #c6cbc4;
+  --color-neutral-400: #9aa49e;
+  --color-neutral-500: #68736c;
+  --color-neutral-600: #56615b;
+  --color-neutral-700: #3b4741;
+  --color-neutral-800: #22362b;
+  --color-neutral-900: #16241d;
+  --color-neutral-950: #0e1813;
   --color-ring-offset-background: var(--background);
 
   --shadow-gold: var(--shadow-gold);
@@ -219,16 +209,26 @@
     font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
     background: var(--background);
     color: var(--foreground);
-    line-height: 1.6;
-    letter-spacing: -0.01em;
+    line-height: 1.55;
   }
 
+  /* Títulos em Jost leve, como na apresentação: peso 400 nos grandes,
+     500 nos pequenos, destaque em bronze sem itálico (<em>). */
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display), Georgia, serif;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
+    font-family: var(--font-display), "Futura", "Century Gothic", "Segoe UI", sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+    line-height: 1.15;
     text-wrap: balance;
+  }
+  h3, h4, h5, h6 { font-weight: 500; line-height: 1.2; }
+  :where(h1, h2, h3, h4, h5, h6, .font-display, .display-text) em {
+    font-style: normal;
+    color: var(--color-primary);
+  }
+  .dark :where(h1, h2, h3, h4, h5, h6, .font-display, .display-text) em,
+  :where(.bg-ink, .bg-ink-card) :where(h1, h2, h3, h4, h5, h6, .font-display, .display-text) em {
+    color: var(--color-primary-light);
   }
 
   /* Controles: sem seleção de texto ao segurar, sem atraso de toque */
@@ -245,7 +245,7 @@
   }
 
   ::selection {
-    background: rgba(184, 154, 92, 0.35);
+    background: rgba(216, 167, 103, 0.4);
     color: var(--color-ink);
   }
   .dark ::selection {
@@ -254,7 +254,7 @@
 
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(122, 112, 96, 0.45); border-radius: var(--radius-full); }
+  ::-webkit-scrollbar-thumb { background: rgba(92, 103, 97, 0.45); border-radius: var(--radius-full); }
   ::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
 
   /* Texto rico vindo do CMS / Stays (plugin typography) herda os tokens */
@@ -278,10 +278,44 @@
 @layer components {
   .display-text { font-family: var(--font-display); }
 
+  /* Chapéu: rótulo acima do título, com o traço de bronze antes.
+     Igual ao .chapeu da apresentação. */
+  .chapeu {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-primary-deep);
+  }
+  .chapeu::before {
+    content: "";
+    flex: none;
+    width: 22px;
+    height: 1.5px;
+    background: currentColor;
+  }
+  .dark .chapeu,
+  :where(.bg-ink, .bg-ink-card) .chapeu { color: var(--color-primary-light); }
+
+  /* Número grande e leve (01, 02, 18%), como nos pilares da apresentação */
+  .numeral {
+    font-family: var(--font-display);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-primary);
+  }
+
   .gold-line {
     display: block;
-    width: 2.5rem;
-    height: 1px;
+    width: 22px;
+    height: 1.5px;
     background: var(--color-primary);
     margin: 1rem 0 1.5rem;
   }
@@ -298,7 +332,7 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
   .dark .glass {
-    background: rgba(15, 14, 12, 0.72);
+    background: rgba(22, 36, 29, 0.78);
     border-color: rgba(255, 255, 255, 0.1);
   }
 
@@ -323,7 +357,7 @@
     min-height: 2.75rem;
     font-weight: 600;
     padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-lg);
+    border-radius: 0.375rem;
     transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
     cursor: pointer;
     border: 1px solid transparent;
@@ -333,15 +367,15 @@
   .btn:active { transform: scale(0.98); }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Primário: tinta com texto ouro claro (reto nos CTAs institucionais) */
+  /* Primário: tinta verde com texto bronze claro */
   .btn-primary { background: var(--color-ink); color: var(--color-primary-light); }
-  .dark .btn-primary { background: var(--color-parchment); color: var(--color-ink); }
+  .dark .btn-primary { background: var(--color-primary-light); color: var(--color-ink); }
 
   /* Secundário: contorno */
   .btn-secondary { background: transparent; color: var(--foreground); border-color: var(--card-border); }
 
-  /* Ação do funil: ouro cheio, texto tinta (antes apontava para token inexistente) */
-  .btn-accent { background: var(--color-primary); color: var(--color-ink); }
+  /* Ação do funil: bronze claro com texto tinta (7,4:1), o botão da apresentação */
+  .btn-accent { background: var(--color-primary-light); color: var(--color-ink); }
 
   .focus-ring:focus-visible {
     outline: 2px solid var(--color-primary);
@@ -382,7 +416,7 @@
   .react-datepicker__current-month,
   .react-datepicker__day-name,
   .react-datepicker__day { color: var(--foreground); }
-  .react-datepicker__current-month { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; }
+  .react-datepicker__current-month { font-family: var(--font-display); font-size: 1.125rem; font-weight: 500; }
   .react-datepicker__day,
   .react-datepicker__day-name {
     width: 2.75rem;
@@ -395,9 +429,9 @@
   .react-datepicker__day--range-start,
   .react-datepicker__day--range-end,
   .react-datepicker__day--keyboard-selected {
-    background: var(--color-primary) !important;
-    color: var(--color-ink) !important;
-    font-weight: 700;
+    background: var(--color-ink) !important;
+    color: var(--color-primary-light) !important;
+    font-weight: 600;
   }
   .react-datepicker__day--in-range,
   .react-datepicker__day--in-selecting-range { background: var(--color-primary-dim) !important; color: var(--foreground) !important; }
@@ -412,9 +446,10 @@
   .card:hover { box-shadow: var(--shadow-lg); }
   .card-interactive:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl); }
   .card-lift:hover { transform: translateY(-6px); box-shadow: var(--shadow-gold); }
-  .btn-primary:hover { background: var(--color-primary); color: var(--color-ink); }
+  .btn-primary:hover { background: var(--color-ink-card); color: var(--color-primary-light); }
+  .dark .btn-primary:hover { background: var(--color-primary-glow); color: var(--color-ink); }
   .btn-secondary:hover { background: var(--color-primary-dim); border-color: var(--color-primary); }
-  .btn-accent:hover { background: var(--color-primary-light); }
+  .btn-accent:hover { background: var(--color-primary-glow); }
   .react-datepicker__day:hover { background: var(--color-primary-dim); }
 }
 
@@ -519,12 +554,12 @@ body::before {
   font-size: 11px;
   font-weight: 600;
   line-height: 1.2;
-  color: #1a1a1a;
+  color: var(--color-ink);
   background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--color-warm-mid);
   border-radius: 6px;
   padding: 3px 7px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1px 4px rgba(20, 36, 29, 0.18);
   white-space: nowrap;
 }
 .leaflet-tooltip.vivare-map-label::before {

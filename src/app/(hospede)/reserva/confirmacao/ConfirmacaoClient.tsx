@@ -74,7 +74,7 @@ export function ConfirmacaoClient() {
     )}`;
 
     const Primary = ({ href, children }: { href: string; children: React.ReactNode }) => (
-        <Link href={href} className="inline-flex min-h-12 items-center justify-center bg-ink px-6 text-xs font-bold uppercase tracking-widest text-primary-light transition-colors hover:bg-primary hover:text-ink dark:bg-parchment dark:text-ink">
+        <Link href={href} className="inline-flex min-h-12 items-center justify-center bg-ink px-6 text-xs font-bold uppercase tracking-widest text-primary-light transition-colors hover:bg-primary-light hover:text-ink dark:bg-parchment dark:text-ink">
             {children}
         </Link>
     );
@@ -91,12 +91,12 @@ export function ConfirmacaoClient() {
     if (status === "failed") {
         return (
             <section className="mx-auto max-w-2xl">
-                <h1 className="font-display text-4xl font-bold md:text-5xl">Esta reserva não foi concluída.</h1>
+                <h1 className="font-display text-4xl font-normal md:text-5xl">Esta reserva não foi concluída.</h1>
                 <span className="gold-line" aria-hidden="true"></span>
                 <p className="text-base text-secondary-text">O pagamento não foi confirmado ou a reserva expirou. Nenhum valor foi cobrado. Você pode tentar de novo ou falar com a gente.</p>
                 <div className="mt-8 flex flex-wrap gap-3">
                     <Primary href="/unidades">Ver acomodações</Primary>
-                    <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-2 border border-primary px-6 text-xs font-semibold uppercase tracking-widest text-primary-deep hover:bg-primary hover:text-ink dark:text-primary-light">
+                    <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-2 border border-primary px-6 text-xs font-semibold uppercase tracking-widest text-primary-deep hover:bg-primary-light hover:text-ink dark:text-primary-light">
                         <MessageCircle className="h-4 w-4" aria-hidden="true" /> Falar no WhatsApp
                     </a>
                 </div>
@@ -112,7 +112,7 @@ export function ConfirmacaoClient() {
                 <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
                 {booked ? "Reserva confirmada" : "Pagamento recebido"}
             </p>
-            <h1 className="mt-3 font-display text-4xl font-bold md:text-5xl">
+            <h1 className="mt-3 font-display text-4xl font-normal md:text-5xl">
                 {booked ? "Tudo certo. Sua estadia está reservada." : "Recebemos seu pagamento."}
             </h1>
             <span className="gold-line" aria-hidden="true"></span>
@@ -129,7 +129,7 @@ export function ConfirmacaoClient() {
                     {checkout.staysBookingCode && (
                         <div className="sm:col-span-2">
                             <dt className="text-xs font-semibold uppercase tracking-widest text-secondary-text">Código da reserva</dt>
-                            <dd className="font-display text-2xl font-bold">{checkout.staysBookingCode}</dd>
+                            <dd className="font-display text-2xl font-medium">{checkout.staysBookingCode}</dd>
                         </div>
                     )}
                     <div className="sm:col-span-2">
@@ -155,7 +155,7 @@ export function ConfirmacaoClient() {
                 </dl>
             )}
 
-            <h2 className="mt-10 font-display text-2xl font-bold">O que acontece agora</h2>
+            <h2 className="mt-10 font-display text-2xl font-medium">O que acontece agora</h2>
             <ul className="mt-4 space-y-4">
                 <li className="flex gap-3">
                     <Mail className="mt-0.5 h-5 w-5 shrink-0 text-primary-deep dark:text-primary-light" aria-hidden="true" />
@@ -172,10 +172,10 @@ export function ConfirmacaoClient() {
             </ul>
 
             <div className="mt-10 flex flex-wrap gap-3">
-                <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-2 bg-ink px-6 text-xs font-bold uppercase tracking-widest text-primary-light transition-colors hover:bg-primary hover:text-ink dark:bg-parchment dark:text-ink">
+                <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-2 bg-ink px-6 text-xs font-bold uppercase tracking-widest text-primary-light transition-colors hover:bg-primary-light hover:text-ink dark:bg-parchment dark:text-ink">
                     <MessageCircle className="h-4 w-4" aria-hidden="true" /> Falar com a equipe
                 </a>
-                <Link href="/" className="inline-flex min-h-12 items-center border border-primary px-6 text-xs font-semibold uppercase tracking-widest text-primary-deep transition-colors hover:bg-primary hover:text-ink dark:text-primary-light">
+                <Link href="/" className="inline-flex min-h-12 items-center border border-primary px-6 text-xs font-semibold uppercase tracking-widest text-primary-deep transition-colors hover:bg-primary-light hover:text-ink dark:text-primary-light">
                     Voltar ao início
                 </Link>
             </div>

@@ -31,10 +31,10 @@ export function Collections() {
         <section className="py-24 px-6 bg-white dark:bg-black">
             <div className="max-w-7xl mx-auto">
                 <div className="mb-12 text-center md:text-left">
-                    <h2 className="text-3xl md:text-4xl font-display font-bold text-neutral-900 dark:text-white mb-4">
+                    <h2 className="text-3xl md:text-4xl font-display font-normal text-neutral-900 dark:text-white mb-4">
                         Inspire-se por Coleções
                     </h2>
-                    <p className="text-lg text-neutral-600 dark:text-neutral-400 font-light max-w-2xl">
+                    <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl">
                         Descubra o cenário perfeito para sua próxima experiência inesquecível.
                     </p>
                 </div>
@@ -56,14 +56,14 @@ export function Collections() {
 
                             <div className="absolute bottom-0 left-0 p-8 w-full">
                                 <div className="flex items-center justify-between mb-2">
-                                    <h3 className="text-2xl font-bold text-white font-display">
+                                    <h3 className="text-2xl font-medium text-white font-display">
                                         {collection.title}
                                     </h3>
                                     <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
                                         <ArrowUpRight className="w-5 h-5 text-white" />
                                     </div>
                                 </div>
-                                <p className="text-white/80 font-light text-sm line-clamp-2 transform translate-y-2 opacity-80 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                <p className="text-white/80 text-sm line-clamp-2 transform translate-y-2 opacity-80 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                                     {collection.description}
                                 </p>
                             </div>

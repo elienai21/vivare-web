@@ -219,7 +219,7 @@ export function OwnerPopup() {
                     </button>
 
                     <div className="mb-8 pr-8">
-                        <h2 id="owner-popup-title" className="text-2xl md:text-3xl font-display font-bold text-neutral-950 mb-3 tracking-tight">
+                        <h2 id="owner-popup-title" className="text-2xl md:text-3xl font-display font-normal text-neutral-950 mb-3 tracking-tight">
                             Antes de falar com nosso time, conte rapidamente sobre seu imóvel
                         </h2>
                         <p id="owner-popup-description" className="text-neutral-600 leading-relaxed text-[15px]">
@@ -248,7 +248,7 @@ export function OwnerPopup() {
                         <div className="space-y-5">
                             <div className="flex items-center gap-3 border-b pb-2 mb-4">
                                 <span className="w-6 h-6 rounded-full bg-neutral-900 text-white flex items-center justify-center text-xs font-bold">1</span>
-                                <h3 className="font-semibold text-neutral-900">Informações Obrigatórias</h3>
+                                <h3 className="font-medium text-neutral-900">Informações Obrigatórias</h3>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -314,7 +314,7 @@ export function OwnerPopup() {
                         <div className="space-y-4 pt-2">
                             <div className="flex items-center gap-3 border-b pb-2 mb-4">
                                 <span className="w-6 h-6 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center text-xs font-bold">2</span>
-                                <h3 className="font-semibold text-neutral-900 border-none">Informações Opcionais <span className="text-neutral-400 font-normal text-sm ml-1">(Ajuda muito!)</span></h3>
+                                <h3 className="font-medium text-neutral-900 border-none">Informações Opcionais <span className="text-neutral-400 font-normal text-sm ml-1">(Ajuda muito!)</span></h3>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

@@ -124,7 +124,7 @@ export default async function UnidadesPage({
                             autoComplete="off"
                             className="px-5 py-3 bg-transparent w-full min-h-12 outline-none text-base text-foreground placeholder:text-secondary-text font-medium"
                         />
-                        <button type="submit" className="bg-primary hover:bg-primary-light text-ink px-5 md:px-8 font-bold transition-colors flex items-center gap-2 tracking-wide">
+                        <button type="submit" className="bg-primary-light hover:bg-primary-glow text-ink px-5 md:px-8 font-bold transition-colors flex items-center gap-2 tracking-wide">
                             <Search className="w-[18px] h-[18px]" aria-hidden="true" /> Buscar
                         </button>
                     </div>
@@ -185,7 +185,7 @@ export default async function UnidadesPage({
                 {/* Left Side - Results Grid */}
                 <div className="w-full lg:w-[55%] xl:w-[60%] px-4 lg:pl-8 lg:pr-6 py-8 flex flex-col h-full min-h-[500px]">
                     <div className="mb-6">
-                        <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">
+                        <h1 className="font-display text-3xl md:text-4xl font-normal text-foreground">
                             Acomodações em {dest ? dest : "São Paulo, Santos e Guarujá"}
                         </h1>
                         <p className="mt-1 text-base text-secondary-text" aria-live="polite">
@@ -197,13 +197,13 @@ export default async function UnidadesPage({
                     {listings.length === 0 ? (
                         <div className="flex-1 flex flex-col items-center justify-center text-center py-20">
                             <SearchX className="w-16 h-16 text-secondary-text/50 mb-4" aria-hidden="true" />
-                            <h2 className="font-display text-xl font-bold mb-2">Nenhuma unidade para esses filtros</h2>
+                            <h2 className="font-display text-xl font-medium mb-2">Nenhuma unidade para esses filtros</h2>
                             <p className="text-secondary-text mb-6 max-w-md">
                                 {hasDateFilter
                                     ? 'Não há unidades livres nas datas e filtros escolhidos. Experimente outras datas ou outro bairro.'
                                     : 'Experimente outro bairro ou limpe os filtros para ver todas as unidades.'}
                             </p>
-                            <Link href="/unidades" className="inline-flex min-h-12 items-center rounded-full bg-ink px-8 text-sm font-bold text-primary-light transition-colors hover:bg-primary hover:text-ink dark:bg-parchment dark:text-ink">Ver todas as unidades</Link>
+                            <Link href="/unidades" className="inline-flex min-h-12 items-center rounded-full bg-ink px-8 text-sm font-bold text-primary-light transition-colors hover:bg-primary-light hover:text-ink dark:bg-parchment dark:text-ink">Ver todas as unidades</Link>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -233,7 +233,7 @@ export default async function UnidadesPage({
                                             <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep dark:text-primary-light truncate">
                                                 {item.address.region}{item.address.region && item.address.city ? ', ' : ''}{item.address.city}
                                             </p>
-                                            <h2 className="mt-1 font-display font-bold text-lg leading-tight text-foreground group-hover:text-primary-deep dark:group-hover:text-primary-light transition-colors line-clamp-2" title={item._mstitle.pt_BR}>
+                                            <h2 className="mt-1 font-display font-medium text-lg leading-tight text-foreground group-hover:text-primary-deep dark:group-hover:text-primary-light transition-colors line-clamp-2" title={item._mstitle.pt_BR}>
                                                 {item._mstitle.pt_BR}
                                             </h2>
                                         </div>

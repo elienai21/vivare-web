@@ -109,7 +109,7 @@ export default async function Home() {
         <div className="relative z-20 flex flex-col items-center px-6 text-center">
           <div className="max-w-4xl space-y-5">
             <h1
-              className="hero-enter hero-enter-1 font-display font-semibold text-white leading-[1.05] text-[clamp(2.25rem,6vw,5.5rem)] drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+              className="hero-enter hero-enter-1 font-display font-normal text-white leading-[1.05] text-[clamp(2.25rem,6vw,5.5rem)] drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
               dangerouslySetInnerHTML={{ __html: content.heroTitle }}
             />
             <p className="hero-enter hero-enter-2 mx-auto max-w-xl text-base md:text-lg text-parchment/95 leading-relaxed whitespace-pre-line drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
@@ -130,7 +130,7 @@ export default async function Home() {
 
             {/* Nota */}
             <div className="flex items-center gap-2.5">
-              <span className="text-2xl font-display font-bold text-white leading-none">{PROOF.rating}</span>
+              <span className="text-2xl font-display font-medium text-white leading-none">{PROOF.rating}</span>
               <div>
                 <div className="flex gap-0.5" role="img" aria-label={`Nota ${PROOF.rating} de 5`}>
                   {[...Array(5)].map((_, i) => (
@@ -145,7 +145,7 @@ export default async function Home() {
 
             {/* Avaliações */}
             <div className="text-center">
-              <p className="text-2xl font-display font-bold text-white leading-none">{PROOF.reviews}</p>
+              <p className="text-2xl font-display font-medium text-white leading-none">{PROOF.reviews}</p>
               <p className="text-[11px] text-white/70 uppercase tracking-widest mt-0.5">Avaliações verificadas</p>
             </div>
 
@@ -181,7 +181,7 @@ export default async function Home() {
       <section className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
         <div className="mb-14 flex items-end justify-between reveal">
           <div>
-            <span className="text-xs font-bold uppercase tracking-[.3em] text-primary-deep dark:text-primary-light">Coleção Exclusiva</span>
+            <span className="chapeu">Coleção Exclusiva</span>
             <h2 className="font-display font-light text-ink dark:text-parchment mt-1 text-[clamp(2rem,3.5vw,3rem)]">
               Experiências <em>Vivare</em>
             </h2>
@@ -213,7 +213,7 @@ export default async function Home() {
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-primary-deep tracking-wider uppercase dark:text-primary-light">{listing.address.region}, {listing.address.city}</p>
-                  <h3 className="font-display text-xl font-semibold text-ink dark:text-parchment line-clamp-2 mt-1">{listing._mstitle.pt_BR}</h3>
+                  <h3 className="font-display text-xl font-medium text-ink dark:text-parchment line-clamp-2 mt-1">{listing._mstitle.pt_BR}</h3>
                 </div>
                 <span className="gold-line" style={{ margin: '0.75rem 0 0.5rem', width: '2rem' }}></span>
                 {/* A Stays não expõe preço mínimo por unidade; até existir um
@@ -238,7 +238,7 @@ export default async function Home() {
         </div>
 
         <div className="mt-10 text-center md:hidden">
-          <Link href="/unidades" className="inline-flex min-h-12 items-center border border-primary text-primary-deep px-8 font-bold text-xs uppercase tracking-widest transition-colors hover:bg-primary hover:text-ink dark:text-primary-light">
+          <Link href="/unidades" className="inline-flex min-h-12 items-center border border-primary text-primary-deep px-8 font-bold text-xs uppercase tracking-widest transition-colors hover:bg-primary-light hover:text-ink dark:text-primary-light">
             Mostrar todas
           </Link>
         </div>
@@ -250,7 +250,7 @@ export default async function Home() {
       <section className="bg-background py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 reveal">
-            <span className="text-xs font-bold uppercase tracking-[.3em] text-primary-deep dark:text-primary-light">Para quem hospeda</span>
+            <span className="chapeu">Para quem hospeda</span>
             <h2 className="font-display font-light text-ink dark:text-parchment mt-2 text-[clamp(2rem,3.5vw,3rem)]">
               O Padrão <em>Vivare</em>
             </h2>
@@ -272,7 +272,7 @@ export default async function Home() {
                 <div className="flex h-11 w-11 items-center justify-center border border-primary text-primary-deep dark:text-primary-light">
                   <Icon className="w-5 h-5" aria-hidden="true" />
                 </div>
-                <h3 className="font-display text-xl font-semibold text-ink dark:text-parchment">{title}</h3>
+                <h3 className="font-display text-xl font-medium text-ink dark:text-parchment">{title}</h3>
                 <p className="text-sm leading-relaxed text-secondary-text">{text}</p>
               </li>
             ))}
@@ -284,7 +284,7 @@ export default async function Home() {
       <section className="bg-ink py-24 border-t border-primary/20">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="mb-14 reveal">
-            <span className="text-xs font-bold uppercase tracking-[.3em] text-primary-light">Quem hospedou aqui</span>
+            <span className="chapeu text-primary-light">Quem hospedou aqui</span>
             <h2 className="font-display font-light text-parchment mt-2 text-[clamp(1.8rem,3vw,2.8rem)]">
               O que nossos <em>hóspedes</em> dizem
             </h2>
@@ -298,7 +298,7 @@ export default async function Home() {
                   <Star key={i} className="w-3.5 h-3.5 text-primary fill-primary" aria-hidden="true" />
                 ))}
               </div>
-              <p className="font-display text-lg font-light italic text-warm-mid leading-relaxed mb-6">
+              <p className="font-display text-lg font-light not-italic text-warm-mid leading-relaxed mb-6">
                 &quot;O apartamento estava ainda melhor do que nas fotos. Localização perfeita, tudo impecavelmente limpo. Sem dúvida a melhor hospedagem que já tive em São Paulo.&quot;
               </p>
               <div>
@@ -313,7 +313,7 @@ export default async function Home() {
                   <Star key={i} className="w-3.5 h-3.5 text-primary fill-primary" aria-hidden="true" />
                 ))}
               </div>
-              <p className="font-display text-lg font-light italic text-warm-mid leading-relaxed mb-6">
+              <p className="font-display text-lg font-light not-italic text-warm-mid leading-relaxed mb-6">
                 &quot;Já fico na Vivare toda vez que venho a SP — há mais de um ano. A equipe tem uma atenção que você não encontra em hotel. Indico pra todo mundo sem hesitar.&quot;
               </p>
               <div>
@@ -328,7 +328,7 @@ export default async function Home() {
                   <Star key={i} className="w-3.5 h-3.5 text-primary fill-primary" aria-hidden="true" />
                 ))}
               </div>
-              <p className="font-display text-lg font-light italic text-warm-mid leading-relaxed mb-6">
+              <p className="font-display text-lg font-light not-italic text-warm-mid leading-relaxed mb-6">
                 &quot;Seriedade, rapidez no atendimento, excelentes localizações em SP e preços que fazem sentido. Equipe nota 10 do início ao fim.&quot;
               </p>
               <div>
@@ -361,7 +361,7 @@ export default async function Home() {
           )}
 
           <div className="relative z-10 p-8 md:p-16 lg:w-7/12 reveal">
-            <span className="text-xs font-bold uppercase tracking-[.3em] text-primary-light">Para proprietários</span>
+            <span className="chapeu text-primary-light">Para proprietários</span>
             <h2 className="font-display font-light text-parchment mt-3 leading-[1.1] text-[clamp(2rem,3.5vw,3.2rem)]">
               Seu imóvel rende. <em>Você não opera.</em>
             </h2>
@@ -371,7 +371,7 @@ export default async function Home() {
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <Link href="/para-proprietarios" className="inline-flex min-h-12 items-center gap-2 bg-primary text-ink px-8 text-xs font-bold tracking-widest uppercase transition-colors hover:bg-primary-light">
+              <Link href="/para-proprietarios" className="inline-flex min-h-12 items-center gap-2 bg-primary-light text-ink px-8 text-xs font-bold tracking-widest uppercase transition-colors hover:bg-primary-glow">
                 <Handshake className="w-4 h-4" aria-hidden="true" />
                 Conhecer a gestão
               </Link>

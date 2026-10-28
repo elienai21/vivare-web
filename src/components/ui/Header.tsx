@@ -85,7 +85,7 @@ export function Header() {
                             href={WHATSAPP_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hidden xl:inline-flex min-h-11 items-center gap-2 rounded-none border border-primary-deep px-5 text-xs font-semibold tracking-widest uppercase text-primary-deep transition-colors hover:bg-primary hover:border-primary hover:text-ink dark:border-primary dark:text-primary-light dark:hover:text-ink"
+                            className="hidden xl:inline-flex min-h-11 items-center gap-2 rounded-none border border-primary-deep px-5 text-xs font-semibold tracking-widest uppercase text-primary-deep transition-colors hover:bg-primary-light hover:border-primary hover:text-ink dark:border-primary dark:text-primary-light dark:hover:text-ink"
                         >
                             <MessageCircle className="w-4 h-4" aria-hidden="true" />
                             WhatsApp
@@ -93,7 +93,7 @@ export function Header() {
 
                         <Link
                             href="/unidades"
-                            className="hidden lg:inline-flex min-h-11 items-center rounded-none bg-ink px-5 text-xs font-bold tracking-widest uppercase text-primary-light transition-colors hover:bg-primary hover:text-ink dark:bg-parchment dark:text-ink dark:hover:bg-primary"
+                            className="hidden lg:inline-flex min-h-11 items-center rounded-none bg-ink px-5 text-xs font-bold tracking-widest uppercase text-primary-light transition-colors hover:bg-primary-light hover:text-ink dark:bg-parchment dark:text-ink dark:hover:bg-primary-light"
                         >
                             Reservar
                         </Link>
@@ -138,7 +138,7 @@ export function Header() {
                         <Link
                             href="/unidades"
                             onClick={() => setIsMenuOpen(false)}
-                            className="flex min-h-12 w-full items-center justify-center rounded-none bg-ink px-6 text-xs font-bold tracking-widest uppercase text-primary-light transition-colors hover:bg-primary hover:text-ink dark:bg-parchment dark:text-ink"
+                            className="flex min-h-12 w-full items-center justify-center rounded-none bg-ink px-6 text-xs font-bold tracking-widest uppercase text-primary-light transition-colors hover:bg-primary-light hover:text-ink dark:bg-parchment dark:text-ink"
                         >
                             Reservar Agora
                         </Link>
@@ -146,7 +146,7 @@ export function Header() {
                             href={WHATSAPP_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="mt-2 flex min-h-12 w-full items-center justify-center gap-2 rounded-none border border-primary px-6 text-xs font-semibold tracking-widest uppercase text-primary-deep transition-colors hover:bg-primary hover:text-ink dark:text-primary-light"
+                            className="mt-2 flex min-h-12 w-full items-center justify-center gap-2 rounded-none border border-primary px-6 text-xs font-semibold tracking-widest uppercase text-primary-deep transition-colors hover:bg-primary-light hover:text-ink dark:text-primary-light"
                         >
                             <MessageCircle className="w-4 h-4" aria-hidden="true" />
                             Falar no WhatsApp

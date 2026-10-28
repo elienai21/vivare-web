@@ -176,7 +176,7 @@ export default function PropertyMap({ listings, singleView }: PropertyMapProps) 
 
             groups.forEach(({ lat: mLat, lng: mLng, units }) => {
                 const icon = singleView
-                    ? makeEmojiIcon('🏠', '#b89a5c', 36)
+                    ? makeEmojiIcon('🏠', '#a26e35', 36)
                     : new L.Icon.Default();
 
                 const first = units[0];
@@ -187,7 +187,7 @@ export default function PropertyMap({ listings, singleView }: PropertyMapProps) 
                 const popupHtml = `
                     <div style="font-family:system-ui;font-size:13px;width:200px">
                         ${units.map((u) => `
-                            <a href="/unidades/${u.id}" target="_blank" style="display:block;font-weight:bold;color:#1a1a1a;text-decoration:none;margin-top:6px">
+                            <a href="/unidades/${u.id}" target="_blank" style="display:block;font-weight:bold;color:#16241d;text-decoration:none;margin-top:6px">
                                 ${u.title}
                             </a>
                         `).join('')}

@@ -373,7 +373,7 @@ export function CheckoutWizard({
         return (
             <div className="flex flex-col items-center justify-center min-h-[400px] animate-in fade-in py-12">
                 <Loader2 className="w-12 h-12 animate-spin text-primary-500 mb-4" />
-                <h3 className="text-xl font-semibold font-display">Confirmando disponibilidade...</h3>
+                <h3 className="text-xl font-medium font-display">Confirmando disponibilidade...</h3>
                 <p className="text-neutral-500">Estamos bloqueando suas datas com segurança.</p>
             </div>
         );
@@ -450,7 +450,7 @@ export function CheckoutWizard({
                                 </div>
                             )}
                             <div>
-                                <h4 className="font-semibold text-sm line-clamp-2">{listing.name}</h4>
+                                <h4 className="font-medium text-sm line-clamp-2">{listing.name}</h4>
                                 <p className="text-xs text-neutral-500 mt-1">
                                     {listing.address.neighborhood}, {listing.address.city}
                                 </p>

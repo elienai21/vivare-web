@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 export default function NotFound() {
     return (
         <main className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-start justify-center px-6 py-20 lg:px-10">
-            <p className="text-xs font-semibold uppercase tracking-widest text-primary-deep dark:text-primary-light">Erro 404</p>
-            <h1 className="mt-3 font-display text-4xl font-bold text-foreground md:text-5xl">
+            <p className="chapeu">Erro 404</p>
+            <h1 className="mt-3 font-display text-4xl font-normal text-foreground md:text-5xl">
                 Esta página não existe mais.
             </h1>
             <span className="gold-line" aria-hidden="true"></span>
@@ -22,7 +22,7 @@ export default function NotFound() {
             <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                     href="/unidades"
-                    className="inline-flex min-h-12 items-center bg-ink px-6 text-xs font-bold uppercase tracking-widest text-primary-light transition-colors hover:bg-primary hover:text-ink dark:bg-parchment dark:text-ink"
+                    className="inline-flex min-h-12 items-center bg-ink px-6 text-xs font-bold uppercase tracking-widest text-primary-light transition-colors hover:bg-primary-light hover:text-ink dark:bg-parchment dark:text-ink"
                 >
                     Ver acomodações
                 </Link>
@@ -30,7 +30,7 @@ export default function NotFound() {
                     href={WHATSAPP_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-12 items-center border border-primary px-6 text-xs font-semibold uppercase tracking-widest text-primary-deep transition-colors hover:bg-primary hover:text-ink dark:text-primary-light"
+                    className="inline-flex min-h-12 items-center border border-primary px-6 text-xs font-semibold uppercase tracking-widest text-primary-deep transition-colors hover:bg-primary-light hover:text-ink dark:text-primary-light"
                 >
                     Falar no WhatsApp
                 </a>

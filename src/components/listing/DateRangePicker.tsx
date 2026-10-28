@@ -218,7 +218,7 @@ export function DateRangePicker({
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <span className="font-display font-semibold text-lg capitalize">
+            <span className="font-display font-medium text-lg capitalize">
               {new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(monthDate)}
             </span>
             <button

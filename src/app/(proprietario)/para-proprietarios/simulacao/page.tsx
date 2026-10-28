@@ -17,8 +17,8 @@ export default function SimulacaoPage() {
             <div className="container mx-auto px-4 max-w-xl">
 
                 <div className="text-center mb-10">
-                    <span className="text-primary-600 font-bold tracking-widest uppercase text-sm mb-4 block">Gratuito · Sem Compromisso</span>
-                    <h1 className="text-3xl md:text-4xl font-display font-bold mb-4">
+                    <span className="chapeu mb-4">Gratuito · Sem Compromisso</span>
+                    <h1 className="text-3xl md:text-4xl font-display font-normal mb-4">
                         Quanto seu imóvel pode faturar com a Vivare?
                     </h1>
                     <p className="text-lg text-neutral-600">

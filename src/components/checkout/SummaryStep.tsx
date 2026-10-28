@@ -70,13 +70,13 @@ export function SummaryStep({
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-            <h2 className="text-2xl font-bold font-display">Conferir sua viagem</h2>
+            <h2 className="text-2xl font-medium font-display">Conferir sua viagem</h2>
 
             <div className="space-y-6">
                 {/* Dates */}
                 <div className="flex justify-between items-center py-4 border-b border-neutral-100 dark:border-neutral-800">
                     <div>
-                        <h3 className="font-semibold text-lg">Datas</h3>
+                        <h3 className="font-medium text-lg">Datas</h3>
                         <p className="text-neutral-500">
                             {format(new Date(checkIn + 'T00:00:00'), 'dd/MM/yyyy')} – {format(new Date(checkOut + 'T00:00:00'), 'dd/MM/yyyy')}
                         </p>
@@ -93,7 +93,7 @@ export function SummaryStep({
                 {/* Guests */}
                 <div className="flex justify-between items-center py-4 border-b border-neutral-100 dark:border-neutral-800">
                     <div>
-                        <h3 className="font-semibold text-lg">Hóspedes</h3>
+                        <h3 className="font-medium text-lg">Hóspedes</h3>
                         <p className="text-neutral-500">
                             {guests.adults + guests.children} hóspedes
                             {guests.infants > 0 && `, ${guests.infants} bebês`}
@@ -111,7 +111,7 @@ export function SummaryStep({
                 {/* Price breakdown (only when quote available) */}
                 {quote && breakdown && (
                     <div className="py-4 border-b border-neutral-100 dark:border-neutral-800">
-                        <h3 className="font-semibold text-lg mb-3">Resumo de preços</h3>
+                        <h3 className="font-medium text-lg mb-3">Resumo de preços</h3>
                         <dl className="space-y-2 text-sm">
                             <div className="flex justify-between">
                                 <dt className="text-neutral-500">Diárias</dt>
@@ -231,7 +231,7 @@ export function SummaryStep({
 
                 {/* Rules or Info */}
                 <div className="py-4">
-                    <h3 className="font-semibold text-lg mb-2">Regras da casa</h3>
+                    <h3 className="font-medium text-lg mb-2">Regras da casa</h3>
                     <p className="text-sm text-neutral-500">
                         Check-in: {listing.checkInTime || '15:00'}<br />
                         Check-out: {listing.checkOutTime || '11:00'}

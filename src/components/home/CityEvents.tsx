@@ -49,14 +49,14 @@ export function CityEvents() {
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div>
-                        <h2 className="text-sm font-bold text-accent-600 uppercase tracking-widest mb-3">
+                        <h2 className="text-sm font-medium text-accent-600 uppercase tracking-widest mb-3">
                             Vivare Culture
                         </h2>
-                        <h3 className="text-3xl md:text-4xl font-display font-bold text-neutral-900 dark:text-white">
+                        <h3 className="text-3xl md:text-4xl font-display font-normal text-neutral-900 dark:text-white">
                             O que acontece em São Paulo
                         </h3>
                     </div>
-                    <p className="max-w-md text-neutral-500 font-light">
+                    <p className="max-w-md text-neutral-500">
                         Descubra os eventos mais exclusivos da cidade e reserve sua estadia premium próxima ao local.
                     </p>
                 </div>
@@ -94,7 +94,7 @@ export function CityEvents() {
                                     {event.date}
                                 </div>
 
-                                <h4 className="text-xl font-bold text-neutral-900 dark:text-white mb-2 line-clamp-1">
+                                <h4 className="text-xl font-medium text-neutral-900 dark:text-white mb-2 line-clamp-1">
                                     {event.title}
                                 </h4>
 

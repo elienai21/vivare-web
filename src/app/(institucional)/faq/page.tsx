@@ -62,13 +62,13 @@ export default async function FaqPage() {
         <main className="min-h-screen pt-10 md:pt-14 pb-12 bg-neutral-50">
             <div className="container mx-auto px-4 max-w-4xl">
                 <div className="text-center mb-16">
-                    <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">{pageTitle}</h1>
+                    <h1 className="text-4xl md:text-5xl font-display font-normal mb-4">{pageTitle}</h1>
                     <p className="text-xl text-neutral-600">Encontre respostas para as dúvidas mais comuns sobre a Vivare.</p>
                 </div>
 
                 {/* Guest FAQs */}
                 <section className="mb-16">
-                    <h2 className="text-2xl font-display font-bold mb-8 border-b pb-4">Para Hóspedes</h2>
+                    <h2 className="text-2xl font-display font-medium mb-8 border-b pb-4">Para Hóspedes</h2>
                     <div className="space-y-4">
                         {guestFaqs.map((faq, i) => (
                             <details key={i} className="group border border-neutral-200 rounded-xl bg-white shadow-sm">
@@ -85,7 +85,7 @@ export default async function FaqPage() {
                 {/* Owner FAQs */}
                 {ownerFaqs.length > 0 && (
                     <section className="mb-16">
-                        <h2 className="text-2xl font-display font-bold mb-8 border-b pb-4">Para Proprietários</h2>
+                        <h2 className="text-2xl font-display font-medium mb-8 border-b pb-4">Para Proprietários</h2>
                         <div className="space-y-4">
                             {ownerFaqs.map((faq, i) => (
                                 <details key={i} className="group border border-neutral-200 rounded-xl bg-white shadow-sm">
@@ -102,7 +102,7 @@ export default async function FaqPage() {
 
                 {/* CTA */}
                 <section className="text-center bg-white border border-neutral-200 rounded-2xl p-10 shadow-sm">
-                    <h2 className="text-2xl font-display font-bold mb-4">Ainda tem dúvidas?</h2>
+                    <h2 className="text-2xl font-display font-medium mb-4">Ainda tem dúvidas?</h2>
                     <p className="text-neutral-600 mb-6">Fale diretamente com nossa equipe pelo WhatsApp.</p>
                     <a
                         href="https://wa.me/5511985067840?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%20a%20Vivare."

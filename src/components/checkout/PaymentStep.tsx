@@ -79,7 +79,7 @@ function CheckoutForm({
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-            <h2 className="text-2xl font-bold font-display">Pagamento Seguro</h2>
+            <h2 className="text-2xl font-medium font-display">Pagamento Seguro</h2>
 
             <div className="bg-white p-4 rounded-xl border border-neutral-200">
                 <PaymentElement />
@@ -140,7 +140,7 @@ export function PaymentStep({
         return (
             <div className="flex flex-col items-center justify-center h-64 text-center px-6">
                 <AlertCircle className="w-10 h-10 text-amber-500 mb-4" aria-hidden="true" />
-                <h3 className="text-lg font-semibold mb-2">Pagamento indisponível</h3>
+                <h3 className="text-lg font-medium mb-2">Pagamento indisponível</h3>
                 <p className="text-sm text-neutral-500 max-w-md">
                     A integração de pagamento não está configurada nesse ambiente.
                     Configure <code className="px-1.5 py-0.5 bg-neutral-100 rounded">NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY</code> e
@@ -162,11 +162,17 @@ export function PaymentStep({
     return (
         <Elements stripe={stripePromise} options={{
             clientSecret,
+            // O formulário do Stripe roda num iframe e não enxerga o next/font;
+            // a fonte do texto do site é carregada pelo endereço do Google Fonts.
+            fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&display=swap' }],
             appearance: {
                 theme: 'stripe',
                 variables: {
-                    colorPrimary: '#b89a5c',
-                    fontFamily: 'Manrope, system-ui, sans-serif',
+                    colorPrimary: '#a26e35',
+                    colorText: '#1e2622',
+                    colorDanger: '#9b3b2e',
+                    borderRadius: '6px',
+                    fontFamily: '"Source Sans 3", system-ui, sans-serif',
                 }
             }
         }}>
