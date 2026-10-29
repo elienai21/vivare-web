@@ -6,6 +6,40 @@ export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 export const DEFAULT_OG_IMAGE = `/og-img.png`;
 
 /**
+ * Números de prova públicos — fonte única para todas as páginas.
+ * Antes cada página tinha o próprio valor e eles divergiam (revisão T11).
+ *
+ * Fonte: perfil Vivare Stay no Airbnb (Superhost), conferido em 10/2026.
+ * Só o que o PRODUCT.md autoriza: nota, avaliações, tempo hospedando, ano de
+ * início e cidades. Nada de ocupação ou ganho.
+ */
+export const PROOF = {
+  rating: '4,84',
+  reviews: 900,
+  hostingYears: 5,
+  foundedYear: 2021,
+  cities: ['São Paulo', 'Santos', 'Guarujá'] as const,
+} as const;
+
+/**
+ * Fotos do hero da home, escolhidas a dedo entre as ~2.000 fotos das unidades
+ * na Stays (10/2026). Critérios: horizontais, ≥ 2560 px, com profundidade e
+ * vista, que continuam bonitas sob o escurecimento do título e a caixa de
+ * busca. Uma por unidade, para variar o portfólio. A primeira é a candidata
+ * a LCP. Para trocar, basta colar outra URL de imagem da Stays.
+ */
+export const HERO_PHOTOS = [
+  { url: 'https://vivare.stays.net/image/64e56cb0dc1330c131bfe487', alt: 'Piscina no rooftop ao pôr do sol, Vila Clementino', listingId: 'XQ02H' },
+  { url: 'https://vivare.stays.net/image/6a341d884b1a6d3b7937777b', alt: 'Sala com vista para a cidade ao entardecer, 20º andar na Vila Clementino', listingId: 'LE02J' },
+  { url: 'https://vivare.stays.net/image/64bb133fe387822f0c8a55fa', alt: 'Piscina aquecida no rooftop com o horizonte de São Paulo, Pinheiros', listingId: 'WK02H' },
+  { url: 'https://vivare.stays.net/image/665e588b0bc9f6948ed611ec', alt: 'Varanda com mesa de jantar e vista para Moema ao pôr do sol', listingId: 'IN02I' },
+  { url: 'https://vivare.stays.net/image/6ac7ef9d5c1f7df6915a5145', alt: 'Piscina cercada de jardim vertical em Moema', listingId: 'OA02J' },
+] as const;
+
+export const CONTACT_EMAIL = 'contato@vivarestay.com';
+export const PHONE_DISPLAY = '+55 (11) 98506-7840';
+
+/**
  * GA4 Measurement ID. Configurado no `<head>` do layout.
  */
 export const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID || 'G-NS503CK9EC';

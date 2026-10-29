@@ -59,7 +59,7 @@ export default async function FaqPage() {
     const pageTitle = page?.content?.pageTitle || "Perguntas Frequentes";
 
     return (
-        <main className="min-h-screen pt-24 pb-12 bg-neutral-50">
+        <main className="min-h-screen pt-10 md:pt-14 pb-12 bg-neutral-50">
             <div className="container mx-auto px-4 max-w-4xl">
                 <div className="text-center mb-16">
                     <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">{pageTitle}</h1>

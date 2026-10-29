@@ -164,20 +164,21 @@ export function OwnerPopup() {
         const { [HONEYPOT_FIELD]: _hp, ...payload } = formData;
         void _hp;
 
+        // Abre o WhatsApp dentro do gesto do usuário (antes do await): depois
+        // de um await o iOS Safari bloqueia a nova aba.
+        const message = formatMessageForWhatsApp();
+        window.open(`https://wa.me/5511985067840?text=${message}`, "_blank", "noopener");
+        closeOwnerPopup();
+
         try {
             await addDoc(collection(db, "leads_proprietarios"), {
                 ...payload,
                 createdAt: serverTimestamp(),
                 source: "Popup_B2B",
             });
-            console.log("Lead B2B salvo no banco");
         } catch (error) {
             console.error("Erro ao salvar lead B2B:", error);
         }
-
-        const message = formatMessageForWhatsApp();
-        window.open(`https://wa.me/5511985067840?text=${message}`, "_blank");
-        closeOwnerPopup();
     };
 
     const handleSkipToWhatsApp = () => {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getPublishedPageServer } from "@/services/cmsServiceServer";
 import { formatImageUrl } from "@/lib/formatImage";
+import { fetchListings } from "@/services/staysService";
 
 export const metadata: Metadata = {
     title: "Quem Somos – A Experiência Vivare",
@@ -28,26 +29,30 @@ export default async function SobrePage() {
     const page = await getPublishedPageServer("sobre");
     const cms: Record<string, string> = (page?.content as Record<string, string>) || {};
 
+    // Sem foto no CMS, usa fotos reais das unidades (antes: banco de imagens
+    // apresentado como "sede" e "apartamento gerenciado").
+    const unitPhotos = (await fetchListings().catch(() => []))
+        .filter((l) => l.status === "active")
+        .map((l) => l._t_mainImageMeta?.url)
+        .filter((u): u is string => Boolean(u));
+    const heroPhoto = formatImageUrl(cms.heroImage) || unitPhotos[1] || unitPhotos[0];
+    const storyPhoto = formatImageUrl(cms.storyImage) || unitPhotos[2] || unitPhotos[0];
+    const founderPhoto = formatImageUrl(cms.founderPhoto);
+
     // Scroll-reveal classes are wired up by the global <ScrollObserver/>
     // mounted in app/layout.tsx — no need for a per-page useEffect.
 
     return (
         <main className="min-h-screen bg-[#0f0e0c] text-[#f5f0e8] font-sans selection:bg-[#b89a5c] selection:text-[#0f0e0c]">
 
-            {/* Grain Overlay */}
-            <div
-                className="fixed inset-0 pointer-events-none z-[9999] opacity-60 mix-blend-overlay"
-                style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`
-                }}
-            />
+
 
             {/* HERO SECTION */}
-            <section className="min-h-screen grid grid-cols-1 md:grid-cols-2 relative overflow-hidden pt-20 md:pt-0">
+            <section className="min-h-screen grid grid-cols-1 md:grid-cols-2 relative overflow-hidden">
                 <div className="relative h-[50vh] md:h-full overflow-hidden order-2 md:order-1 hidden md:block">
                     <Image
-                        src={formatImageUrl(cms.heroImage) || "https://images.unsplash.com/photo-1548142813-c348350df52b?w=1200&q=70"}
-                        alt="São Paulo – sede do Grupo Vivare"
+                        src={heroPhoto}
+                        alt="Interior de um apartamento gerenciado pela Vivare"
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover filter brightness-50 sepia-[.2] scale-105 animate-[slowZoom_14s_ease-out_forwards]"
@@ -61,8 +66,9 @@ export default async function SobrePage() {
                     <p className="text-[11px] tracking-[0.3em] uppercase text-[#b89a5c] mb-8 animate-[fadeUp_0.8s_0.4s_ease_forwards] opacity-0">
                         Grupo Vivare · São Paulo
                     </p>
-                    <h1 className="display-text text-5xl md:text-[5.5rem] font-light leading-[1.05] mb-8 animate-[fadeUp_0.9s_0.6s_ease_forwards] opacity-0">
-                        Cuidamos do<br />seu imóvel como<br /><em className="italic text-[#d4b87a]">se fosse nosso.</em>
+                    {/* Escala intermediária no tablet: a 768 px o 5.5rem quebrava em 7 linhas */}
+                    <h1 className="display-text text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-light leading-[1.05] mb-8 animate-[fadeUp_0.9s_0.6s_ease_forwards] opacity-0 text-balance">
+                        Cuidamos do seu imóvel como <em className="italic text-[#d4b87a]">se fosse nosso.</em>
                     </h1>
                     <div className="w-12 h-px bg-[#b89a5c] mb-8 animate-[fadeUp_0.8s_0.8s_ease_forwards] opacity-0" />
                     <p className="text-base leading-[1.8] text-[#e8e0d0] max-w-[38ch] animate-[fadeUp_0.8s_1s_ease_forwards] opacity-0 font-light">
@@ -70,7 +76,7 @@ export default async function SobrePage() {
                     </p>
                 </div>
 
-                <span className="absolute right-8 top-1/2 -translate-y-1/2 rotate-90 text-[10px] tracking-[0.3em] uppercase text-[#7a7060] whitespace-nowrap hidden md:block z-20">
+                <span className="absolute right-8 top-1/2 -translate-y-1/2 rotate-90 text-[11px] tracking-[0.3em] uppercase text-warm-mid/70 whitespace-nowrap hidden xl:block z-20" aria-hidden="true">
                     São Paulo · Santos · Guarujá
                 </span>
             </section>
@@ -111,7 +117,7 @@ export default async function SobrePage() {
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-32 items-center">
                     <div className="relative reveal w-full h-[400px] md:h-[520px]">
                         <Image
-                            src={formatImageUrl(cms.storyImage) || "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=900&q=70"}
+                            src={storyPhoto}
                             alt="Apartamento gerenciado pela Vivare"
                             fill
                             sizes="(max-width: 768px) 100vw, 50vw"
@@ -229,8 +235,9 @@ export default async function SobrePage() {
                     <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-12 md:gap-20 items-center">
                         <div className="relative reveal w-full h-[500px] md:h-[580px]">
                             <Image
-                                src={formatImageUrl(cms.founderPhoto) || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=70"}
-                                alt={cms.founderName || "Elienai Cordeiro – Fundador Grupo Vivare"}
+                                src={founderPhoto || storyPhoto}
+                                // Sem retrato no CMS, mostra uma unidade real e não finge ser o fundador.
+                                alt={founderPhoto ? (cms.founderName || "Elienai Cordeiro, fundador da Vivare") : "Apartamento gerenciado pela Vivare"}
                                 fill
                                 sizes="(max-width: 768px) 100vw, 40vw"
                                 className="object-cover object-top filter brightness-[0.75] sepia-[0.1]"

@@ -114,7 +114,7 @@ export function HeroSearch() {
                             if (!showSuggestions) setShowSuggestions(true);
                         }}
                         onFocus={() => setShowSuggestions(true)}
-                        className="w-full border-none bg-transparent p-0 text-sm font-semibold focus:ring-0 text-ink dark:text-parchment placeholder:text-neutral-400 focus:outline-none"
+                        className="w-full border-none bg-transparent p-0 text-base md:text-sm font-semibold focus:ring-0 text-ink dark:text-parchment placeholder:text-neutral-400 focus:outline-none"
                         placeholder="Para onde você vai?"
                         type="text"
                         autoComplete="off"
@@ -174,7 +174,7 @@ export function HeroSearch() {
                         id="hero-checkin"
                         value={checkIn}
                         onChange={(e) => setCheckIn(e.target.value)}
-                        className="w-full border-none bg-transparent p-0 text-sm font-semibold focus:ring-0 text-ink dark:text-parchment appearance-none focus:outline-none"
+                        className="w-full border-none bg-transparent p-0 text-base md:text-sm font-semibold focus:ring-0 text-ink dark:text-parchment appearance-none focus:outline-none"
                         type="date"
                     />
                 </div>
@@ -187,7 +187,7 @@ export function HeroSearch() {
                         id="hero-checkout"
                         value={checkOut}
                         onChange={(e) => setCheckOut(e.target.value)}
-                        className="w-full border-none bg-transparent p-0 text-sm font-semibold focus:ring-0 text-ink dark:text-parchment appearance-none focus:outline-none"
+                        className="w-full border-none bg-transparent p-0 text-base md:text-sm font-semibold focus:ring-0 text-ink dark:text-parchment appearance-none focus:outline-none"
                         type="date"
                     />
                 </div>
@@ -200,7 +200,7 @@ export function HeroSearch() {
                         id="hero-guests"
                         value={guests}
                         onChange={(e) => setGuests(e.target.value)}
-                        className="w-full border-none bg-transparent p-0 text-sm font-semibold focus:ring-0 text-neutral-900 dark:text-neutral-100 cursor-pointer focus:outline-none"
+                        className="w-full border-none bg-transparent p-0 text-base md:text-sm font-semibold focus:ring-0 text-neutral-900 dark:text-neutral-100 cursor-pointer focus:outline-none"
                     >
                         <option>1 Hóspede</option>
                         <option>2 Hóspedes</option>
@@ -212,7 +212,7 @@ export function HeroSearch() {
                 <div className="flex items-center justify-center p-2 lg:col-span-1 md:col-span-4">
                     <button
                         onClick={handleSearch}
-                        className="w-full h-full rounded-xl bg-[#1a1a1a] px-6 py-4 text-sm font-bold text-white shadow-lg shadow-black/10 transition-all hover:bg-[#2d2d2d] active:scale-95 flex items-center justify-center gap-2"
+                        className="w-full h-full rounded-xl bg-primary px-6 py-4 text-sm font-bold text-ink shadow-lg shadow-black/10 hover:bg-primary-light transition-all hover:bg-[#2d2d2d] active:scale-95 flex items-center justify-center gap-2"
                     >
                         <Search className="w-5 h-5" aria-hidden="true" />
                         Buscar

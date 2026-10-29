@@ -1,4 +1,6 @@
+import Link from "next/link";
 import type { Metadata } from "next";
+import { PROOF } from "@/lib/constants";
 import { OwnerPopupTrigger } from "@/components/ui/OwnerPopupTrigger";
 import { OwnerContactForm } from "@/components/forms/OwnerContactForm";
 
@@ -14,17 +16,17 @@ export const metadata: Metadata = {
 
 export default function ParaProprietariosPage() {
     return (
-        <main className="min-h-screen bg-neutral-50 text-neutral-900 pt-20">
+        <main className="min-h-screen bg-background text-foreground">
 
             {/* 1. Hero Orientado a Resultado */}
-            <section className="relative pt-32 pb-24 bg-neutral-950 text-white overflow-hidden">
+            <section className="relative pt-20 md:pt-28 pb-24 bg-ink text-white overflow-hidden">
                 <div className="container mx-auto px-4 max-w-5xl text-center relative z-10">
                     <span className="text-accent-400 font-bold tracking-widest uppercase text-sm mb-6 block">Gestão Profissional Vivare</span>
-                    <h1 className="text-5xl md:text-6xl font-display font-bold mb-6 leading-tight">
-                        Seu patrimônio valorizado,<br /> sua agenda vazia.
+                    <h1 className="text-5xl md:text-6xl font-display font-bold mb-6 leading-tight text-balance">
+                        Seu imóvel rende. Você não opera.
                     </h1>
-                    <p className="text-xl text-neutral-300 mb-10 max-w-3xl mx-auto">
-                        Aumente a rentabilidade do seu imóvel com a nossa inteligência de mercado e operação 360º. Nós cuidamos de tudo.
+                    <p className="text-xl text-warm-mid mb-10 max-w-3xl mx-auto">
+                        Gestão completa de locação por temporada em São Paulo, Santos e Guarujá: anúncio, hóspede, limpeza e manutenção por nossa conta. Cobramos só comissão sobre as reservas, com repasse no 5º dia útil.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <a href="#contato" className="btn btn-accent text-lg px-8 py-4">Quero uma Consultoria Gratuita</a>
@@ -34,24 +36,24 @@ export default function ParaProprietariosPage() {
             </section>
 
             {/* 2. Resultados (Números da Operação) */}
-            <section className="py-12 bg-white border-b border-neutral-200">
+            <section className="py-12 bg-card border-b border-card-border">
                 <div className="container mx-auto px-4">
-                    <div className="flex flex-wrap justify-center gap-12 md:gap-24 text-center">
+                    <div className="flex flex-wrap justify-center gap-10 md:gap-20 text-center">
                         <div>
-                            <p className="text-4xl font-display font-bold text-primary-600 mb-2">30+</p>
-                            <p className="text-sm text-neutral-500 font-semibold uppercase tracking-wider">Imóveis Gerenciados</p>
+                            <p className="text-4xl font-display font-bold text-primary-deep dark:text-primary-light mb-2">{PROOF.rating}</p>
+                            <p className="text-sm text-secondary-text font-semibold uppercase tracking-wider">Nota média · {PROOF.reviews} avaliações</p>
                         </div>
                         <div>
-                            <p className="text-4xl font-display font-bold text-primary-600 mb-2">90%</p>
-                            <p className="text-sm text-neutral-500 font-semibold uppercase tracking-wider">Ocupação Média</p>
+                            <p className="text-4xl font-display font-bold text-primary-deep dark:text-primary-light mb-2">{PROOF.hostingYears} anos</p>
+                            <p className="text-sm text-secondary-text font-semibold uppercase tracking-wider">Hospedando como Superhost</p>
                         </div>
                         <div>
-                            <p className="text-4xl font-display font-bold text-primary-600 mb-2">2021</p>
-                            <p className="text-sm text-neutral-500 font-semibold uppercase tracking-wider">Atuando Desde</p>
+                            <p className="text-4xl font-display font-bold text-primary-deep dark:text-primary-light mb-2">{PROOF.foundedYear}</p>
+                            <p className="text-sm text-secondary-text font-semibold uppercase tracking-wider">Atuando desde</p>
                         </div>
                         <div>
-                            <p className="text-4xl font-display font-bold text-primary-600 mb-2">3</p>
-                            <p className="text-sm text-neutral-500 font-semibold uppercase tracking-wider">Cidades Atendidas</p>
+                            <p className="text-4xl font-display font-bold text-primary-deep dark:text-primary-light mb-2">{PROOF.cities.length}</p>
+                            <p className="text-sm text-secondary-text font-semibold uppercase tracking-wider">Cidades atendidas</p>
                         </div>
                     </div>
                 </div>
@@ -113,99 +115,25 @@ export default function ParaProprietariosPage() {
                                 ))}
                             </ul>
                         </div>
-                        {/* Dashboard Mockup */}
-                        <div className="aspect-square bg-neutral-950 rounded-3xl overflow-hidden flex flex-col text-white shadow-2xl border border-white/5">
-
-                            {/* Top Bar */}
-                            <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/5">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-accent-400" />
-                                    <span className="text-[11px] font-bold tracking-widest uppercase text-white/50">Painel Vivare</span>
-                                </div>
-                                <div className="flex gap-1.5">
-                                    <div className="w-2.5 h-2.5 rounded-full bg-red-400/50" />
-                                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/50" />
-                                    <div className="w-2.5 h-2.5 rounded-full bg-green-400/50" />
-                                </div>
-                            </div>
-
-                            {/* Receita Principal */}
-                            <div className="px-5 pt-5 pb-3">
-                                <p className="text-[11px] text-white/30 uppercase tracking-widest mb-1">Receita · Maio 2025</p>
-                                <div className="flex items-end gap-3">
-                                    <span className="text-3xl font-display font-bold text-white">R$ 4.820</span>
-                                    <span className="mb-0.5 text-xs font-bold text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full">↑ +23%</span>
-                                </div>
-                            </div>
-
-                            {/* Métricas */}
-                            <div className="grid grid-cols-2 gap-2.5 px-5 pb-3">
-                                <div className="bg-white/5 rounded-xl p-3 border border-white/5">
-                                    <p className="text-[10px] text-white/30 mb-1">Ocupação</p>
-                                    <p className="text-xl font-bold text-accent-400">92%</p>
-                                    <div className="w-full bg-white/10 rounded-full h-1 mt-2">
-                                        <div className="bg-accent-400 h-1 rounded-full w-[92%]" />
-                                    </div>
-                                </div>
-                                <div className="bg-white/5 rounded-xl p-3 border border-white/5">
-                                    <p className="text-[10px] text-white/30 mb-1">Avaliação</p>
-                                    <p className="text-xl font-bold text-yellow-400">100%</p>
-                                    <div className="w-full bg-white/10 rounded-full h-1 mt-2">
-                                        <div className="bg-yellow-400 h-1 rounded-full w-[98%]" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Mini Gráfico de Barras */}
-                            <div className="px-5 pb-3">
-                                <p className="text-[10px] text-white/30 uppercase tracking-widest mb-2">Receita Semanal</p>
-                                <div className="flex items-end gap-1 h-10">
-                                    {[40, 65, 45, 80, 55, 95, 70].map((h, i) => (
-                                        <div
-                                            key={i}
-                                            className={`flex-1 rounded-sm ${i === 5 ? 'bg-accent-400' : 'bg-white/15'}`}
-                                            style={{ height: `${h}%` }}
-                                        />
-                                    ))}
-                                </div>
-                                <div className="flex mt-1">
-                                    {['S','T','Q','Q','S','S','D'].map((d, i) => (
-                                        <span key={i} className="flex-1 text-center text-[8px] text-white/20">{d}</span>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Próximas Reservas */}
-                            <div className="px-5 flex-1">
-                                <p className="text-[10px] text-white/30 uppercase tracking-widest mb-2">Próximas Reservas</p>
-                                <div className="space-y-1.5">
-                                    {[
-                                        { name: 'Lucas M.',  dates: '14–17 mai', value: 'R$ 640' },
-                                        { name: 'Sarah B.',  dates: '19–22 mai', value: 'R$ 890' },
-                                        { name: 'Ana C.',    dates: '24–26 mai', value: 'R$ 540' },
-                                    ].map((r, i) => (
-                                        <div key={i} className="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-6 h-6 rounded-full bg-primary-900 flex items-center justify-center text-[9px] font-bold text-primary-300">
-                                                    {r.name[0]}
-                                                </div>
-                                                <div>
-                                                    <p className="text-xs font-semibold leading-tight">{r.name}</p>
-                                                    <p className="text-[9px] text-white/30">{r.dates}</p>
-                                                </div>
-                                            </div>
-                                            <span className="text-xs font-bold text-green-400">{r.value}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Status */}
-                            <div className="px-5 py-3.5 border-t border-white/5 mt-auto">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                                    <span className="text-[10px] text-white/30">Repasse no 5° dia útil · Transparência total</span>
-                                </div>
+                        {/* Prova real no lugar do painel ilustrativo (PRODUCT.md: nada inventado) */}
+                        <div className="rounded-3xl bg-ink text-parchment p-8 md:p-10 border border-primary/20 shadow-2xl">
+                            <p className="text-xs font-bold uppercase tracking-[.25em] text-primary-light">Como você acompanha</p>
+                            <ul className="mt-6 space-y-6">
+                                <li>
+                                    <p className="font-display text-3xl font-bold leading-none">5º dia útil</p>
+                                    <p className="mt-1 text-sm text-warm-mid">Repasse do mês anterior, todo mês, com relatório detalhado.</p>
+                                </li>
+                                <li>
+                                    <p className="font-display text-3xl font-bold leading-none">Só comissão</p>
+                                    <p className="mt-1 text-sm text-warm-mid">Cobramos sobre as reservas realizadas. Sem mensalidade e sem taxa de adesão.</p>
+                                </li>
+                                <li>
+                                    <p className="font-display text-3xl font-bold leading-none">{PROOF.rating} · Superhost</p>
+                                    <p className="mt-1 text-sm text-warm-mid">{PROOF.reviews} avaliações de hóspedes e {PROOF.hostingYears} anos hospedando como Superhost no Airbnb, a mesma operação que cuida do seu imóvel.</p>
+                                </li>
+                            </ul>
+                            <div className="mt-8 border-t border-primary/20 pt-6">
+                                <Link href="/para-proprietarios/simulacao" className="btn btn-accent w-full">Simular o faturamento do meu imóvel</Link>
                             </div>
                         </div>
                     </div>
@@ -213,28 +141,22 @@ export default function ParaProprietariosPage() {
             </section>
 
             {/* 5. Prova Social Exclusiva */}
-            <section className="py-24 bg-primary-900 text-white">
+            <section className="py-24 bg-ink text-parchment">
                 <div className="container mx-auto px-4 max-w-5xl">
                     <h2 className="text-3xl md:text-4xl font-display font-bold mb-16 text-center">Proprietários que confiam na Vivare</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="card p-8 bg-white text-neutral-900 border-none shadow-xl transform hover:-translate-y-1 transition-transform">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-14 h-14 bg-neutral-200 rounded-full"></div>
-                                <div>
-                                    <h4 className="font-bold text-lg">João Paulo Ferreira</h4>
-                                    <p className="text-sm text-primary-600 font-semibold">Studio na Vila Mariana</p>
-                                </div>
+                        <div className="card card-interactive p-8 bg-paper text-ink border-none shadow-xl">
+                            <div className="mb-6">
+                                <p className="font-display font-bold text-lg">João Paulo Ferreira</p>
+                                <p className="text-sm text-primary-deep font-semibold">Studio na Vila Mariana</p>
                             </div>
                             <p className="text-lg text-neutral-700 italic">&quot;Meu studio estava vazio há 2 meses com uma imobiliária tradicional. Depois de passar para a Vivare, em 3 semanas eles estruturaram o anúncio e fecharam a agenda do mês seguinte inteiro com 40% a mais de rentabilidade no m².&quot;</p>
                         </div>
 
-                        <div className="card p-8 bg-white text-neutral-900 border-none shadow-xl transform hover:-translate-y-1 transition-transform">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-14 h-14 bg-neutral-200 rounded-full"></div>
-                                <div>
-                                    <h4 className="font-bold text-lg">Marta Siqueira</h4>
-                                    <p className="text-sm text-primary-600 font-semibold">Apartamento 2 Quartos, Guarujá</p>
-                                </div>
+                        <div className="card card-interactive p-8 bg-paper text-ink border-none shadow-xl">
+                            <div className="mb-6">
+                                <p className="font-display font-bold text-lg">Marta Siqueira</p>
+                                <p className="text-sm text-primary-deep font-semibold">Apartamento 2 quartos, Guarujá</p>
                             </div>
                             <p className="text-lg text-neutral-700 italic">&quot;Moro fora do Brasil e não tinha como administrar o apartamento na praia. A Vivare cuida de tudo, desde limpeza até a menor das manutenções. Só recebo o repasse no quinto dia útil, sem dor de cabeça.&quot;</p>
                         </div>
@@ -243,10 +165,10 @@ export default function ParaProprietariosPage() {
             </section>
 
             {/* 6. Perfil do Imóvel Ideal */}
-            <section className="py-24 bg-neutral-50 border-b border-neutral-200">
+            <section className="py-24 bg-background border-b border-card-border">
                 <div className="container mx-auto px-4 text-center max-w-4xl">
                     <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">Seu imóvel tem o perfil?</h2>
-                    <p className="text-xl text-neutral-600 mb-12">Nossa operação é focada em alto padrão para garantir resultados superiores.</p>
+                    <p className="text-xl text-secondary-text mb-12">Nossa operação é focada em alto padrão para garantir resultados superiores.</p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                         <div className="p-6 bg-white rounded-2xl border border-neutral-200 shadow-sm">
@@ -261,6 +183,10 @@ export default function ParaProprietariosPage() {
                             <h3 className="font-bold text-lg mb-2">Estado</h3>
                             <p className="text-neutral-600">Mobiliados, reformados, com internet de alta velocidade e enxoval básico de qualidade.</p>
                         </div>
+                    </div>
+                    <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <Link href="/para-proprietarios/simulacao" className="btn btn-accent px-8">Meu imóvel se encaixa: simular faturamento</Link>
+                        <a href="#contato" className="btn btn-secondary px-8">Falar com um especialista</a>
                     </div>
                 </div>
             </section>

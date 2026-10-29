@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Manrope, Cormorant_Garamond } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -7,7 +7,7 @@ import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE, META_PIXEL_ID,
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-body",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -18,6 +18,17 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
   style: ["normal", "italic"]
 });
+
+/** Cor da barra de status por tema e área segura do iPhone (mobile-native). */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f8fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f0e0c" },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -79,6 +90,7 @@ import { Header } from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ScrollObserver } from "@/components/ui/ScrollObserver";
+import { PaletteToggle } from "@/components/ui/PaletteToggle";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -115,7 +127,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${manrope.variable} ${cormorant.variable}`} suppressHydrationWarning>
+    <html lang="pt-BR" className={`${manrope.variable} ${cormorant.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* Google Tag (gtag.js) — script NATIVO (não next/script).
             Motivo: `next/script strategy="afterInteractive"` renderiza só
@@ -230,6 +242,8 @@ export default function RootLayout({
             <LazyOwnerPopup />
             <FloatingWhatsApp />
             <ScrollObserver />
+            {/* Prévia temporária de paleta: remover após a decisão */}
+            <PaletteToggle />
           </OwnerPopupProvider>
         </ThemeProvider>
         <div id="root-portal" />

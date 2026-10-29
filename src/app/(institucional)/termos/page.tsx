@@ -13,20 +13,20 @@ export async function generateMetadata(): Promise<Metadata> {
 /* ── Conteúdo fallback (hard-coded) ── */
 const FALLBACK_HTML = `
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">1. Aceitação dos Termos</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">1. Aceitação dos Termos</h2>
     <p>Ao acessar e utilizar o site da Vivare Experience (doravante "Vivare"), você concorda integralmente com os presentes Termos e Condições de Uso. Caso não concorde com algum dos termos aqui descritos, por favor, não utilize nossos serviços.</p>
 </section>
 
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">2. Sobre a Vivare</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">2. Sobre a Vivare</h2>
     <p>A Vivare é uma empresa especializada na gestão profissional de imóveis para locação por temporada em São Paulo, Santos e Guarujá. Atuamos como intermediários entre proprietários de imóveis e hóspedes, oferecendo curadoria, operação e atendimento completos.</p>
     <p class="mt-3"><strong>Razão Social:</strong> Vivare Gestão de Negócios Imobiliários Ltda.<br/><strong>CNPJ:</strong> 51.486.823/0001-00<br/><strong>Endereço:</strong> Rua Rondinha, 180, Chácara Inglesa, São Paulo — SP</p>
 </section>
 
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">3. Serviços Oferecidos</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">3. Serviços Oferecidos</h2>
     <p>A Vivare oferece os seguintes serviços:</p>
-    <ul class="list-disc list-inside mt-3 space-y-2 ml-4">
+    <ul class="list-disc list-outside mt-3 space-y-2 pl-5">
         <li>Locação de imóveis mobiliados por temporada (curta e média duração);</li>
         <li>Gestão profissional de imóveis para proprietários;</li>
         <li>Simulação de rentabilidade para proprietários;</li>
@@ -35,9 +35,9 @@ const FALLBACK_HTML = `
 </section>
 
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">4. Reservas e Pagamentos</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">4. Reservas e Pagamentos</h2>
     <p>As reservas podem ser realizadas diretamente pelo site da Vivare ou através de plataformas parceiras (Airbnb, Booking.com, Stays.net). Ao confirmar uma reserva, o hóspede concorda com:</p>
-    <ul class="list-disc list-inside mt-3 space-y-2 ml-4">
+    <ul class="list-disc list-outside mt-3 space-y-2 pl-5">
         <li>O pagamento integral ou parcial conforme as condições da reserva;</li>
         <li>O cumprimento das regras da casa e políticas de cada propriedade;</li>
         <li>A veracidade dos dados pessoais fornecidos;</li>
@@ -47,9 +47,9 @@ const FALLBACK_HTML = `
 </section>
 
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">5. Obrigações do Hóspede</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">5. Obrigações do Hóspede</h2>
     <p>Ao utilizar uma propriedade gerenciada pela Vivare, o hóspede se compromete a:</p>
-    <ul class="list-disc list-inside mt-3 space-y-2 ml-4">
+    <ul class="list-disc list-outside mt-3 space-y-2 pl-5">
         <li>Tratar o imóvel e seus equipamentos com zelo e cuidado;</li>
         <li>Respeitar o número máximo de hóspedes declarado na reserva;</li>
         <li>Não realizar festas ou eventos sem autorização prévia;</li>
@@ -60,15 +60,15 @@ const FALLBACK_HTML = `
 </section>
 
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">6. Danos e Responsabilidades</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">6. Danos e Responsabilidades</h2>
     <p>O hóspede é responsável por eventuais danos causados ao imóvel, mobília e equipamentos durante sua estadia. A Vivare realiza vistoria a cada check-out e reserva-se o direito de cobrar reparos diretamente do hóspede responsável.</p>
     <p class="mt-3">Adicionalmente, as plataformas de reserva possuem seguros próprios (como o AirCover do Airbnb) que cobrem danos em determinadas situações.</p>
 </section>
 
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">7. Check-in e Check-out</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">7. Check-in e Check-out</h2>
     <p>O check-in é 100% digital. As instruções de acesso serão enviadas por e-mail e/ou WhatsApp até 24 horas antes da data de chegada. Os horários padrão são:</p>
-    <ul class="list-disc list-inside mt-3 space-y-2 ml-4">
+    <ul class="list-disc list-outside mt-3 space-y-2 pl-5">
         <li><strong>Check-in:</strong> a partir das 15h00;</li>
         <li><strong>Check-out:</strong> até as 11h00.</li>
     </ul>
@@ -76,32 +76,32 @@ const FALLBACK_HTML = `
 </section>
 
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">8. Propriedade Intelectual</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">8. Propriedade Intelectual</h2>
     <p>Todo o conteúdo do site da Vivare — incluindo textos, imagens, logotipos, design e código — é protegido por direitos autorais e não pode ser reproduzido, distribuído ou utilizado sem autorização prévia por escrito.</p>
 </section>
 
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">9. Limitação de Responsabilidade</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">9. Limitação de Responsabilidade</h2>
     <p>A Vivare se esforça para manter informações precisas e atualizadas no site, mas não garante que todo o conteúdo esteja livre de erros. As fotos dos imóveis são ilustrativas e podem apresentar pequenas variações em relação ao estado atual.</p>
     <p class="mt-3">A Vivare não se responsabiliza por eventos de força maior, desastres naturais, greves, falhas de internet ou qualquer outro evento fora do controle razoável da empresa.</p>
 </section>
 
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">10. Alterações nos Termos</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">10. Alterações nos Termos</h2>
     <p>A Vivare reserva-se o direito de alterar estes Termos e Condições a qualquer momento, sem aviso prévio. As alterações entram em vigor imediatamente após sua publicação no site. Recomendamos que você revise esta página periodicamente.</p>
 </section>
 
 <section>
-    <h2 class="font-display text-xl font-medium text-ink mb-4">11. Foro e Legislação Aplicável</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">11. Foro e Legislação Aplicável</h2>
     <p>Estes Termos são regidos pelas leis da República Federativa do Brasil. Fica eleito o foro da comarca de São Paulo — SP para dirimir quaisquer questões decorrentes destes Termos, renunciando-se a qualquer outro por mais privilegiado que seja.</p>
 </section>
 
 <section class="border-t border-primary/20 pt-10">
-    <h2 class="font-display text-xl font-medium text-ink mb-4">Contato</h2>
+    <h2 class="font-display text-2xl font-semibold text-ink dark:text-parchment mt-2 mb-4">Contato</h2>
     <p>Em caso de dúvidas sobre estes Termos, entre em contato conosco:</p>
     <ul class="mt-3 space-y-2">
-        <li><strong>E-mail:</strong> <a href="mailto:contato@vivarestay.com" class="text-primary hover:underline">contato@vivarestay.com</a></li>
-        <li><strong>WhatsApp:</strong> <a href="https://wa.me/5511985067840" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">+55 (11) 98506-7840</a></li>
+        <li><strong>E-mail:</strong> <a href="mailto:contato@vivarestay.com" class="font-semibold text-primary-deep dark:text-primary-light underline underline-offset-4">contato@vivarestay.com</a></li>
+        <li><strong>WhatsApp:</strong> <a href="https://wa.me/5511985067840" target="_blank" rel="noopener noreferrer" class="font-semibold text-primary-deep dark:text-primary-light underline underline-offset-4">+55 (11) 98506-7840</a></li>
     </ul>
 </section>
 `;
@@ -112,15 +112,15 @@ export default async function TermosPage() {
     const bodyHtml = page?.content?.bodyHtml || FALLBACK_HTML;
 
     return (
-        <main className="min-h-screen pt-32 pb-20 bg-background-light dark:bg-background-dark">
+        <main className="min-h-screen pt-10 md:pt-14 pb-20 bg-background-light dark:bg-background-dark">
             <div className="mx-auto max-w-3xl px-6 lg:px-10">
-                <span className="text-xs font-bold uppercase tracking-[.3em] text-primary">Legal</span>
+                <span className="text-xs font-bold uppercase tracking-[.3em] text-primary-deep dark:text-primary-light">Legal</span>
                 <h1 className="font-display text-4xl md:text-5xl font-light text-ink dark:text-parchment mt-2 mb-4">{title}</h1>
                 <span className="gold-line"></span>
-                <p className="text-sm text-muted mb-12">Última atualização: Março de 2026</p>
+                <p className="text-sm text-secondary-text mb-12">Última atualização: Março de 2026</p>
 
                 <div
-                    className="space-y-10 text-sm leading-relaxed text-ink/80 dark:text-parchment/80"
+                    className="space-y-10 text-base leading-[1.7] max-w-[68ch] text-ink/80 dark:text-parchment/80"
                     dangerouslySetInnerHTML={{ __html: bodyHtml }}
                 />
             </div>

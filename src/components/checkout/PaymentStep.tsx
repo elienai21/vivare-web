@@ -16,6 +16,7 @@ interface CheckoutFormProps {
     listingId?: string;
     listingName?: string;
     couponCode?: string | null;
+    checkoutId?: string;
 }
 
 function CheckoutForm({
@@ -25,6 +26,7 @@ function CheckoutForm({
     listingId,
     listingName,
     couponCode,
+    checkoutId,
 }: CheckoutFormProps) {
     const stripe = useStripe();
     const elements = useElements();
@@ -63,7 +65,8 @@ function CheckoutForm({
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}/reserva/confirmando`, // we need to creaet this page
+                // Página de confirmação real (antes apontava para /reserva/confirmando, inexistente)
+                return_url: `${window.location.origin}/reserva/confirmacao${checkoutId ? `?checkoutId=${encodeURIComponent(checkoutId)}` : ''}`,
             },
         });
 
@@ -119,6 +122,7 @@ export function PaymentStep({
     listingId,
     listingName,
     couponCode,
+    checkoutId,
 }: {
     clientSecret: string | null;
     onBack: () => void;
@@ -127,6 +131,7 @@ export function PaymentStep({
     listingId?: string;
     listingName?: string;
     couponCode?: string | null;
+    checkoutId?: string;
 }) {
     if (!isStripeConfigured) {
         // Quando a env `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` não está definida,
@@ -148,8 +153,8 @@ export function PaymentStep({
     if (!clientSecret) {
         return (
             <div className="flex flex-col items-center justify-center h-64">
-                <Loader2 className="w-8 h-8 animate-spin text-primary-500 mb-4" aria-hidden="true" />
-                <p className="text-neutral-500">Preparando pagamento seguro...</p>
+                <Loader2 className="w-8 h-8 animate-spin text-primary-deep mb-4" aria-hidden="true" />
+                <p className="text-secondary-text">Preparando pagamento seguro…</p>
             </div>
         );
     }
@@ -160,8 +165,8 @@ export function PaymentStep({
             appearance: {
                 theme: 'stripe',
                 variables: {
-                    colorPrimary: '#e85d04',
-                    fontFamily: 'Inter, sans-serif',
+                    colorPrimary: '#b89a5c',
+                    fontFamily: 'Manrope, system-ui, sans-serif',
                 }
             }
         }}>
@@ -172,6 +177,7 @@ export function PaymentStep({
                 listingId={listingId}
                 listingName={listingName}
                 couponCode={couponCode}
+                checkoutId={checkoutId}
             />
         </Elements>
     );

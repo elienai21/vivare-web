@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function SimulacaoPage() {
     return (
-        <main className="min-h-screen pt-32 pb-12 bg-neutral-50 text-neutral-900 flex flex-col items-center justify-center">
+        <main className="min-h-screen pt-10 md:pt-16 pb-12 bg-background text-foreground flex flex-col items-center justify-center">
             <div className="container mx-auto px-4 max-w-xl">
 
                 <div className="text-center mb-10">

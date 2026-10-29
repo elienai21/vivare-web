@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, Heart, Search, SearchX } from "lucide-react";
+import { ChevronDown, Search, SearchX } from "lucide-react";
 import { fetchListings, fetchListingCalendar } from "@/services/staysService";
 import PropertyMap from "@/components/ui/DynamicPropertyMap";
 
@@ -107,63 +107,72 @@ export default async function UnidadesPage({
     if (hasGuestsFilter) activeFilters.push(`${guests} hóspede${parseInt(guests, 10) !== 1 ? 's' : ''}`);
 
     return (
-        <main className="min-h-screen pt-24 pb-12 bg-neutral-50 text-neutral-900 flex flex-col">
+        <main className="min-h-screen pb-12 bg-background text-foreground flex flex-col">
 
-            {/* Search Header / Filtros */}
-            <section className="bg-white border-b border-neutral-200 sticky top-0 z-20 py-4 shadow-sm">
-                <form action="/unidades" method="GET" className="container mx-auto px-4 flex flex-col md:flex-row gap-4 items-center justify-between">
-                    <div className="flex bg-neutral-100 rounded-full overflow-hidden flex-1 max-w-2xl border border-neutral-200 focus-within:ring-2 focus-within:ring-primary-500 transition-all">
+            {/* Filtros: pegajosos só a partir de md e abaixo do cabeçalho (antes
+                ficavam escondidos sob o header sticky e, no celular, comiam 25% da tela). */}
+            <section className="bg-card border-b border-card-border md:sticky md:top-[var(--header-h)] z-20 py-3 md:py-4 shadow-sm">
+                <form action="/unidades" method="GET" className="mx-auto max-w-7xl px-4 lg:px-8 flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center justify-between">
+                    <div className="flex bg-background rounded-full overflow-hidden flex-1 max-w-2xl border border-card-border focus-within:ring-2 focus-within:ring-primary transition-shadow">
+                        <label htmlFor="busca-dest" className="sr-only">Bairro, cidade ou nome da unidade</label>
                         <input
-                            type="text"
+                            id="busca-dest"
+                            type="search"
                             name="dest"
                             defaultValue={dest || ""}
-                            placeholder="Buscar por bairro, cidade ou nome..."
-                            className="px-6 py-3 bg-transparent w-full outline-none text-neutral-800 placeholder:text-neutral-500 font-medium"
+                            placeholder="Bairro, cidade ou nome"
+                            autoComplete="off"
+                            className="px-5 py-3 bg-transparent w-full min-h-12 outline-none text-base text-foreground placeholder:text-secondary-text font-medium"
                         />
-                        <button type="submit" className="bg-primary hover:brightness-110 text-ink px-8 font-bold transition-all flex items-center gap-2 tracking-wide">
+                        <button type="submit" className="bg-primary hover:bg-primary-light text-ink px-5 md:px-8 font-bold transition-colors flex items-center gap-2 tracking-wide">
                             <Search className="w-[18px] h-[18px]" aria-hidden="true" /> Buscar
                         </button>
                     </div>
 
-                    <div className="flex gap-2 relative z-50 flex-wrap items-center">
+                    <fieldset className="flex gap-2 relative z-50 flex-wrap items-center">
+                        <legend className="sr-only">Datas e hóspedes</legend>
                         <div className="flex items-center gap-2">
+                            <label htmlFor="busca-checkin" className="sr-only">Check-in</label>
                             <input
+                                id="busca-checkin"
                                 type="date"
                                 name="checkIn"
                                 defaultValue={checkIn || ""}
-                                className="text-sm bg-white py-2.5 px-3 rounded-full border border-neutral-300 font-semibold outline-none hover:border-neutral-400 transition-all"
+                                className="text-base md:text-sm bg-card text-foreground min-h-11 py-2 px-3 rounded-full border border-card-border font-semibold outline-none focus-visible:ring-2 focus-visible:ring-primary"
                             />
-                            <span className="text-neutral-400 text-xs font-bold">-</span>
+                            <span className="text-secondary-text text-xs font-bold" aria-hidden="true">–</span>
+                            <label htmlFor="busca-checkout" className="sr-only">Check-out</label>
                             <input
+                                id="busca-checkout"
                                 type="date"
                                 name="checkOut"
                                 defaultValue={checkOut || ""}
-                                className="text-sm bg-white py-2.5 px-3 rounded-full border border-neutral-300 font-semibold outline-none hover:border-neutral-400 transition-all"
+                                className="text-base md:text-sm bg-card text-foreground min-h-11 py-2 px-3 rounded-full border border-card-border font-semibold outline-none focus-visible:ring-2 focus-visible:ring-primary"
                             />
                         </div>
-                        <div className="relative group">
-                            <select name="guests" defaultValue={guests || ""} className="btn btn-secondary text-sm appearance-none bg-white pr-8 py-3 rounded-full border border-neutral-300 font-semibold cursor-pointer outline-none hover:border-neutral-400 transition-all">
+                        <div className="relative">
+                            <label htmlFor="busca-guests" className="sr-only">Hóspedes</label>
+                            <select id="busca-guests" name="guests" defaultValue={guests || ""} className="text-base md:text-sm appearance-none bg-card text-foreground min-h-11 pl-4 pr-9 py-2 rounded-full border border-card-border font-semibold cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary">
                                 <option value="">Hóspedes</option>
-                                <option value="1">1 Hóspede</option>
-                                <option value="2">2 Hóspedes</option>
-                                <option value="3">3 Hóspedes</option>
-                                <option value="4">4+ Hóspedes</option>
+                                <option value="1">1 hóspede</option>
+                                <option value="2">2 hóspedes</option>
+                                <option value="3">3 hóspedes</option>
+                                <option value="4">4+ hóspedes</option>
                             </select>
-                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-400 w-5 h-5" aria-hidden="true" />
+                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-secondary-text w-5 h-5" aria-hidden="true" />
                         </div>
-                    </div>
+                    </fieldset>
                 </form>
 
-                {/* Active Filters Badges */}
                 {activeFilters.length > 0 && (
-                    <div className="container mx-auto px-4 mt-3 flex items-center gap-2 flex-wrap">
-                        <span className="text-xs text-neutral-500 font-medium">Filtros:</span>
+                    <div className="mx-auto max-w-7xl px-4 lg:px-8 mt-3 flex items-center gap-2 flex-wrap">
+                        <span className="text-xs text-secondary-text font-medium">Filtros:</span>
                         {activeFilters.map((filter, i) => (
-                            <span key={i} className="inline-flex items-center gap-1 text-xs font-semibold bg-primary-50 text-primary-700 border border-primary-200 px-3 py-1 rounded-full">
+                            <span key={i} className="inline-flex items-center gap-1 text-xs font-semibold bg-primary-dim text-foreground border border-primary/40 px-3 py-1 rounded-full">
                                 {filter}
                             </span>
                         ))}
-                        <Link href="/unidades" className="text-xs text-neutral-500 hover:text-red-500 font-medium underline ml-2 transition-colors">
+                        <Link href="/unidades" className="inline-flex min-h-11 items-center text-xs text-secondary-text hover:text-foreground font-medium underline underline-offset-4 ml-2 transition-colors">
                             Limpar filtros
                         </Link>
                     </div>
@@ -175,93 +184,88 @@ export default async function UnidadesPage({
 
                 {/* Left Side - Results Grid */}
                 <div className="w-full lg:w-[55%] xl:w-[60%] px-4 lg:pl-8 lg:pr-6 py-8 flex flex-col h-full min-h-[500px]">
-                    <div className="flex justify-between items-center mb-6">
-                        <h1 className="text-2xl font-display font-bold text-ink">
-                            {listings.length} {listings.length === 1 ? 'Acomodação encontrada' : 'Acomodações encontradas'}
-                            {hasDateFilter && <span className="text-base font-normal text-neutral-500 ml-2">disponíveis nas datas selecionadas</span>}
+                    <div className="mb-6">
+                        <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">
+                            Acomodações em {dest ? dest : "São Paulo, Santos e Guarujá"}
                         </h1>
+                        <p className="mt-1 text-base text-secondary-text" aria-live="polite">
+                            {listings.length} {listings.length === 1 ? 'unidade' : 'unidades'}
+                            {hasDateFilter ? ' disponíveis nas datas escolhidas' : ' disponíveis'}
+                        </p>
                     </div>
 
                     {listings.length === 0 ? (
                         <div className="flex-1 flex flex-col items-center justify-center text-center py-20">
-                            <SearchX className="w-16 h-16 text-neutral-300 mb-4" aria-hidden="true" />
-                            <h3 className="text-xl font-bold text-neutral-700 mb-2">Nenhum resultado encontrado</h3>
-                            <p className="text-neutral-500 mb-6">
+                            <SearchX className="w-16 h-16 text-secondary-text/50 mb-4" aria-hidden="true" />
+                            <h2 className="font-display text-xl font-bold mb-2">Nenhuma unidade para esses filtros</h2>
+                            <p className="text-secondary-text mb-6 max-w-md">
                                 {hasDateFilter
-                                    ? 'Não há acomodações disponíveis para as datas e filtros selecionados. Tente outras datas.'
-                                    : 'Tente ajustar seus filtros ou buscar por outra região.'}
+                                    ? 'Não há unidades livres nas datas e filtros escolhidos. Experimente outras datas ou outro bairro.'
+                                    : 'Experimente outro bairro ou limpe os filtros para ver todas as unidades.'}
                             </p>
-                            <Link href="/unidades" className="btn btn-primary rounded-full px-8">Limpar Busca</Link>
+                            <Link href="/unidades" className="inline-flex min-h-12 items-center rounded-full bg-ink px-8 text-sm font-bold text-primary-light transition-colors hover:bg-primary hover:text-ink dark:bg-parchment dark:text-ink">Ver todas as unidades</Link>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {/* Listing Card Loop */}
-                            {listings.map((item) => (
-                                <Link href={`/unidades/${item.id}${filterQuery ? `?${filterQuery}` : ''}`} key={item._id} className="group relative flex flex-col bg-white border border-neutral-200 hover:border-neutral-300 rounded-[1.25rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full cursor-pointer">
-                                    {/* Image Container */}
-                                    <div className="aspect-[4/3] w-full bg-neutral-100 overflow-hidden relative">
+                            {listings.map((item) => {
+                                const guestsN = item._i_maxGuests ?? 0;
+                                const roomsN = item._i_rooms ?? 0;
+                                const bathsN = item._f_bathrooms ?? 0;
+                                return (
+                                <Link href={`/unidades/${item.id}${filterQuery ? `?${filterQuery}` : ''}`} key={item._id} className="group card card-interactive relative flex flex-col overflow-hidden rounded-[1.25rem] h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+                                    <div className="aspect-[4/3] w-full bg-warm-mid dark:bg-ink-card overflow-hidden relative">
                                         {item._t_mainImageMeta?.url ? (
                                             <Image
                                                 src={item._t_mainImageMeta.url}
                                                 alt={item._mstitle.pt_BR}
                                                 fill
                                                 sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                                className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                                                 loading="lazy"
                                             />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-neutral-400 font-medium text-sm">Sem imagem</div>
+                                            <div className="w-full h-full flex items-center justify-center text-secondary-text font-medium text-sm">Foto em breve</div>
                                         )}
-                                        {/* Favoritar */}
-                                        <div className="absolute top-3 right-3 bg-white/60 hover:bg-white backdrop-blur-md rounded-full p-2 text-neutral-700 hover:text-rose-500 shadow-sm transition-all duration-200 flex items-center justify-center z-10">
-                                            <Heart className="w-[18px] h-[18px]" aria-hidden="true" />
-                                        </div>
                                     </div>
 
-                                    {/* Content Container */}
                                     <div className="p-5 flex-1 flex flex-col">
-                                        {/* Titulo e Local */}
                                         <div className="mb-3">
-                                            <h2 className="font-display font-bold text-lg leading-tight text-neutral-900 group-hover:text-primary-700 transition-colors line-clamp-2" title={item._mstitle.pt_BR}>
-                                                {item._mstitle.pt_BR}
-                                            </h2>
-                                            <p className="text-neutral-500 text-xs mt-1 truncate font-medium tracking-wide">
+                                            <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep dark:text-primary-light truncate">
                                                 {item.address.region}{item.address.region && item.address.city ? ', ' : ''}{item.address.city}
                                             </p>
+                                            <h2 className="mt-1 font-display font-bold text-lg leading-tight text-foreground group-hover:text-primary-deep dark:group-hover:text-primary-light transition-colors line-clamp-2" title={item._mstitle.pt_BR}>
+                                                {item._mstitle.pt_BR}
+                                            </h2>
                                         </div>
 
-                                        {/* Comodidades (Features) */}
-                                        <div className="flex items-center text-neutral-600 text-[11px] font-semibold tracking-wide uppercase gap-2 mb-4">
-                                            <span>Até {item._i_maxGuests} hósp{item._i_maxGuests !== 1 && 's'}</span>
-                                            <span className="w-1 h-1 rounded-full bg-neutral-300"></span>
-                                            <span>{item._i_rooms} dorm{item._i_rooms !== 1 && 's'}</span>
-                                            <span className="w-1 h-1 rounded-full bg-neutral-300"></span>
-                                            <span>{item._f_bathrooms} banh{item._f_bathrooms !== 1 && 's'}</span>
-                                        </div>
+                                        <ul className="flex flex-wrap items-center text-secondary-text text-sm gap-x-4 gap-y-1 mb-4">
+                                            <li>até {guestsN} {guestsN === 1 ? 'hóspede' : 'hóspedes'}</li>
+                                            <li>{roomsN} {roomsN === 1 ? 'quarto' : 'quartos'}</li>
+                                            <li>{bathsN} {bathsN === 1 ? 'banheiro' : 'banheiros'}</li>
+                                        </ul>
 
-                                        <div className="mt-auto"></div> {/* Espaçador Flex */}
+                                        <div className="mt-auto"></div>
 
-                                        {/* Footer: Preço + Call to Action */}
-                                        <div className="pt-4 border-t border-neutral-100 flex justify-between items-end">
-                                            <div className="flex flex-col">
-                                                <span className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mb-0.5">A partir de</span>
-                                                <span className="font-bold text-neutral-900 text-lg">
-                                                    {item._d_minPrice ? `R$ ${item._d_minPrice}` : 'Ver tarifas'} <span className="text-xs font-normal text-neutral-500 normal-case tracking-normal">/ noite</span>
-                                                </span>
-                                            </div>
-                                            <div className="bg-neutral-50 text-primary-700 font-bold text-xs uppercase tracking-widest px-4 py-2 rounded-lg border border-neutral-200 group-hover:bg-primary-600 group-hover:border-primary-600 group-hover:text-white transition-all duration-300">
-                                                Ver
-                                            </div>
+                                        {/* A Stays não expõe preço mínimo por unidade: sem valor, nada de
+                                            moldura "A partir de / noite" vazia. */}
+                                        <div className="pt-4 border-t border-card-border flex justify-between items-center">
+                                            <span className="text-sm font-semibold text-foreground">
+                                                {item._d_minPrice
+                                                    ? <>R$ {item._d_minPrice} <span className="text-xs font-normal text-secondary-text">/ noite</span></>
+                                                    : 'Ver datas e valores'}
+                                            </span>
+                                            <span aria-hidden="true" className="text-primary-deep dark:text-primary-light transition-transform group-hover:translate-x-1">→</span>
                                         </div>
                                     </div>
                                 </Link>
-                            ))}
+                                );
+                            })}
                         </div>
                     )}
                 </div>
 
-                {/* Right Side - Sticky Interactive Map */}
-                <div className="hidden lg:block lg:w-[45%] xl:w-[40%] bg-neutral-200 sticky top-[80px] h-[calc(100vh-80px)] border-l border-neutral-200 z-10">
+                {/* Mapa fixo ao lado da grade (desktop) */}
+                <div className="hidden lg:block lg:w-[45%] xl:w-[40%] bg-warm-mid sticky top-[var(--header-h)] h-[calc(100vh-var(--header-h))] border-l border-card-border z-10">
                     <PropertyMap listings={listings} />
                 </div>
 
