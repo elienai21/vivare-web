@@ -289,54 +289,46 @@ export default async function Home() {
               O que nossos <em>hóspedes</em> dizem
             </h2>
             <span className="gold-line"></span>
+            {/* Nota e total copiados do perfil Vivare Stay no Airbnb em 28/10/2026; atualizar à mão. */}
+            <p className="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-warm-mid">
+              <span className="numeral text-4xl text-primary-light">4,84</span>
+              <span>de 5 em 911 avaliações no Airbnb · Superhost</span>
+            </p>
           </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-
-            <div className="p-8 border border-primary/20 bg-white/5 reveal">
-              <div className="flex gap-0.5 mb-4" role="img" aria-label="5 de 5 estrelas">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 text-primary fill-primary" aria-hidden="true" />
-                ))}
-              </div>
-              <p className="font-display text-lg font-light not-italic text-warm-mid leading-relaxed mb-6">
-                &quot;O apartamento estava ainda melhor do que nas fotos. Localização perfeita, tudo impecavelmente limpo. Sem dúvida a melhor hospedagem que já tive em São Paulo.&quot;
-              </p>
-              <div>
-                <p className="text-sm font-semibold text-parchment">Karina Santos</p>
-                <p className="text-xs text-warm-mid/80 tracking-wider uppercase mt-0.5">Jardins · São Paulo</p>
-              </div>
-            </div>
-
-            <div className="p-8 border border-primary/20 bg-white/5 reveal">
-              <div className="flex gap-0.5 mb-4" role="img" aria-label="5 de 5 estrelas">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 text-primary fill-primary" aria-hidden="true" />
-                ))}
-              </div>
-              <p className="font-display text-lg font-light not-italic text-warm-mid leading-relaxed mb-6">
-                &quot;Já fico na Vivare toda vez que venho a SP — há mais de um ano. A equipe tem uma atenção que você não encontra em hotel. Indico pra todo mundo sem hesitar.&quot;
-              </p>
-              <div>
-                <p className="text-sm font-semibold text-parchment">Erika Lima</p>
-                <p className="text-xs text-warm-mid/80 tracking-wider uppercase mt-0.5">Recorrente · 1+ ano</p>
-              </div>
-            </div>
-
-            <div className="p-8 border border-primary/20 bg-white/5 reveal">
-              <div className="flex gap-0.5 mb-4" role="img" aria-label="5 de 5 estrelas">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 text-primary fill-primary" aria-hidden="true" />
-                ))}
-              </div>
-              <p className="font-display text-lg font-light not-italic text-warm-mid leading-relaxed mb-6">
-                &quot;Seriedade, rapidez no atendimento, excelentes localizações em SP e preços que fazem sentido. Equipe nota 10 do início ao fim.&quot;
-              </p>
-              <div>
-                <p className="text-sm font-semibold text-parchment">Luíza Castro</p>
-                <p className="text-xs text-warm-mid/80 tracking-wider uppercase mt-0.5">Pinheiros · São Paulo</p>
-              </div>
-            </div>
-
+            {/* Trechos literais de avaliações reais no Airbnb; (…) marca os cortes. */}
+            {[
+              {
+                nome: "Daniel",
+                cidade: "Palmas",
+                texto: "Apartamento superaconchegante, moderno e com excelente custo-benefício! Localização excepcional, pertinho da Paulista e de ótimos lugares. A gestora é muito atenciosa e prestativa.",
+              },
+              {
+                nome: "Marina",
+                cidade: "Santos",
+                texto: "Foi de longe minha melhor experiência no Airbnb. (…) Apartamento muito cheiroso, roupa de cama e banho maravilhosas. (…) Já reservei uma próxima data e recomendo para todos.",
+              },
+              {
+                nome: "Cristian",
+                cidade: "Florianópolis",
+                texto: "Apartamento aconchegante, tudo novinho. Chuveiro maravilhoso, e cama gostosa de dormir. Igual as fotos! Adoramos.",
+              },
+            ].map(({ nome, cidade, texto }) => (
+              <figure key={nome} className="flex flex-col p-8 border border-primary/20 bg-white/5 reveal">
+                <div className="flex gap-0.5 mb-4" role="img" aria-label="5 de 5 estrelas">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 text-primary fill-primary" aria-hidden="true" />
+                  ))}
+                </div>
+                <blockquote className="font-display text-lg font-light not-italic text-warm-mid leading-relaxed mb-6">
+                  &quot;{texto}&quot;
+                </blockquote>
+                <figcaption className="mt-auto">
+                  <p className="text-sm font-semibold text-parchment">{nome}</p>
+                  <p className="text-xs text-warm-mid/80 tracking-wider uppercase mt-0.5">{cidade} · Airbnb</p>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
