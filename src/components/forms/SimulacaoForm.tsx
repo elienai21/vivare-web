@@ -97,7 +97,7 @@ export function SimulacaoForm() {
         <div className="card p-8 shadow-2xl bg-white border border-neutral-100">
             {step === 1 && (
                 <form onSubmit={handleStep1} className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <h2 className="text-xl font-bold border-b pb-4">Etapa 1: Sobre o Imóvel</h2>
+                    <h2 className="text-xl font-medium border-b pb-4">Etapa 1: Sobre o Imóvel</h2>
 
                     <div>
                         <label htmlFor="sim-bairro" className="block text-sm font-semibold mb-2">Bairro e Cidade *</label>
@@ -153,7 +153,7 @@ export function SimulacaoForm() {
 
             {step === 2 && (
                 <form onSubmit={calculateResult} className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-                    <h2 className="text-xl font-bold border-b pb-4">Etapa 2: Para quem enviamos?</h2>
+                    <h2 className="text-xl font-medium border-b pb-4">Etapa 2: Para quem enviamos?</h2>
                     <p className="text-sm text-neutral-500">Preencha seus dados para liberar a estimativa na tela e entrar em contato com nossa equipe.</p>
 
                     {/* Honeypot — invisible to humans, irresistible to bots. */}
@@ -209,12 +209,12 @@ export function SimulacaoForm() {
                     <div className="w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                         <span className="text-2xl">&#10003;</span>
                     </div>
-                    <h2 className="font-display text-2xl font-bold">Faixa indicativa de faturamento</h2>
+                    <h2 className="font-display text-2xl font-medium">Faixa indicativa de faturamento</h2>
                     <p className="text-neutral-600 mb-6">Com base no tipo e na metragem informados, usando a tarifa média por m² da nossa carteira, a referência de faturamento mensal bruto é de:</p>
 
                     <div className="bg-primary-50 border border-primary-200 rounded-xl p-8 mb-6">
                         <p className="text-sm text-primary-600 font-bold uppercase tracking-wider mb-2">Estimativa Mensal</p>
-                        <p className="text-5xl font-display font-bold text-primary-700">
+                        <p className="text-5xl font-display font-normal text-primary-700">
                             {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(result)}
                         </p>
                     </div>

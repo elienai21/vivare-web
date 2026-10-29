@@ -66,11 +66,11 @@ export default async function UnidadeDetalhePage({
         // pb extra no celular: a barra fixa de reserva ocupa ~5rem no rodapé da tela
         <main className="min-h-screen bg-background text-foreground pb-28 md:pb-24">
             <section className="pt-6 md:pt-10 container mx-auto px-4 mb-6 md:mb-8">
-                <p className="text-xs font-semibold uppercase tracking-widest text-primary-deep dark:text-primary-light">
+                <p className="chapeu">
                     {listing.address?.region}{listing.address?.region && listing.address?.city ? ' · ' : ''}{listing.address?.city}
                 </p>
                 {/* Nomes vêm das OTAs e são longos: duas linhas no celular, três no desktop. */}
-                <h1 className="mt-1 mb-3 font-display text-3xl md:text-4xl font-bold leading-tight line-clamp-2 md:line-clamp-3" title={title}>
+                <h1 className="mt-1 mb-3 font-display text-3xl md:text-4xl font-normal leading-tight line-clamp-2 md:line-clamp-3" title={title}>
                     {title}
                 </h1>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-secondary-text font-medium mb-6">
@@ -109,7 +109,7 @@ export default async function UnidadeDetalhePage({
                 <div className="flex-1 min-w-0">
 
                     <div className="border-b border-card-border pb-8 mb-8">
-                        <h2 className="font-display text-2xl font-bold mb-3">Apartamento inteiro, com gestão profissional</h2>
+                        <h2 className="font-display text-2xl font-medium mb-3">Apartamento inteiro, com gestão profissional</h2>
                         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-base text-secondary-text">
                             <li className="inline-flex items-center gap-2"><Users className="h-4 w-4" aria-hidden="true" />até {listing._i_maxGuests} {listing._i_maxGuests === 1 ? 'hóspede' : 'hóspedes'}</li>
                             <li className="inline-flex items-center gap-2"><BedDouble className="h-4 w-4" aria-hidden="true" />{listing._i_rooms} {listing._i_rooms === 1 ? 'quarto' : 'quartos'}</li>
@@ -119,7 +119,7 @@ export default async function UnidadeDetalhePage({
 
                     {/* O que vem com toda unidade Vivare (prova real, não inventada) */}
                     <div className="border-b border-card-border pb-8 mb-8">
-                        <h3 className="font-display text-xl font-bold mb-4">Padrão Vivare</h3>
+                        <h3 className="font-display text-xl font-medium mb-4">Padrão Vivare</h3>
                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-base">
                             <li className="flex gap-2"><span className="text-primary-deep dark:text-primary-light" aria-hidden="true">—</span>Check-in digital, sem chave física</li>
                             <li className="flex gap-2"><span className="text-primary-deep dark:text-primary-light" aria-hidden="true">—</span>Sem depósito caução e sem fiador</li>
@@ -130,7 +130,7 @@ export default async function UnidadeDetalhePage({
 
                     {descHTML && (
                         <div className="border-b border-card-border pb-8 mb-8">
-                            <h3 className="font-display text-xl font-bold mb-4">Sobre o espaço</h3>
+                            <h3 className="font-display text-xl font-medium mb-4">Sobre o espaço</h3>
                             {/* Texto da Stays: medida de leitura e "ler mais" para não virar parede entre as fotos e o mapa */}
                             <ReadMore html={descHTML} className="prose prose-neutral max-w-[65ch] text-foreground [&_p]:my-3" />
                         </div>
@@ -138,7 +138,7 @@ export default async function UnidadeDetalhePage({
 
                     {listing.latLng && (
                         <div className="border-b border-card-border pb-8 mb-8">
-                            <h3 className="font-display text-xl font-bold mb-2">Localização</h3>
+                            <h3 className="font-display text-xl font-medium mb-2">Localização</h3>
                             <p className="text-secondary-text mb-4">{listing.address?.street}, {listing.address?.region}, {listing.address?.city}</p>
                             {/* touch-action: a rolagem vertical da página passa pelo mapa no celular */}
                             <div className="w-full h-[320px] md:h-[400px] rounded-2xl overflow-hidden border border-card-border relative z-[1]" style={{ touchAction: 'pan-y' }}>
@@ -148,7 +148,7 @@ export default async function UnidadeDetalhePage({
                     )}
 
                     <div className="pb-2 mb-8 bg-card p-6 rounded-2xl border border-card-border">
-                        <h3 className="font-display text-xl font-bold mb-4">Políticas e regras da casa</h3>
+                        <h3 className="font-display text-xl font-medium mb-4">Políticas e regras da casa</h3>
                         <dl className="space-y-4 text-sm">
                             <div>
                                 <dt className="font-bold">Check-in e check-out</dt>

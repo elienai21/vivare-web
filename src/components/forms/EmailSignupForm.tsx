@@ -78,7 +78,7 @@ export function EmailSignupForm() {
             <button
                 type="submit"
                 disabled={loading}
-                className="bg-primary hover:brightness-110 transition-all text-ink font-bold py-4 px-10 min-w-[220px] text-xs uppercase tracking-widest whitespace-nowrap disabled:opacity-60"
+                className="bg-primary-light hover:brightness-110 transition-all text-ink font-bold py-4 px-10 min-w-[220px] text-xs uppercase tracking-widest whitespace-nowrap disabled:opacity-60"
             >
                 {loading ? "Enviando..." : "Inscrever-se"}
             </button>

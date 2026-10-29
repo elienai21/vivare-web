@@ -111,7 +111,7 @@ export default async function BlogPostPage({ params }: Props) {
                         </div>
                     )}
 
-                    <h1 className="font-display text-4xl md:text-5xl font-semibold text-ink dark:text-parchment leading-tight mb-8 text-balance">
+                    <h1 className="font-display text-4xl md:text-5xl font-normal text-ink dark:text-parchment leading-tight mb-8 text-balance">
                         {post.title}
                     </h1>
 
@@ -166,7 +166,7 @@ export default async function BlogPostPage({ params }: Props) {
                 <footer className="mt-16 pt-10 border-t border-card-border">
                     {related.length > 0 && (
                         <section aria-labelledby="continue-lendo" className="mb-12">
-                            <h2 id="continue-lendo" className="font-display text-2xl font-bold mb-6">Continue lendo</h2>
+                            <h2 id="continue-lendo" className="font-display text-2xl font-medium mb-6">Continue lendo</h2>
                             <ul className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                                 {related.map((r) => (
                                     <li key={r.id}>
@@ -176,7 +176,7 @@ export default async function BlogPostPage({ params }: Props) {
                                                     <Image src={r.coverImage} alt="" fill sizes="(max-width: 640px) 100vw, 33vw" className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" />
                                                 </div>
                                             )}
-                                            <h3 className="font-display text-lg font-semibold leading-snug line-clamp-3 group-hover:text-primary-deep dark:group-hover:text-primary-light transition-colors">{r.title}</h3>
+                                            <h3 className="font-display text-lg font-medium leading-snug line-clamp-3 group-hover:text-primary-deep dark:group-hover:text-primary-light transition-colors">{r.title}</h3>
                                         </Link>
                                     </li>
                                 ))}
@@ -184,11 +184,11 @@ export default async function BlogPostPage({ params }: Props) {
                         </section>
                     )}
                     <div className="rounded-2xl bg-ink text-parchment p-8 md:p-10">
-                        <p className="text-xs font-bold uppercase tracking-[.25em] text-primary-light">Hospede-se com a Vivare</p>
-                        <h2 className="mt-2 font-display text-2xl md:text-3xl font-bold text-balance">Apartamentos de alto padrão em São Paulo, Santos e Guarujá.</h2>
+                        <p className="chapeu text-primary-light">Hospede-se com a Vivare</p>
+                        <h2 className="mt-2 font-display text-2xl md:text-3xl font-normal text-balance">Apartamentos de alto padrão em São Paulo, Santos e Guarujá.</h2>
                         <p className="mt-3 text-warm-mid max-w-prose">Check-in digital, sem caução e sem fiador. Reservar direto custa menos do que nas plataformas.</p>
                         <div className="mt-6 flex flex-wrap gap-3">
-                            <Link href="/unidades" className="inline-flex min-h-12 items-center bg-primary px-6 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:bg-primary-light">Ver acomodações</Link>
+                            <Link href="/unidades" className="inline-flex min-h-12 items-center bg-primary-light px-6 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:bg-primary-glow">Ver acomodações</Link>
                             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center border border-primary/60 px-6 text-xs font-semibold uppercase tracking-widest text-parchment transition-colors hover:bg-white/5">Falar no WhatsApp</a>
                         </div>
                     </div>

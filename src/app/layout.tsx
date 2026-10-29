@@ -1,22 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Cormorant_Garamond } from "next/font/google";
+import { Jost, Source_Sans_3 } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE, META_PIXEL_ID, GA4_ID, GOOGLE_ADS_ID, GTM_ID } from "@/lib/constants";
 
-const manrope = Manrope({
+/* Mesmas fontes da apresentação comercial: Jost nos títulos (geométrica,
+   da família do logotipo) e Source Sans 3 no texto. As duas são variáveis,
+   então um arquivo por fonte cobre todos os pesos. */
+const sourceSans = Source_Sans_3({
   subsets: ["latin"],
   variable: "--font-body",
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const cormorant = Cormorant_Garamond({
+const jost = Jost({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
-  style: ["normal", "italic"]
 });
 
 /** Cor da barra de status por tema e área segura do iPhone (mobile-native). */
@@ -25,8 +25,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f8fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f0e0c" },
+    { media: "(prefers-color-scheme: light)", color: "#faf8f4" },
+    { media: "(prefers-color-scheme: dark)", color: "#16241d" },
   ],
 };
 
@@ -90,7 +90,6 @@ import { Header } from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ScrollObserver } from "@/components/ui/ScrollObserver";
-import { PaletteToggle } from "@/components/ui/PaletteToggle";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -127,7 +126,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${manrope.variable} ${cormorant.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="pt-BR" className={`${sourceSans.variable} ${jost.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* Google Tag (gtag.js) — script NATIVO (não next/script).
             Motivo: `next/script strategy="afterInteractive"` renderiza só
@@ -243,7 +242,6 @@ export default function RootLayout({
             <FloatingWhatsApp />
             <ScrollObserver />
             {/* Prévia temporária de paleta: remover após a decisão */}
-            <PaletteToggle />
           </OwnerPopupProvider>
         </ThemeProvider>
         <div id="root-portal" />

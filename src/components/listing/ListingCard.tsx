@@ -79,9 +79,7 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
             <div className="p-5">
                 {/* Title */}
                 <h3
-                    className="font-display font-semibold text-lg text-neutral-900 mb-1.5
-                     group-hover:text-primary-600 transition-colors duration-200
-                     line-clamp-1"
+                    className="font-display font-medium text-lg text-neutral-900 mb-1.5 group-hover:text-primary-600 transition-colors duration-200 line-clamp-1"
                 >
                     {name}
                 </h3>

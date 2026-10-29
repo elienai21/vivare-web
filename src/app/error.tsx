@@ -17,8 +17,8 @@ export default function Error({
 
     return (
         <main className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-start justify-center px-6 py-20 lg:px-10">
-            <p className="text-xs font-semibold uppercase tracking-widest text-primary-deep dark:text-primary-light">Algo deu errado</p>
-            <h1 className="mt-3 font-display text-4xl font-bold text-foreground md:text-5xl">
+            <p className="chapeu">Algo deu errado</p>
+            <h1 className="mt-3 font-display text-4xl font-normal text-foreground md:text-5xl">
                 Não conseguimos carregar esta página.
             </h1>
             <span className="gold-line" aria-hidden="true"></span>
@@ -30,13 +30,13 @@ export default function Error({
                 <button
                     type="button"
                     onClick={() => reset()}
-                    className="inline-flex min-h-12 items-center bg-ink px-6 text-xs font-bold uppercase tracking-widest text-primary-light transition-colors hover:bg-primary hover:text-ink dark:bg-parchment dark:text-ink"
+                    className="inline-flex min-h-12 items-center bg-ink px-6 text-xs font-bold uppercase tracking-widest text-primary-light transition-colors hover:bg-primary-light hover:text-ink dark:bg-parchment dark:text-ink"
                 >
                     Tentar de novo
                 </button>
                 <Link
                     href="/"
-                    className="inline-flex min-h-12 items-center border border-primary px-6 text-xs font-semibold uppercase tracking-widest text-primary-deep transition-colors hover:bg-primary hover:text-ink dark:text-primary-light"
+                    className="inline-flex min-h-12 items-center border border-primary px-6 text-xs font-semibold uppercase tracking-widest text-primary-deep transition-colors hover:bg-primary-light hover:text-ink dark:text-primary-light"
                 >
                     Ir para o início
                 </Link>

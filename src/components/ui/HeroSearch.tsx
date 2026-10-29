@@ -212,7 +212,7 @@ export function HeroSearch() {
                 <div className="flex items-center justify-center p-2 lg:col-span-1 md:col-span-4">
                     <button
                         onClick={handleSearch}
-                        className="w-full h-full rounded-xl bg-primary px-6 py-4 text-sm font-bold text-ink shadow-lg shadow-black/10 hover:bg-primary-light transition-all hover:bg-[#2d2d2d] active:scale-95 flex items-center justify-center gap-2"
+                        className="w-full h-full rounded-xl bg-primary-light px-6 py-4 text-sm font-bold text-ink shadow-lg shadow-black/10 hover:bg-primary-glow transition-all hover:bg-[#2d2d2d] active:scale-95 flex items-center justify-center gap-2"
                     >
                         <Search className="w-5 h-5" aria-hidden="true" />
                         Buscar

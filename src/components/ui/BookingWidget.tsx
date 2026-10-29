@@ -127,7 +127,7 @@ export default function BookingWidget({ listingId, whatsapp, listingName, calend
         document.getElementById(`${uid}-checkin`)?.focus();
     };
 
-    const primaryButton = "inline-flex w-full min-h-12 items-center justify-center rounded-xl bg-ink px-6 text-base font-bold text-primary-light transition-colors hover:bg-primary hover:text-ink disabled:opacity-50 disabled:hover:bg-ink disabled:hover:text-primary-light dark:bg-parchment dark:text-ink dark:hover:bg-primary";
+    const primaryButton = "inline-flex w-full min-h-12 items-center justify-center rounded-xl bg-ink px-6 text-base font-bold text-primary-light transition-colors hover:bg-primary-light hover:text-ink disabled:opacity-50 disabled:hover:bg-ink disabled:hover:text-primary-light dark:bg-parchment dark:text-ink dark:hover:bg-primary-light";
 
     return (
         <>
@@ -136,12 +136,12 @@ export default function BookingWidget({ listingId, whatsapp, listingName, calend
                 <div className="mb-5">
                     {priceData && !isPriceLoading && nightsCount > 0 ? (
                         <>
-                            <p className="font-display text-3xl font-bold leading-none">{formatBRL(priceData.total)}</p>
+                            <p className="font-display text-3xl font-normal leading-none">{formatBRL(priceData.total)}</p>
                             <p className="mt-1 text-sm text-secondary-text">total para {nightsCount} noite{nightsCount !== 1 ? 's' : ''}</p>
                         </>
                     ) : (
                         <>
-                            <p className="font-display text-2xl font-bold leading-tight">Escolha as datas para ver o valor</p>
+                            <p className="font-display text-2xl font-medium leading-tight">Escolha as datas para ver o valor</p>
                             <p className="mt-1 text-sm text-secondary-text">O calendário já mostra só os dias livres.</p>
                         </>
                     )}
@@ -278,7 +278,7 @@ export default function BookingWidget({ listingId, whatsapp, listingName, calend
                         href={whatsappHref}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl border border-primary text-sm font-semibold text-primary-deep transition-colors hover:bg-primary hover:text-ink dark:text-primary-light"
+                        className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl border border-primary text-sm font-semibold text-primary-deep transition-colors hover:bg-primary-light hover:text-ink dark:text-primary-light"
                     >
                         <MessageCircle className="h-4 w-4" aria-hidden="true" />
                         Falar no WhatsApp
@@ -292,7 +292,7 @@ export default function BookingWidget({ listingId, whatsapp, listingName, calend
                     <div className="min-w-0 flex-1">
                         {priceData && !isPriceLoading && nightsCount > 0 ? (
                             <>
-                                <p className="font-display text-xl font-bold leading-none tabular-nums">{formatBRL(priceData.total)}</p>
+                                <p className="font-display text-xl font-medium leading-none tabular-nums">{formatBRL(priceData.total)}</p>
                                 <p className="truncate text-xs text-secondary-text">{nightsCount} noite{nightsCount !== 1 ? 's' : ''} · {guests} {Number(guests) === 1 ? 'hóspede' : 'hóspedes'}</p>
                             </>
                         ) : (
@@ -314,7 +314,7 @@ export default function BookingWidget({ listingId, whatsapp, listingName, calend
                     <button
                         type="button"
                         onClick={ready ? handleReservar : scrollToWidget}
-                        className="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-ink px-5 text-sm font-bold text-primary-light transition-colors hover:bg-primary hover:text-ink dark:bg-parchment dark:text-ink"
+                        className="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-ink px-5 text-sm font-bold text-primary-light transition-colors hover:bg-primary-light hover:text-ink dark:bg-parchment dark:text-ink"
                     >
                         {ready ? 'Reservar' : 'Ver datas'}
                     </button>

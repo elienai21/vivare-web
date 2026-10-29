@@ -82,7 +82,7 @@ export function OwnerContactForm() {
                 <div className="w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl">&#10003;</span>
                 </div>
-                <h3 className="font-display text-2xl font-bold mb-2">Solicitação enviada</h3>
+                <h3 className="font-display text-2xl font-medium mb-2">Solicitação enviada</h3>
                 <p className="text-secondary-text mb-6">Continue a conversa no WhatsApp para agilizar o atendimento. Nossa equipe responde em até 24h úteis.</p>
                 {whatsAppUrl && (
                     <a href={whatsAppUrl} target="_blank" rel="noopener noreferrer" className="btn btn-accent w-full mb-3">Abrir conversa no WhatsApp</a>

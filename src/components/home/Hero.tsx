@@ -53,10 +53,10 @@ export function Hero() {
 
             {/* Content */}
             <div className="relative z-10 w-full max-w-7xl px-6 flex flex-col items-center text-center">
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6 drop-shadow-lg max-w-4xl tracking-tight">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-normal text-white mb-6 drop-shadow-lg max-w-4xl tracking-tight">
                     Sua experiência premium <br /> começa aqui
                 </h1>
-                <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl font-light drop-shadow-md">
+                <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl drop-shadow-md">
                     Aluguel de temporada com curadoria exclusiva e serviço de concierge em destinos únicos.
                 </p>
 

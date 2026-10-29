@@ -137,7 +137,7 @@ export default async function ReservaPage({
         return (
             <main className="min-h-screen pt-8 md:pt-12 pb-12">
                 <div className="container mx-auto px-4 max-w-2xl text-center">
-                    <h1 className="text-3xl font-display font-bold mb-4">
+                    <h1 className="text-3xl font-display font-normal mb-4">
                         Acomodação não encontrada
                     </h1>
                     <p className="text-neutral-600 mb-8">

@@ -118,7 +118,7 @@ export function GuestStep({ initialInfo, onSubmit, onBack, isLoading }: {
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-            <h2 className="text-2xl font-bold font-display">Seus Dados</h2>
+            <h2 className="text-2xl font-medium font-display">Seus Dados</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <fieldset disabled={isLoading} className="group space-y-4">
                     <div className="grid grid-cols-2 gap-4">
